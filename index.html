@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>tarrific.tv · DSP Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#eef1f6;color:#1f2937;font-size:13px}
+[v-cloak]{display:none}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-thumb{background:#c5cdd8;border-radius:3px}
+
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* Sidebar */
+.sidebar{width:200px;background:#1c2b4a;display:flex;flex-direction:column;flex-shrink:0}
+.logo{padding:18px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.06)}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff);display:flex;align-items:center;justify-content:center}
+.logo-icon svg{width:14px;height:14px;fill:#fff}
+.logo-text{color:#fff;font-size:15px;font-weight:700;letter-spacing:-.3px}
+.nav{flex:1;padding:12px 8px;overflow-y:auto}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:6px;color:#8fa3bf;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:2px;border-left:3px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#c8d6e8}
+.nav-item.active{background:rgba(91,192,235,.15);color:#5bc0eb;border-left-color:#5bc0eb}
+.nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
+.sidebar-foot{padding:12px;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+.collapse-btn{background:none;border:none;color:#5a6f8a;cursor:pointer;padding:6px}
+
+/* Main */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:52px;background:#fff;border-bottom:1px solid #e5e9f0;display:flex;align-items:center;justify-content:flex-end;padding:0 24px;gap:16px;flex-shrink:0}
+.lang-select{display:flex;align-items:center;gap:6px;font-size:13px;color:#4b5563;cursor:pointer}
+.user-block{display:flex;align-items:center;gap:8px}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:#5bc0eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+.user-name{font-size:13px;font-weight:500;color:#374151}
+.content{flex:1;overflow-y:auto;padding:20px 24px}
+
+/* Breadcrumb & title */
+.bread{font-size:12px;color:#9ca3af;margin-bottom:6px}
+.bread span{color:#6b7280}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.page-title{font-size:22px;font-weight:700;color:#111827}
+
+/* Filter bar */
+.filter-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.btn-filter{background:#5bc0eb;color:#fff;border:none;border-radius:4px;padding:7px 16px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:6px}
+.btn-filter:hover{background:#4ab0db}
+.date-range{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #d1d9e6;border-radius:4px;padding:7px 12px;font-size:13px;color:#374151;cursor:pointer}
+
+/* Card */
+.card{background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.card-tabs{display:flex;border-bottom:1px solid #e8ecf1;padding:0 16px}
+.card-tab{padding:14px 20px;font-size:13px;font-weight:500;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.card-tab:hover{color:#5bc0eb}
+.card-tab.active{color:#5bc0eb;border-bottom-color:#5bc0eb}
+.toolbar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f0f2f5}
+.toolbar-left,.toolbar-right{display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;border-radius:4px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:all .15s;white-space:nowrap}
+.btn-primary{background:#5bc0eb;color:#fff;border-color:#5bc0eb}
+.btn-primary:hover{background:#4ab0db}
+.btn-default{background:#fff;color:#374151;border-color:#d1d9e6}
+.btn-default:hover{border-color:#5bc0eb;color:#5bc0eb}
+.btn-default:disabled{opacity:.45;cursor:not-allowed}
+.btn-danger-outline{background:#fff;color:#ef4444;border-color:#fca5a5}
+.btn-danger-outline:hover{background:#fef2f2}
+.btn-success{background:#10b981;color:#fff;border-color:#10b981}
+.btn-success:hover{background:#059669}
+.btn-link{background:none;border:none;color:#10b981;padding:0 4px;font-size:12px;cursor:pointer}
+.btn-link:hover{text-decoration:underline}
+.btn-link.danger{color:#ef4444}
+.btn-sm{padding:4px 10px;font-size:12px}
+.chk-label{display:flex;align-items:center;gap:6px;font-size:13px;color:#4b5563;cursor:pointer}
+.icon-btn{width:32px;height:32px;border:1px solid #d1d9e6;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6b7280}
+.icon-btn:hover{border-color:#5bc0eb;color:#5bc0eb}
+
+/* Table */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{background:#fafbfc;padding:10px 12px;text-align:left;font-weight:600;color:#6b7280;border-bottom:1px solid #e8ecf1;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #f3f4f6;color:#374151;vertical-align:middle}
+tr:hover td{background:#f9fafb}
+.status-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px}
+.status-dot.active{background:#22c55e}
+.status-dot.paused{background:#9ca3af}
+.switch{position:relative;width:36px;height:20px;display:inline-block}
+.switch input{opacity:0;width:0;height:0}
+.switch-slider{position:absolute;inset:0;background:#d1d5db;border-radius:10px;cursor:pointer;transition:.2s}
+.switch-slider::before{content:'';position:absolute;width:16px;height:16px;left:2px;bottom:2px;background:#fff;border-radius:50%;transition:.2s}
+.switch input:checked+.switch-slider{background:#5bc0eb}
+.switch input:checked+.switch-slider::before{transform:translateX(16px)}
+
+/* Pagination */
+.pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 16px;font-size:12px;color:#6b7280}
+.page-btn{width:28px;height:28px;border:1px solid #d1d9e6;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.page-btn.active{background:#5bc0eb;color:#fff;border-color:#5bc0eb}
+.page-size{border:1px solid #d1d9e6;border-radius:4px;padding:4px 8px;font-size:12px;outline:none}
+
+/* Manage Creative filters */
+.mc-filters{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid #f0f2f5;flex-wrap:wrap}
+.mc-input{border:1px solid #d1d9e6;border-radius:4px;padding:7px 12px;font-size:13px;outline:none;width:180px;color:#374151}
+.mc-input:focus{border-color:#5bc0eb}
+.mc-select{border:1px solid #d1d9e6;border-radius:4px;padding:7px 12px;font-size:13px;outline:none;width:160px;background:#fff;color:#9ca3af}
+.mc-actions{margin-left:auto;display:flex;gap:8px}
+
+/* Placeholder pages */
+.placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 40px;text-align:center;color:#9ca3af}
+.placeholder h2{font-size:18px;color:#6b7280;margin-bottom:8px;font-weight:600}
+
+/* Asset form */
+.asset-form-layout{display:grid;grid-template-columns:1fr 320px;gap:20px}
+.form-card{background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:24px}
+.form-head{margin-bottom:20px}
+.form-head h2{font-size:18px;font-weight:700;color:#111827;margin-bottom:4px}
+.form-head p{font-size:12px;color:#9ca3af}
+.form-actions-top{display:flex;gap:8px}
+.type-seg{display:flex;gap:0;border:1px solid #d1d9e6;border-radius:4px;overflow:hidden;margin-bottom:20px;flex-wrap:wrap}
+.type-seg-btn{padding:8px 16px;font-size:12px;font-weight:500;border:none;background:#fff;color:#6b7280;cursor:pointer;border-right:1px solid #d1d9e6;transition:all .15s}
+.type-seg-btn:last-child{border-right:none}
+.type-seg-btn.active{background:#eff8fd;color:#5bc0eb;box-shadow:inset 0 0 0 1px #5bc0eb}
+.upload-zone{border:2px dashed #d1d9e6;border-radius:6px;padding:40px 20px;text-align:center;cursor:pointer;transition:all .15s;margin-bottom:20px;background:#fafbfc}
+.upload-zone:hover,.upload-zone.dragover{border-color:#5bc0eb;background:#eff8fd}
+.upload-zone p{font-size:14px;color:#374151;margin-bottom:4px}
+.upload-zone span{font-size:12px;color:#9ca3af}
+.upload-preview{margin-top:12px}
+.upload-preview img,.upload-preview video{max-width:100%;max-height:160px;border-radius:4px}
+.form-group{margin-bottom:16px}
+.form-label{display:block;font-size:12px;font-weight:600;color:#374151;margin-bottom:6px}
+.form-input,.form-textarea{width:100%;border:1px solid #d1d9e6;border-radius:4px;padding:8px 12px;font-size:13px;outline:none;transition:border-color .15s}
+.form-input:focus,.form-textarea:focus{border-color:#5bc0eb}
+.form-textarea{resize:vertical;min-height:72px}
+
+/* Phone preview */
+.phone-wrap{position:sticky;top:20px}
+.phone{background:#1a1a2e;border-radius:32px;padding:12px;box-shadow:0 8px 32px rgba(0,0,0,.2)}
+.phone-screen{background:#f5f5f5;border-radius:24px;overflow:hidden;min-height:520px}
+.phone-status{display:flex;justify-content:space-between;padding:8px 16px;font-size:11px;font-weight:600;color:#111}
+.phone-content{padding:0 12px 12px}
+.phone-header{font-size:13px;font-weight:600;color:#111;margin-bottom:10px}
+.ad-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ad-card-head{display:flex;align-items:center;gap:8px;padding:10px 12px}
+.ad-icon{width:28px;height:28px;border-radius:50%;background:#5bc0eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+.ad-sponsored{font-size:11px;color:#6b7280}
+.ad-media{height:160px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);display:flex;align-items:center;justify-content:center;color:#5bc0eb;font-size:13px;font-weight:500;overflow:hidden}
+.ad-media img,.ad-media video{width:100%;height:100%;object-fit:cover}
+.ad-body{padding:12px}
+.ad-title{font-size:13px;font-weight:700;color:#111;margin-bottom:4px}
+.ad-desc{font-size:11px;color:#6b7280;line-height:1.5;margin-bottom:10px}
+.ad-cta{background:#5bc0eb;color:#fff;border:none;border-radius:6px;padding:8px;width:100%;font-size:12px;font-weight:600;cursor:default}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
+.modal{background:#fff;border-radius:6px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #f0f2f5}
+.modal-head h3{font-size:16px;font-weight:700}
+.modal-close{background:none;border:none;font-size:20px;color:#9ca3af;cursor:pointer;line-height:1}
+.modal-body{padding:20px}
+.modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid #f0f2f5}
+.material-slots{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.material-slot{border:1px solid #e8ecf1;border-radius:6px;padding:14px}
+.material-slot h4{font-size:12px;font-weight:600;color:#374151;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.material-slot .upload-zone{padding:20px 12px;margin-bottom:0}
+.material-slot .upload-zone p{font-size:12px}
+.slot-preview img,.slot-preview video{max-width:100%;max-height:80px;border-radius:4px;margin-top:8px}
+
+/* Toast */
+.toast{position:fixed;top:20px;right:20px;z-index:200;background:#1f2937;color:#fff;padding:12px 18px;border-radius:6px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transform:translateY(-8px);transition:all .3s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* Ads tabs data */
+.metric-col{color:#5bc0eb;font-size:11px}
+.tag-type{display:inline-block;padding:2px 8px;background:#eff8fd;color:#0891b2;border-radius:3px;font-size:11px}
+</style>
+</head>
+<body>
+<div id="app" v-cloak>
+  <div class="toast" :class="{show:toast.show}">{{ toast.text }}</div>
+
+  <div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg>
+        </div>
+        <span class="logo-text">tarrific.tv</span>
+      </div>
+      <nav class="nav">
+        <div v-for="item in navItems" :key="item.id" class="nav-item" :class="{active: page===item.id}" @click="page=item.id">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" v-html="item.icon"></svg>
+          {{ item.label }}
+        </div>
+      </nav>
+      <div class="sidebar-foot">
+        <button class="collapse-btn" title="Collapse">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 17l-5-5 5-5M18 17l-5-5 5-5"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main">
+      <header class="topbar">
+        <div class="lang-select">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          English
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+        </div>
+        <div class="user-block">
+          <div class="user-avatar">D</div>
+          <span class="user-name">DSP Admin2</span>
+        </div>
+      </header>
+
+      <div class="content">
+        <!-- ═══ DASHBOARD (placeholder) ═══ -->
+        <template v-if="page==='dashboard'">
+          <div class="bread">Home</div>
+          <div class="page-title" style="margin-bottom:20px">Dashboard</div>
+          <div class="card"><div class="placeholder"><h2>Dashboard</h2><p>Overview metrics and charts will appear here.</p></div></div>
+        </template>
+
+        <!-- ═══ ADS (no Creative tab) ═══ -->
+        <template v-if="page==='ads'">
+          <div class="bread">Home <span>></span> Ads</div>
+          <div class="page-head">
+            <h1 class="page-title">Ads</h1>
+          </div>
+          <div class="filter-bar">
+            <button class="btn-filter">+ Filter</button>
+            <div class="date-range">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              2026-07-03 ~ 2026-07-09
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-tabs">
+              <div class="card-tab" :class="{active:adsTab==='campaign'}" @click="adsTab='campaign'">Campaign</div>
+              <div class="card-tab" :class="{active:adsTab==='adgroup'}" @click="adsTab='adgroup'">Ad Group</div>
+            </div>
+            <div class="toolbar">
+              <div class="toolbar-left">
+                <button class="btn btn-primary">New</button>
+                <button class="btn btn-default" disabled>Edit ▾</button>
+              </div>
+              <div class="toolbar-right">
+                <label class="chk-label"><input type="checkbox" checked> Show Metrics</label>
+                <button class="btn btn-default btn-sm">Custom Columns</button>
+                <button class="icon-btn" title="Refresh">↻</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th><input type="checkbox"></th>
+                    <th></th>
+                    <th>{{ adsTab==='campaign' ? 'Campaign Name' : 'Ad Group Name' }}</th>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Updated Time</th>
+                    <th>Created Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in adsData" :key="row.id">
+                    <td><input type="checkbox"></td>
+                    <td><label class="switch"><input type="checkbox" :checked="row.active"><span class="switch-slider"></span></label></td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.id }}</td>
+                    <td><span class="status-dot" :class="row.active?'active':'paused'"></span>{{ row.active?'Active':'Paused' }}</td>
+                    <td>{{ row.updated }}</td>
+                    <td>{{ row.created }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              Total {{ adsData.length }}
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+              <select class="page-size"><option>10 / page</option></select>
+            </div>
+          </div>
+        </template>
+
+        <!-- ═══ MANAGE CREATIVE (interactive) ═══ -->
+        <template v-if="page==='manage-creative'">
+          <!-- List view -->
+          <template v-if="mcView==='list'">
+            <div class="bread">Home <span>></span> Manage Creative</div>
+            <div class="page-head">
+              <h1 class="page-title">Manage Creative</h1>
+            </div>
+            <div class="card">
+              <div class="card-tabs">
+                <div class="card-tab" :class="{active:mcTab==='group'}" @click="mcTab='group'">Creative Group</div>
+                <div class="card-tab" :class="{active:mcTab==='assets'}" @click="mcTab='assets'">Assets</div>
+              </div>
+
+              <!-- Creative Group tab -->
+              <template v-if="mcTab==='group'">
+                <div class="mc-filters">
+                  <input class="mc-input" v-model="groupFilter.name" placeholder="- Creative Group Name -">
+                  <select class="mc-select" v-model="groupFilter.method">
+                    <option value="">- Combination Method -</option>
+                    <option value="programmatic">Programmatic Creative</option>
+                    <option value="manual">Manual Combination</option>
+                  </select>
+                  <input class="mc-input" v-model="groupFilter.adUnit" placeholder="- Ad Unit Name -">
+                  <div class="mc-actions">
+                    <button class="btn btn-success" @click="openGroupModal()">Upload Creative Group</button>
+                    <button class="btn btn-danger-outline" :disabled="!selectedGroups.length" @click="deleteGroups">Delete Creative Group</button>
+                    <button class="btn btn-success" @click="filterGroups">Find Creative Group</button>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox" :checked="allGroupsSelected" @change="toggleAllGroups"></th>
+                        <th>ID</th>
+                        <th>Creative Group Name</th>
+                        <th>Combination Method</th>
+                        <th>Creative Type</th>
+                        <th>Deliverable Ad Types</th>
+                        <th>Country</th>
+                        <th>Ad Unit</th>
+                        <th>Created Time</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="g in filteredGroups" :key="g.id">
+                        <td><input type="checkbox" :value="g.id" v-model="selectedGroups"></td>
+                        <td>{{ g.id }}</td>
+                        <td>{{ g.name }}</td>
+                        <td>{{ g.method }}</td>
+                        <td><span v-for="(t,i) in g.types" :key="i" class="tag-type" style="margin-right:4px">{{ t }}</span></td>
+                        <td style="max-width:200px;font-size:11px;line-height:1.6">{{ g.adTypes }}</td>
+                        <td>{{ g.country }}</td>
+                        <td>{{ g.adUnit }}</td>
+                        <td>{{ g.created }}</td>
+                        <td>
+                          <button class="btn-link" @click="openGroupModal(g)">Edit</button>
+                          <button class="btn-link" @click="copyGroup(g)">Copy</button>
+                          <button class="btn-link danger" @click="deleteGroup(g.id)">Delete</button>
+                        </td>
+                      </tr>
+                      <tr v-if="!filteredGroups.length"><td colspan="10" style="text-align:center;padding:40px;color:#9ca3af">No creative groups found</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  Total {{ filteredGroups.length }}
+                  <button class="page-btn">‹</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn">›</button>
+                  <select class="page-size"><option>20 / page</option></select>
+                </div>
+              </template>
+
+              <!-- Assets tab -->
+              <template v-if="mcTab==='assets'">
+                <div class="toolbar">
+                  <div class="toolbar-left">
+                    <button class="btn btn-primary" @click="openAssetForm()">New</button>
+                    <button class="btn btn-default" :disabled="selectedAssets.length!==1" @click="editSelectedAsset">Edit ▾</button>
+                  </div>
+                  <div class="toolbar-right">
+                    <label class="chk-label"><input type="checkbox" v-model="showMetrics" checked> Show Metrics</label>
+                    <button class="btn btn-default btn-sm">Custom Columns</button>
+                    <button class="icon-btn" title="Refresh" @click="showToast('Refreshed')">↻</button>
+                  </div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th><input type="checkbox" :checked="allAssetsSelected" @change="toggleAllAssets"></th>
+                        <th></th>
+                        <th>Creative Name</th>
+                        <th>Creative ID</th>
+                        <th>Creative Type</th>
+                        <th>Campaign Name</th>
+                        <th>Campaign ID</th>
+                        <th>Ad Group Name</th>
+                        <th>Ad Group ID</th>
+                        <th>Status</th>
+                        <th>Updated Time</th>
+                        <th>Created Time</th>
+                        <th>Schedule</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="a in assets" :key="a.id">
+                        <td><input type="checkbox" :value="a.id" v-model="selectedAssets"></td>
+                        <td><label class="switch"><input type="checkbox" v-model="a.active" @change="showToast(a.active?'Enabled':'Paused')"><span class="switch-slider"></span></label></td>
+                        <td>{{ a.name }}</td>
+                        <td>{{ a.id }}</td>
+                        <td><span class="tag-type">{{ a.type }}</span></td>
+                        <td>{{ a.campaignName }}</td>
+                        <td>{{ a.campaignId }}</td>
+                        <td>{{ a.adGroupName }}</td>
+                        <td>{{ a.adGroupId }}</td>
+                        <td><span class="status-dot" :class="a.active?'active':'paused'"></span>{{ a.active?'Active':'Paused' }}</td>
+                        <td>{{ a.updated }}</td>
+                        <td>{{ a.created }}</td>
+                        <td>{{ a.schedule }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="pagination">
+                  Total {{ assets.length }}
+                  <button class="page-btn">‹</button>
+                  <button class="page-btn active">1</button>
+                  <button class="page-btn">›</button>
+                  <select class="page-size"><option>10 / page</option></select>
+                </div>
+              </template>
+            </div>
+          </template>
+
+          <!-- Asset form view -->
+          <template v-if="mcView==='asset-form'">
+            <div class="bread">Home <span>></span> Manage Creative <span>></span> {{ assetForm.id ? 'Edit Asset' : 'New Asset' }}</div>
+            <div class="page-head">
+              <div>
+                <h1 class="page-title">Creative</h1>
+                <p style="font-size:12px;color:#9ca3af;margin-top:4px">Keep both creation, historical data, and template entries according to the current 1:1 clone logic.</p>
+              </div>
+              <div class="form-actions-top">
+                <button class="btn btn-default" @click="mcView='list'">Back to List</button>
+                <button class="btn btn-primary" @click="saveAsset">Save</button>
+              </div>
+            </div>
+            <div class="asset-form-layout">
+              <div class="form-card">
+                <div class="type-seg">
+                  <button v-for="t in creativeTypes" :key="t" class="type-seg-btn" :class="{active:assetForm.type===t}" @click="assetForm.type=t">{{ t }}</button>
+                </div>
+                <div class="upload-zone" :class="{dragover:dragOver}" @click="$refs.assetFile.click()" @dragover.prevent="dragOver=true" @dragleave="dragOver=false" @drop.prevent="onAssetDrop">
+                  <p>Drag &amp; Drop or Click to Upload</p>
+                  <span>Support image or video, limit 1 per time</span>
+                  <div class="upload-preview" v-if="assetForm.preview">
+                    <img v-if="assetForm.previewType==='image'" :src="assetForm.preview">
+                    <video v-else :src="assetForm.preview" controls></video>
+                  </div>
+                </div>
+                <input ref="assetFile" type="file" accept="image/*,video/*" style="display:none" @change="onAssetFile">
+                <div class="form-group">
+                  <label class="form-label">Title</label>
+                  <input class="form-input" v-model="assetForm.title" placeholder="Your next install starts here">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Description</label>
+                  <textarea class="form-textarea" v-model="assetForm.description" placeholder="Build performant mobile growth loops..."></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Native CTA Text</label>
+                  <input class="form-input" v-model="assetForm.cta" placeholder="Install">
+                </div>
+              </div>
+              <div class="phone-wrap">
+                <div class="phone">
+                  <div class="phone-screen">
+                    <div class="phone-status"><span>9:41</span><span>5G</span></div>
+                    <div class="phone-content">
+                      <div class="phone-header">For You</div>
+                      <div class="ad-card">
+                        <div class="ad-card-head">
+                          <div class="ad-icon">A</div>
+                          <div><div class="ad-sponsored">Sponsored</div><div style="font-size:10px;color:#9ca3af">AD</div></div>
+                        </div>
+                        <div class="ad-media">
+                          <template v-if="assetForm.preview">
+                            <img v-if="assetForm.previewType==='image'" :src="assetForm.preview">
+                            <video v-else-if="assetForm.previewType==='video'" :src="assetForm.preview" autoplay muted loop></video>
+                          </template>
+                          <template v-else>{{ assetForm.type }} Ad</template>
+                        </div>
+                        <div class="ad-body">
+                          <div class="ad-title">{{ assetForm.title || 'Your next install starts here' }}</div>
+                          <div class="ad-desc">{{ assetForm.description || 'Build performant mobile growth loops with native, banner and video creatives.' }}</div>
+                          <button class="ad-cta">{{ assetForm.cta || 'Install' }}</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </template>
+        </template>
+
+        <!-- ═══ Other placeholders ═══ -->
+        <template v-if="page==='reports'">
+          <div class="bread">Home <span>></span> Reports</div>
+          <div class="page-title" style="margin-bottom:20px">Reports</div>
+          <div class="card"><div class="placeholder"><h2>Reports</h2><p>Performance reports and analytics.</p></div></div>
+        </template>
+        <template v-if="page==='apps'">
+          <div class="bread">Home <span>></span> My Apps</div>
+          <div class="page-title" style="margin-bottom:20px">My Apps</div>
+          <div class="card"><div class="placeholder"><h2>My Apps</h2><p>Manage your application inventory.</p></div></div>
+        </template>
+        <template v-if="page==='settings'">
+          <div class="bread">Home <span>></span> Setting</div>
+          <div class="page-title" style="margin-bottom:20px">Setting</div>
+          <div class="card"><div class="placeholder"><h2>Setting</h2><p>Account and system preferences.</p></div></div>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <!-- Creative Group Upload Modal -->
+  <div class="modal-overlay" v-if="groupModal.show" @click.self="groupModal.show=false">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>{{ groupModal.editing ? 'Edit Creative Group' : 'Upload Creative Group' }}</h3>
+        <button class="modal-close" @click="groupModal.show=false">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Creative Group Name</label>
+          <input class="form-input" v-model="groupModal.name" placeholder="e.g. S1S2nativevideo">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Combination Method</label>
+          <select class="form-input" v-model="groupModal.method">
+            <option value="Programmatic Creative">Programmatic Creative</option>
+            <option value="Manual Combination">Manual Combination</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ad Unit</label>
+          <input class="form-input" v-model="groupModal.adUnit" placeholder="Ad unit name or ID">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <input class="form-input" v-model="groupModal.country" placeholder="ALL">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Upload Materials (multiple types supported)</label>
+          <div class="material-slots">
+            <div class="material-slot" v-for="slot in materialSlots" :key="slot.type">
+              <h4>
+                <input type="checkbox" v-model="slot.enabled">
+                {{ slot.type }}
+              </h4>
+              <div v-if="slot.enabled" class="upload-zone" style="padding:16px" @click="slot.$input.click()" @dragover.prevent @drop.prevent="onSlotDrop($event,slot)">
+                <p style="font-size:12px">{{ slot.preview ? 'Click to replace' : 'Drag & Drop or Click' }}</p>
+                <div class="slot-preview" v-if="slot.preview">
+                  <img v-if="slot.previewType==='image'" :src="slot.preview">
+                  <video v-else :src="slot.preview" controls style="max-height:60px"></video>
+                </div>
+              </div>
+              <input :ref="el => slotInputRef(el, slot)" type="file" accept="image/*,video/*" style="display:none" @change="onSlotFile($event,slot)">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-default" @click="groupModal.show=false">Cancel</button>
+        <button class="btn btn-success" @click="saveGroup">Save Creative Group</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const { createApp, ref, computed, reactive } = Vue;
+
+createApp({
+  setup() {
+    const page = ref('manage-creative');
+    const adsTab = ref('campaign');
+    const mcTab = ref('assets');
+    const mcView = ref('list');
+    const dragOver = ref(false);
+    const showMetrics = ref(true);
+    const selectedAssets = ref([]);
+    const selectedGroups = ref([]);
+    const toast = reactive({ show: false, text: '' });
+    let toastTimer = null;
+
+    const navItems = [
+      { id: 'dashboard', label: 'Dashboard', icon: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>' },
+      { id: 'ads', label: 'Ads', icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>' },
+      { id: 'manage-creative', label: 'Manage Creative', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' },
+      { id: 'reports', label: 'Reports', icon: '<path d="M18 20V10M12 20V4M6 20v-6"/>' },
+      { id: 'apps', label: 'My Apps', icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>' },
+      { id: 'settings', label: 'Setting', icon: '<circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>' },
+    ];
+
+    const adsData = [
+      { id: '10021', name: 'Summer Promo US', active: true, updated: '2026-07-08 14:22', created: '2026-06-15 09:10' },
+      { id: '10018', name: 'Brand Awareness EU', active: false, updated: '2026-07-05 11:30', created: '2026-05-20 16:45' },
+    ];
+
+    const creativeTypes = ['Banner', 'Native Image', 'Video', 'Video EndCard', 'Playable'];
+
+    const assets = ref([
+      { id: '35480', name: 'Summer Banner v2', type: 'Banner', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', active: true, updated: '2026-07-08 14:22', created: '2026-06-20 10:15', schedule: 'Always', title: 'Your next install starts here', description: 'Build performant mobile growth loops with native, banner and video creatives.', cta: 'Install', preview: null, previewType: null },
+      { id: '8641', name: 'Native Video Ad', type: 'Video', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', active: false, updated: '2026-07-05 11:30', created: '2026-05-22 08:40', schedule: 'Mon-Fri', title: 'Discover More', description: 'Engage users with immersive video content.', cta: 'Learn More', preview: null, previewType: null },
+    ]);
+
+    const groups = ref([
+      { id: 1448904, name: 'S1S2nativevideo', method: 'Programmatic Creative', types: ['Full-screen Image', 'Landscape Image', 'Icon', 'Basic Banner'], adTypes: 'Banner, Display Interstitial, Native Video, Rewarded Video, Splash AD', country: 'ALL', adUnit: 'Unit-88421', created: '2026-06-10 15:30', materials: {} },
+      { id: 1448905, name: 'Q3_Playable_Set', method: 'Manual Combination', types: ['Playable', 'Video EndCard'], adTypes: 'Rewarded Video, Interstitial', country: 'US', adUnit: 'Unit-90210', created: '2026-07-01 09:15', materials: {} },
+    ]);
+
+    const groupFilter = reactive({ name: '', method: '', adUnit: '' });
+    const filteredGroups = computed(() => {
+      return groups.value.filter(g => {
+        if (groupFilter.name && !g.name.toLowerCase().includes(groupFilter.name.toLowerCase())) return false;
+        if (groupFilter.method === 'programmatic' && g.method !== 'Programmatic Creative') return false;
+        if (groupFilter.method === 'manual' && g.method !== 'Manual Combination') return false;
+        if (groupFilter.adUnit && !g.adUnit.toLowerCase().includes(groupFilter.adUnit.toLowerCase())) return false;
+        return true;
+      });
+    });
+
+    const assetForm = reactive({ id: null, type: 'Banner', title: '', description: '', cta: '', preview: null, previewType: null, name: '' });
+
+    const groupModal = reactive({
+      show: false, editing: null, name: '', method: 'Programmatic Creative', adUnit: '', country: 'ALL'
+    });
+
+    const materialSlots = ref([
+      { type: 'Banner', enabled: false, preview: null, previewType: null, file: null, $input: null },
+      { type: 'Native Image', enabled: false, preview: null, previewType: null, file: null, $input: null },
+      { type: 'Video', enabled: false, preview: null, previewType: null, file: null, $input: null },
+      { type: 'Video EndCard', enabled: false, preview: null, previewType: null, file: null, $input: null },
+      { type: 'Playable', enabled: false, preview: null, previewType: null, file: null, $input: null },
+      { type: 'Icon', enabled: false, preview: null, previewType: null, file: null, $input: null },
+    ]);
+
+    const allAssetsSelected = computed(() => assets.value.length && selectedAssets.value.length === assets.value.length);
+    const allGroupsSelected = computed(() => filteredGroups.value.length && selectedGroups.value.length === filteredGroups.value.length);
+
+    function showToast(text) {
+      toast.text = text;
+      toast.show = true;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.show = false; }, 2500);
+    }
+
+    function toggleAllAssets(e) {
+      selectedAssets.value = e.target.checked ? assets.value.map(a => a.id) : [];
+    }
+    function toggleAllGroups(e) {
+      selectedGroups.value = e.target.checked ? filteredGroups.value.map(g => g.id) : [];
+    }
+
+    function openAssetForm(asset) {
+      if (asset) {
+        Object.assign(assetForm, { id: asset.id, type: asset.type, title: asset.title, description: asset.description, cta: asset.cta, preview: asset.preview, previewType: asset.previewType, name: asset.name });
+      } else {
+        Object.assign(assetForm, { id: null, type: 'Banner', title: '', description: '', cta: 'Install', preview: null, previewType: null, name: '' });
+      }
+      mcView.value = 'asset-form';
+    }
+
+    function editSelectedAsset() {
+      const a = assets.value.find(x => x.id === selectedAssets.value[0]);
+      if (a) openAssetForm(a);
+    }
+
+    function handleFile(file, target) {
+      if (!file) return;
+      const isVideo = file.type.startsWith('video/');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        target.preview = e.target.result;
+        target.previewType = isVideo ? 'video' : 'image';
+        target.file = file;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function onAssetFile(e) { handleFile(e.target.files[0], assetForm); e.target.value = ''; }
+    function onAssetDrop(e) { dragOver.value = false; handleFile(e.dataTransfer.files[0], assetForm); }
+
+    function saveAsset() {
+      const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+      if (assetForm.id) {
+        const a = assets.value.find(x => x.id === assetForm.id);
+        if (a) Object.assign(a, { type: assetForm.type, title: assetForm.title, description: assetForm.description, cta: assetForm.cta, preview: assetForm.preview, previewType: assetForm.previewType, updated: now });
+        showToast('Asset updated');
+      } else {
+        const id = String(Math.floor(10000 + Math.random() * 90000));
+        assets.value.unshift({
+          id, name: assetForm.title || 'New ' + assetForm.type, type: assetForm.type,
+          campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021',
+          active: true, updated: now, created: now, schedule: 'Always',
+          title: assetForm.title, description: assetForm.description, cta: assetForm.cta,
+          preview: assetForm.preview, previewType: assetForm.previewType
+        });
+        showToast('Asset created');
+      }
+      mcView.value = 'list';
+      mcTab.value = 'assets';
+    }
+
+    function resetMaterialSlots() {
+      materialSlots.value.forEach(s => { s.enabled = false; s.preview = null; s.previewType = null; s.file = null; });
+    }
+
+    function slotInputRef(el, slot) {
+      if (el) slot.$input = el;
+    }
+
+    function openGroupModal(group) {
+      resetMaterialSlots();
+      if (group) {
+        groupModal.editing = group.id;
+        groupModal.name = group.name;
+        groupModal.method = group.method;
+        groupModal.adUnit = group.adUnit;
+        groupModal.country = group.country;
+        if (group.materials) {
+          Object.entries(group.materials).forEach(([type, data]) => {
+            const slot = materialSlots.value.find(s => s.type === type);
+            if (slot) { slot.enabled = true; slot.preview = data.preview; slot.previewType = data.previewType; }
+          });
+        }
+      } else {
+        groupModal.editing = null;
+        groupModal.name = '';
+        groupModal.method = 'Programmatic Creative';
+        groupModal.adUnit = '';
+        groupModal.country = 'ALL';
+      }
+      groupModal.show = true;
+    }
+
+    function onSlotFile(e, slot) { handleFile(e.target.files[0], slot); e.target.value = ''; }
+    function onSlotDrop(e, slot) { handleFile(e.dataTransfer.files[0], slot); }
+
+    function saveGroup() {
+      if (!groupModal.name.trim()) { showToast('Please enter a group name'); return; }
+      const enabledSlots = materialSlots.value.filter(s => s.enabled);
+      if (!enabledSlots.length) { showToast('Please enable at least one material type'); return; }
+
+      const materials = {};
+      enabledSlots.forEach(s => { materials[s.type] = { preview: s.preview, previewType: s.previewType }; });
+
+      const types = enabledSlots.map(s => s.type);
+      const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+
+      if (groupModal.editing) {
+        const g = groups.value.find(x => x.id === groupModal.editing);
+        if (g) Object.assign(g, { name: groupModal.name, method: groupModal.method, adUnit: groupModal.adUnit, country: groupModal.country, types, materials });
+        showToast('Creative group updated');
+      } else {
+        groups.value.unshift({
+          id: Math.floor(1000000 + Math.random() * 9000000),
+          name: groupModal.name, method: groupModal.method, types,
+          adTypes: 'Banner, Display Interstitial, Native Video, Rewarded Video, Splash AD',
+          country: groupModal.country, adUnit: groupModal.adUnit, created: now, materials
+        });
+        showToast('Creative group created');
+      }
+      groupModal.show = false;
+    }
+
+    function deleteGroup(id) {
+      groups.value = groups.value.filter(g => g.id !== id);
+      selectedGroups.value = selectedGroups.value.filter(x => x !== id);
+      showToast('Creative group deleted');
+    }
+
+    function deleteGroups() {
+      groups.value = groups.value.filter(g => !selectedGroups.value.includes(g.id));
+      selectedGroups.value = [];
+      showToast('Selected groups deleted');
+    }
+
+    function copyGroup(g) {
+      const copy = JSON.parse(JSON.stringify(g));
+      copy.id = Math.floor(1000000 + Math.random() * 9000000);
+      copy.name = g.name + ' (Copy)';
+      copy.created = new Date().toISOString().slice(0, 16).replace('T', ' ');
+      groups.value.unshift(copy);
+      showToast('Creative group copied');
+    }
+
+    function filterGroups() { showToast('Found ' + filteredGroups.value.length + ' groups'); }
+
+    return {
+      page, adsTab, mcTab, mcView, navItems, adsData, creativeTypes, assets, groups,
+      groupFilter, filteredGroups, assetForm, groupModal, materialSlots,
+      selectedAssets, selectedGroups, allAssetsSelected, allGroupsSelected,
+      dragOver, showMetrics, toast,
+      showToast, toggleAllAssets, toggleAllGroups, openAssetForm, editSelectedAsset,
+      onAssetFile, onAssetDrop, saveAsset, openGroupModal, slotInputRef,
+      onSlotFile, onSlotDrop, saveGroup, deleteGroup, deleteGroups, copyGroup, filterGroups
+    };
+  }
+}).mount('#app');
+</script>
+</body>
+</html>
