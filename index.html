@@ -27,6 +27,19 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .nav-item:hover{background:rgba(255,255,255,.06);color:#c8d6e8}
 .nav-item.active{background:rgba(91,192,235,.15);color:#5bc0eb;border-left-color:#5bc0eb}
 .nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.85}
+.nav-parent{flex-direction:column;align-items:stretch;padding:0;background:none;border-left:none;margin-bottom:2px}
+.nav-parent:hover{background:none}
+.nav-parent-head{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:6px;color:#8fa3bf;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.nav-parent-head:hover{background:rgba(255,255,255,.06);color:#c8d6e8}
+.nav-parent-head.active{background:rgba(91,192,235,.15);color:#5bc0eb;border-left-color:#5bc0eb}
+.nav-parent-head svg.nav-icon{width:16px;height:16px;flex-shrink:0;opacity:.85}
+.nav-chevron{margin-left:auto;transition:transform .2s;opacity:.6}
+.nav-chevron.open{transform:rotate(90deg)}
+.nav-sub{overflow:hidden;padding-left:12px}
+.nav-sub-item{display:flex;align-items:center;gap:8px;padding:8px 14px 8px 28px;border-radius:6px;color:#6b8299;font-size:12px;font-weight:500;cursor:pointer;transition:all .15s;margin-bottom:1px;border-left:3px solid transparent}
+.nav-sub-item:hover{background:rgba(255,255,255,.06);color:#c8d6e8}
+.nav-sub-item.active{background:rgba(91,192,235,.12);color:#5bc0eb;border-left-color:#5bc0eb}
+.nav-sub-dot{width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0;opacity:.7}
 .sidebar-foot{padding:12px;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
 .collapse-btn{background:none;border:none;color:#5a6f8a;cursor:pointer;padding:6px}
 
@@ -69,7 +82,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
 .btn-danger-outline:hover{background:#fef2f2}
 .btn-success{background:#10b981;color:#fff;border-color:#10b981}
 .btn-success:hover{background:#059669}
-.btn-link{background:none;border:none;color:#10b981;padding:0 4px;font-size:12px;cursor:pointer}
+.btn-link{background:none;border:none;color:#5bc0eb;padding:0 4px;font-size:12px;cursor:pointer}
 .btn-link:hover{text-decoration:underline}
 .btn-link.danger{color:#ef4444}
 .btn-sm{padding:4px 10px;font-size:12px}
@@ -153,7 +166,8 @@ tr:hover td{background:#f9fafb}
 
 /* Modal */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px}
-.modal{background:#fff;border-radius:6px;width:100%;max-width:720px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal{background:#fff;border-radius:6px;width:100%;max-width:900px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.modal.modal-sm{max-width:640px}
 .modal-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #f0f2f5}
 .modal-head h3{font-size:16px;font-weight:700}
 .modal-close{background:none;border:none;font-size:20px;color:#9ca3af;cursor:pointer;line-height:1}
@@ -165,6 +179,89 @@ tr:hover td{background:#f9fafb}
 .material-slot .upload-zone{padding:20px 12px;margin-bottom:0}
 .material-slot .upload-zone p{font-size:12px}
 .slot-preview img,.slot-preview video{max-width:100%;max-height:80px;border-radius:4px;margin-top:8px}
+.group-asset-toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
+.group-asset-table{border:1px solid #e8ecf1;border-radius:4px;overflow:hidden}
+.group-asset-table table{font-size:12px}
+.group-asset-table th{padding:8px 10px}
+.group-asset-table td{padding:8px 10px}
+.preview-thumb{width:48px;height:36px;border-radius:3px;background:#eff8fd;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:10px;color:#5bc0eb}
+.preview-thumb img,.preview-thumb video{width:100%;height:100%;object-fit:cover}
+.empty-table{padding:36px;text-align:center;color:#9ca3af;font-size:13px}
+.form-hint{font-size:12px;color:#ef4444;margin-top:8px}
+.picker-list{max-height:320px;overflow-y:auto;border:1px solid #e8ecf1;border-radius:4px}
+.picker-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid #f3f4f6;cursor:pointer;transition:background .15s}
+.picker-item:hover{background:#f9fafb}
+.picker-item.selected{background:#eff8fd}
+.picker-item:last-child{border-bottom:none}
+.apply-group-section{margin-top:20px;padding-top:20px;border-top:1px solid #f0f2f5}
+.apply-group-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:10px}
+.radio-row{display:flex;gap:20px;margin-bottom:14px}
+.radio-row label{display:flex;align-items:center;gap:6px;font-size:13px;color:#374151;cursor:pointer}
+.apply-group-filters{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.apply-group-table{border:1px solid #e8ecf1;border-radius:4px;overflow:hidden}
+.apply-group-table table{font-size:12px}
+.apply-group-table th,.apply-group-table td{padding:8px 10px}
+.search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid #d1d9e6;border-radius:4px;padding:7px 12px;width:240px}
+.search-box input{border:none;outline:none;font-size:13px;flex:1;color:#374151}
+.search-box svg{color:#9ca3af;flex-shrink:0}
+.report-actions{display:flex;align-items:center;gap:6px}
+.report-action-btn{width:28px;height:28px;border:none;background:none;cursor:pointer;color:#6b7280;border-radius:4px;display:flex;align-items:center;justify-content:center}
+.report-action-btn:hover{background:#f3f4f6;color:#5bc0eb}
+.report-action-btn.danger:hover{color:#ef4444}
+.status-available{color:#374151;font-size:12px}
+
+/* Monitor Report */
+.monitor-filters{padding:20px 20px 16px;border-bottom:1px solid #e8ecf1}
+.monitor-filter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px}
+.monitor-filter-grid:last-of-type{margin-bottom:0}
+.monitor-filter-grid .form-input,.monitor-filter-grid .form-select{font-size:12px;padding:8px 10px;width:100%}
+.monitor-filter-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:16px;padding-top:16px;border-top:1px solid #f0f2f5}
+.monitor-config{padding:20px;border-bottom:1px solid #e8ecf1;background:#fafbfc}
+.monitor-config-block{margin-bottom:0}
+.monitor-config-block+.monitor-config-block{margin-top:18px;padding-top:18px;border-top:1px solid #eef1f5}
+.monitor-config-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:10px}
+.monitor-check-grid{display:flex;flex-wrap:wrap;gap:10px 20px}
+.monitor-check-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#374151;cursor:pointer;white-space:nowrap;line-height:1.4}
+.monitor-check-item input{accent-color:#5bc0eb;width:14px;height:14px}
+.monitor-hint{font-size:11px;color:#9ca3af;margin-top:4px;line-height:1.5}
+.monitor-metrics-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.monitor-metrics-summary{font-size:12px;color:#6b7280;margin-bottom:2px}
+.monitor-table-section .pagination{padding:14px 16px}
+.sortable-th{cursor:pointer;user-select:none}
+.sortable-th:hover{color:#5bc0eb}
+.empty-data{padding:56px 20px;text-align:center;color:#9ca3af}
+.empty-data-icon{font-size:36px;margin-bottom:12px;opacity:.35}
+
+/* Columns modal (fig2 style) */
+.columns-modal{background:#fff;border-radius:8px;width:100%;max-width:920px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.columns-modal-head{padding:16px 20px;border-bottom:1px solid #f0f2f5}
+.columns-modal-head h3{font-size:16px;font-weight:700;margin-bottom:10px}
+.columns-search{width:100%;border:1px solid #d1d9e6;border-radius:4px;padding:8px 12px;font-size:13px;outline:none}
+.columns-search:focus{border-color:#5bc0eb}
+.columns-modal-body{display:grid;grid-template-columns:1fr 1fr;gap:0;flex:1;overflow:hidden;min-height:420px}
+.columns-pane{display:flex;flex-direction:column;border-right:1px solid #f0f2f5;overflow:hidden}
+.columns-pane:last-child{border-right:none}
+.columns-pane-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #f0f2f5;background:#fafbfc}
+.columns-pane-head h4{font-size:13px;font-weight:600;color:#111}
+.columns-pane-sub{font-size:11px;color:#9ca3af;font-weight:400;margin-top:2px}
+.columns-pane-action{background:none;border:none;color:#5bc0eb;font-size:12px;cursor:pointer;padding:0}
+.columns-pane-action:hover{text-decoration:underline}
+.columns-pane-list{flex:1;overflow-y:auto;padding:8px 0}
+.col-group{margin-bottom:4px}
+.col-group-head{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;font-size:12px;font-weight:600;color:#374151;background:#f9fafb}
+.col-group-toggle{background:none;border:none;cursor:pointer;color:#6b7280;display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.col-item{display:flex;align-items:center;gap:8px;padding:8px 16px 8px 28px;font-size:12px;color:#374151;border-bottom:1px solid #f9fafb}
+.col-item:hover{background:#f9fafb}
+.col-drag{color:#c5cdd8;cursor:grab;font-size:14px;line-height:1}
+.col-remove{margin-left:auto;background:none;border:none;color:#ef4444;cursor:pointer;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+.col-remove:hover{background:#fef2f2}
+.col-add-group{background:none;border:none;color:#5bc0eb;font-size:11px;cursor:pointer;padding:0}
+.col-add-group:hover{text-decoration:underline}
+.unsel-group{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #f3f4f6;font-size:12px;color:#374151}
+.unsel-group:hover{background:#f9fafb}
+.columns-modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid #f0f2f5}
+.btn-dark{background:#111827;color:#fff;border-color:#111827}
+.btn-dark:hover{background:#1f2937}
 
 /* Toast */
 .toast{position:fixed;top:20px;right:20px;z-index:200;background:#1f2937;color:#fff;padding:12px 18px;border-radius:6px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.2);opacity:0;transform:translateY(-8px);transition:all .3s;pointer-events:none}
@@ -173,10 +270,168 @@ tr:hover td{background:#f9fafb}
 /* Ads tabs data */
 .metric-col{color:#5bc0eb;font-size:11px}
 .tag-type{display:inline-block;padding:2px 8px;background:#eff8fd;color:#0891b2;border-radius:3px;font-size:11px}
+
+/* Dashboard / Risk Control */
+.dash-grid{display:grid;gap:16px;margin-bottom:16px}
+.dash-kpi-row{grid-template-columns:repeat(4,1fr)}
+.dash-main-row{grid-template-columns:1.4fr 1fr}
+.dash-card{background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:20px}
+.dash-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.dash-card-title{font-size:14px;font-weight:700;color:#111827}
+.dash-card-sub{font-size:11px;color:#9ca3af;margin-top:2px}
+.dash-kpi{padding:18px 20px}
+.dash-kpi-label{font-size:12px;color:#6b7280;margin-bottom:8px}
+.dash-kpi-val{font-size:24px;font-weight:700;color:#111827;line-height:1.2}
+.dash-kpi-foot{font-size:11px;color:#9ca3af;margin-top:6px}
+.dash-kpi-foot.up{color:#10b981}
+.dash-kpi-foot.down{color:#ef4444}
+.dash-kpi-foot.warn{color:#f59e0b}
+.health-hero{display:flex;align-items:center;gap:24px;padding:24px;margin-bottom:16px}
+.health-score-ring{position:relative;width:100px;height:100px;flex-shrink:0}
+.health-score-ring svg{transform:rotate(-90deg)}
+.health-score-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.health-score-num{font-size:28px;font-weight:700;color:#111827;line-height:1}
+.health-score-label{font-size:11px;color:#6b7280;margin-top:2px}
+.health-meta{flex:1}
+.health-meta h2{font-size:18px;font-weight:700;color:#111827;margin-bottom:6px}
+.health-meta p{font-size:13px;color:#6b7280;line-height:1.5;margin-bottom:12px}
+.health-tags{display:flex;flex-wrap:wrap;gap:8px}
+.health-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:500}
+.health-tag.good{background:#ecfdf5;color:#059669}
+.health-tag.warn{background:#fffbeb;color:#d97706}
+.health-tag.bad{background:#fef2f2;color:#dc2626}
+.health-tag-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.progress-row{margin-bottom:14px}
+.progress-row:last-child{margin-bottom:0}
+.progress-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.progress-name{color:#374151;font-weight:500}
+.progress-val{color:#6b7280}
+.progress-track{height:8px;background:#eef1f6;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .3s}
+.progress-fill.blue{background:#5bc0eb}
+.progress-fill.green{background:#10b981}
+.progress-fill.orange{background:#f59e0b}
+.progress-fill.red{background:#ef4444}
+.pacing-chart{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px}
+.pacing-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+.pacing-bar{width:100%;border-radius:3px 3px 0 0;background:#dbeafe;position:relative;min-height:4px}
+.pacing-bar.actual{background:#5bc0eb}
+.pacing-bar-target{position:absolute;bottom:0;left:0;right:0;height:2px;background:#f59e0b;opacity:.8}
+.pacing-label{font-size:10px;color:#9ca3af}
+.health-metric-list{display:flex;flex-direction:column;gap:12px}
+.health-metric{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#fafbfc;border-radius:4px;border:1px solid #f0f2f5}
+.health-metric-left{display:flex;flex-direction:column;gap:2px}
+.health-metric-name{font-size:12px;font-weight:600;color:#374151}
+.health-metric-desc{font-size:11px;color:#9ca3af}
+.health-metric-val{font-size:14px;font-weight:700;color:#111827}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:600}
+.status-pill.good{background:#ecfdf5;color:#059669}
+.status-pill.warn{background:#fffbeb;color:#d97706}
+.status-pill.bad{background:#fef2f2;color:#dc2626}
+.alert-list{display:flex;flex-direction:column;gap:10px}
+.alert-item{display:flex;gap:12px;padding:12px 14px;border-radius:4px;border:1px solid #f0f2f5;background:#fafbfc}
+.alert-item.warn{border-color:#fde68a;background:#fffbeb}
+.alert-item.bad{border-color:#fecaca;background:#fef2f2}
+.alert-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.alert-item.warn .alert-icon{background:#fef3c7;color:#d97706}
+.alert-item.bad .alert-icon{background:#fee2e2;color:#dc2626}
+.alert-item.info .alert-icon{background:#eff8fd;color:#5bc0eb}
+.alert-body{flex:1;min-width:0}
+.alert-title{font-size:12px;font-weight:600;color:#111827;margin-bottom:2px}
+.alert-desc{font-size:11px;color:#6b7280;line-height:1.4}
+.alert-time{font-size:10px;color:#9ca3af;margin-top:4px;white-space:nowrap}
+.dash-table{font-size:12px;width:100%;border-collapse:collapse}
+.dash-table th{text-align:left;padding:8px 10px;background:#fafbfc;color:#6b7280;font-weight:600;border-bottom:1px solid #e8ecf1}
+.dash-table td{padding:10px;border-bottom:1px solid #f3f4f6;color:#374151;vertical-align:middle}
+.dash-table tr:last-child td{border-bottom:none}
+
+/* User dropdown */
+.user-dropdown-wrap{position:relative}
+.user-block{cursor:pointer;padding:4px 8px;border-radius:6px;transition:background .15s}
+.user-block:hover{background:#f3f4f6}
+.user-block.open{background:#f3f4f6}
+.user-chevron{color:#9ca3af;transition:transform .15s}
+.user-block.open .user-chevron{transform:rotate(180deg)}
+.user-menu{position:absolute;top:calc(100% + 6px);right:0;background:#fff;border:1px solid #e5e9f0;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.12);min-width:180px;z-index:50;padding:4px 0}
+.user-menu-item{display:flex;align-items:center;gap:8px;padding:10px 16px;font-size:13px;color:#374151;cursor:pointer;transition:background .15s}
+.user-menu-item:hover{background:#f9fafb}
+.user-menu-item svg{width:16px;height:16px;color:#6b7280;flex-shrink:0}
+.user-menu-divider{height:1px;background:#f0f2f5;margin:4px 0}
+
+/* Account settings */
+.settings-layout{display:flex;gap:0;min-height:calc(100vh - 92px);margin:-20px -24px}
+.settings-sidebar{width:220px;background:#fff;border-right:1px solid #e8ecf1;padding:24px 0;flex-shrink:0}
+.settings-sidebar-title{font-size:13px;font-weight:600;color:#6b7280;padding:0 20px 12px}
+.settings-nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;font-weight:500;color:#374151;cursor:pointer;transition:all .15s;border-left:3px solid transparent}
+.settings-nav-item:hover{background:#f9fafb}
+.settings-nav-item.active{background:#f3f4f6;color:#111827;border-left-color:#5bc0eb;font-weight:600}
+.settings-nav-item svg{width:18px;height:18px;color:#6b7280;flex-shrink:0}
+.settings-nav-item.active svg{color:#5bc0eb}
+.settings-main{flex:1;padding:24px 32px;overflow-y:auto}
+.settings-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#6b7280;cursor:pointer;margin-bottom:16px;background:none;border:none;padding:0}
+.settings-back:hover{color:#374151}
+.settings-page-title{font-size:22px;font-weight:700;color:#111827;margin-bottom:24px}
+.account-header{display:flex;align-items:center;gap:14px;padding:20px 24px;border-bottom:1px solid #f0f2f5}
+.account-avatar-lg{width:48px;height:48px;border-radius:8px;background:#5bc0eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.account-header-info h3{font-size:16px;font-weight:700;color:#111827;margin-bottom:2px}
+.account-header-info p{font-size:12px;color:#9ca3af}
+.account-form{padding:24px}
+.account-form .form-group{margin-bottom:20px}
+.account-form-actions{display:flex;justify-content:flex-end;padding:16px 24px;border-top:1px solid #f0f2f5}
+.website-input{display:flex}
+.website-prefix{background:#f3f4f6;border:1px solid #d1d9e6;border-right:none;border-radius:4px 0 0 4px;padding:8px 12px;font-size:13px;color:#9ca3af;white-space:nowrap}
+.website-input .form-input{border-radius:0 4px 4px 0}
+.owner-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:#eff8fd;border:1px solid #bae6fd;border-radius:6px;margin-bottom:24px}
+.owner-avatar{width:40px;height:40px;border-radius:50%;background:#5bc0eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
+.owner-label{font-size:11px;font-weight:600;color:#0891b2;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+.owner-email{font-size:13px;color:#374151}
+.members-section-title{font-size:15px;font-weight:700;color:#111827;margin-bottom:12px}
+.members-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.members-toolbar .mc-input{width:220px}
+.members-toolbar .mc-select{width:140px;color:#374151}
+.info-icon{width:18px;height:18px;border-radius:50%;border:1px solid #d1d9e6;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#9ca3af;cursor:help}
+.empty-state{text-align:center;padding:48px 20px;color:#9ca3af}
+.access-badge{display:inline-block;padding:2px 10px;background:#f3f4f6;color:#6b7280;border-radius:4px;font-size:12px;font-weight:500}
+.billing-banner{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;background:#eff8fd;border:1px solid #bae6fd;border-radius:6px;margin-bottom:20px;font-size:13px;color:#374151;line-height:1.5}
+.billing-banner svg{flex-shrink:0;color:#5bc0eb;margin-top:1px}
+.billing-banner a{color:#5bc0eb;text-decoration:none;font-weight:500}
+.billing-banner a:hover{text-decoration:underline}
+.billing-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.billing-card{padding:20px 24px}
+.billing-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.billing-card-head h4{font-size:14px;font-weight:600;color:#374151}
+.billing-balance{font-size:32px;font-weight:700;color:#111827;margin-bottom:16px}
+.billing-breakdown{font-size:12px;color:#6b7280;line-height:2}
+.billing-breakdown span{color:#374151;font-weight:500}
+.auto-reload-badge{display:inline-block;padding:2px 8px;background:#fef3c7;color:#d97706;border-radius:4px;font-size:11px;font-weight:600}
+.no-payment{display:flex;flex-direction:column;align-items:center;padding:24px 0;text-align:center;color:#9ca3af}
+.no-payment svg{margin-bottom:12px;color:#d1d5db}
+.no-payment p{font-size:13px;margin-bottom:16px}
+.billing-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
+.billing-section-head h4{font-size:15px;font-weight:700;color:#111827}
+.billing-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.billing-filters{display:flex;gap:8px;margin-bottom:12px}
+.filter-chip{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border:1px solid #d1d9e6;border-radius:4px;font-size:12px;color:#374151;background:#fff;cursor:pointer}
+.filter-chip:hover{border-color:#5bc0eb}
+.receipt-toggle{display:flex;align-items:center;gap:8px;font-size:12px;color:#374151}
+.billing-address-card{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;margin-top:24px}
+.billing-address-left{display:flex;align-items:center;gap:14px}
+.billing-address-icon{width:40px;height:40px;border-radius:8px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;color:#6b7280}
+.billing-address-info h4{font-size:14px;font-weight:600;color:#111827;margin-bottom:2px}
+.billing-address-info p{font-size:13px;color:#9ca3af}
+.stripe-badge{text-align:center;padding:24px 0;color:#9ca3af;font-size:12px}
+.stripe-badge strong{color:#635bff;font-weight:700}
+.modal-info{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;background:#eff8fd;border:1px solid #bae6fd;border-radius:4px;font-size:12px;color:#374151;line-height:1.5;margin-bottom:20px}
+.modal-info svg{flex-shrink:0;color:#5bc0eb;margin-top:1px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-required::after{content:' *';color:#ef4444}
+.modal-section-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f0f2f5}
+.card-details-box{background:#f9fafb;border-radius:4px;padding:16px;margin-bottom:16px}
+
 </style>
 </head>
 <body>
-<div id="app" v-cloak>
+<div id="app" v-cloak @click="userMenuOpen=false">
   <div class="toast" :class="{show:toast.show}">{{ toast.text }}</div>
 
   <div class="app">
@@ -189,10 +444,25 @@ tr:hover td{background:#f9fafb}
         <span class="logo-text">tarrific.tv</span>
       </div>
       <nav class="nav">
-        <div v-for="item in navItems" :key="item.id" class="nav-item" :class="{active: page===item.id}" @click="page=item.id">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" v-html="item.icon"></svg>
-          {{ item.label }}
-        </div>
+        <template v-for="item in navItems" :key="item.id">
+          <div v-if="item.children" class="nav-item nav-parent">
+            <div class="nav-parent-head" :class="{active: isReportsPage}" @click="toggleReportsNav">
+              <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" v-html="item.icon"></svg>
+              {{ item.label }}
+              <svg class="nav-chevron" :class="{open: reportsNavOpen}" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </div>
+            <div v-show="reportsNavOpen" class="nav-sub">
+              <div v-for="sub in item.children" :key="sub.id" class="nav-sub-item" :class="{active: page===sub.id}" @click="page=sub.id; reportsNavOpen=true">
+                <span class="nav-sub-dot"></span>
+                {{ sub.label }}
+              </div>
+            </div>
+          </div>
+          <div v-else class="nav-item" :class="{active: page===item.id}" @click="page=item.id">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" v-html="item.icon"></svg>
+            {{ item.label }}
+          </div>
+        </template>
       </nav>
       <div class="sidebar-foot">
         <button class="collapse-btn" title="Collapse">
@@ -209,18 +479,176 @@ tr:hover td{background:#f9fafb}
           English
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
         </div>
-        <div class="user-block">
-          <div class="user-avatar">D</div>
-          <span class="user-name">DSP Admin2</span>
+        <div class="user-dropdown-wrap" @click.stop>
+          <div class="user-block" :class="{open:userMenuOpen}" @click="userMenuOpen=!userMenuOpen">
+            <div class="user-avatar">{{ accountInfo.initials }}</div>
+            <span class="user-name">{{ accountInfo.displayName }}</span>
+            <svg class="user-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </div>
+          <div class="user-menu" v-if="userMenuOpen">
+            <div class="user-menu-item" @click="openAccountSettings('account-info')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+              Account settings
+            </div>
+            <div class="user-menu-divider"></div>
+            <div class="user-menu-item" @click="showToast('Signed out')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+              Sign out
+            </div>
+          </div>
         </div>
       </header>
 
       <div class="content">
-        <!-- ═══ DASHBOARD (placeholder) ═══ -->
+        <!-- ═══ DASHBOARD: Risk Control ═══ -->
         <template v-if="page==='dashboard'">
           <div class="bread">Home</div>
-          <div class="page-title" style="margin-bottom:20px">Dashboard</div>
-          <div class="card"><div class="placeholder"><h2>Dashboard</h2><p>Overview metrics and charts will appear here.</p></div></div>
+          <div class="page-head">
+            <div>
+              <h1 class="page-title">Risk Control Dashboard</h1>
+              <p style="font-size:12px;color:#9ca3af;margin-top:4px">Account health, budget pacing &amp; delivery risk overview</p>
+            </div>
+            <button class="btn btn-default btn-sm" @click="showToast('Dashboard refreshed')">↻ Refresh</button>
+          </div>
+
+          <!-- Health Hero -->
+          <div class="dash-card health-hero">
+            <div class="health-score-ring">
+              <svg width="100" height="100" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#eef1f6" stroke-width="8"/>
+                <circle cx="50" cy="50" r="42" fill="none" stroke="#5bc0eb" stroke-width="8"
+                  :stroke-dasharray="264" :stroke-dashoffset="264 - (264 * dashboard.healthScore / 100)" stroke-linecap="round"/>
+              </svg>
+              <div class="health-score-text">
+                <span class="health-score-num">{{ dashboard.healthScore }}</span>
+                <span class="health-score-label">Health</span>
+              </div>
+            </div>
+            <div class="health-meta">
+              <h2>Account Health: {{ dashboard.healthLabel }}</h2>
+              <p>{{ dashboard.healthSummary }}</p>
+              <div class="health-tags">
+                <span v-for="tag in dashboard.healthTags" :key="tag.label" class="health-tag" :class="tag.level">
+                  <span class="health-tag-dot"></span>{{ tag.label }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI Row -->
+          <div class="dash-grid dash-kpi-row">
+            <div class="dash-card dash-kpi" v-for="kpi in dashboard.kpis" :key="kpi.label">
+              <div class="dash-kpi-label">{{ kpi.label }}</div>
+              <div class="dash-kpi-val">{{ kpi.value }}</div>
+              <div class="dash-kpi-foot" :class="kpi.trend">{{ kpi.foot }}</div>
+            </div>
+          </div>
+
+          <!-- Budget + Health Metrics -->
+          <div class="dash-grid dash-main-row">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <div class="dash-card-title">Budget Progress</div>
+                  <div class="dash-card-sub">Monthly &amp; daily pacing vs plan</div>
+                </div>
+              </div>
+              <div class="progress-row">
+                <div class="progress-head"><span class="progress-name">Monthly Budget</span><span class="progress-val">${{ dashboard.monthlySpent.toLocaleString() }} / ${{ dashboard.monthlyCap.toLocaleString() }} ({{ dashboard.monthlyPct }}%)</span></div>
+                <div class="progress-track"><div class="progress-fill" :class="dashboard.monthlyPct > 90 ? 'orange' : 'blue'" :style="{width: dashboard.monthlyPct + '%'}"></div></div>
+              </div>
+              <div class="progress-row">
+                <div class="progress-head"><span class="progress-name">Today's Spend</span><span class="progress-val">${{ dashboard.todaySpent.toLocaleString() }} / ${{ dashboard.todayCap.toLocaleString() }} ({{ dashboard.todayPct }}%)</span></div>
+                <div class="progress-track"><div class="progress-fill" :class="dashboard.todayPct > 100 ? 'red' : dashboard.todayPct > 85 ? 'orange' : 'green'" :style="{width: Math.min(dashboard.todayPct, 100) + '%'}"></div></div>
+              </div>
+              <div style="margin-top:20px;margin-bottom:8px;font-size:12px;font-weight:600;color:#374151">7-Day Spend Pacing</div>
+              <div class="pacing-chart">
+                <div v-for="d in dashboard.pacingDays" :key="d.label" class="pacing-bar-wrap">
+                  <div class="pacing-bar" :style="{height: d.pct + '%'}">
+                    <div class="pacing-bar-target" :style="{bottom: d.targetPct + '%'}"></div>
+                  </div>
+                  <span class="pacing-label">{{ d.label }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <div class="dash-card-title">Delivery Health</div>
+                  <div class="dash-card-sub">Programmatic delivery quality</div>
+                </div>
+              </div>
+              <div class="health-metric-list">
+                <div v-for="m in dashboard.deliveryMetrics" :key="m.name" class="health-metric">
+                  <div class="health-metric-left">
+                    <span class="health-metric-name">{{ m.name }}</span>
+                    <span class="health-metric-desc">{{ m.desc }}</span>
+                  </div>
+                  <div style="text-align:right">
+                    <div class="health-metric-val">{{ m.value }}</div>
+                    <span class="status-pill" :class="m.status">{{ m.statusLabel }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Campaign Budget + Alerts -->
+          <div class="dash-grid dash-main-row" style="margin-bottom:16px">
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <div class="dash-card-title">Campaign Budget Status</div>
+                  <div class="dash-card-sub">Daily budget utilization by campaign</div>
+                </div>
+              </div>
+              <table class="dash-table">
+                <thead>
+                  <tr>
+                    <th>Campaign</th>
+                    <th>Daily Budget</th>
+                    <th>Spent Today</th>
+                    <th>Progress</th>
+                    <th>Pacing</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="c in dashboard.campaignBudgets" :key="c.name">
+                    <td style="font-weight:600">{{ c.name }}</td>
+                    <td>${{ c.dailyBudget.toLocaleString() }}</td>
+                    <td>${{ c.spent.toLocaleString() }}</td>
+                    <td style="min-width:140px">
+                      <div class="progress-track" style="height:6px">
+                        <div class="progress-fill" :class="c.pct > 100 ? 'red' : c.pct > 85 ? 'orange' : 'blue'" :style="{width: Math.min(c.pct, 100) + '%'}"></div>
+                      </div>
+                      <span style="font-size:10px;color:#9ca3af">{{ c.pct }}%</span>
+                    </td>
+                    <td><span class="status-pill" :class="c.pacingStatus">{{ c.pacingLabel }}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="dash-card">
+              <div class="dash-card-head">
+                <div>
+                  <div class="dash-card-title">Risk Alerts</div>
+                  <div class="dash-card-sub">{{ dashboard.alerts.length }} items need attention</div>
+                </div>
+              </div>
+              <div class="alert-list">
+                <div v-for="(a,i) in dashboard.alerts" :key="i" class="alert-item" :class="a.level">
+                  <div class="alert-icon">{{ a.level === 'bad' ? '!' : a.level === 'warn' ? '⚠' : 'i' }}</div>
+                  <div class="alert-body">
+                    <div class="alert-title">{{ a.title }}</div>
+                    <div class="alert-desc">{{ a.desc }}</div>
+                  </div>
+                  <div class="alert-time">{{ a.time }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </template>
 
         <!-- ═══ ADS (no Creative tab) ═══ -->
@@ -299,7 +727,7 @@ tr:hover td{background:#f9fafb}
             <div class="card">
               <div class="card-tabs">
                 <div class="card-tab" :class="{active:mcTab==='group'}" @click="mcTab='group'">Creative Group</div>
-                <div class="card-tab" :class="{active:mcTab==='assets'}" @click="mcTab='assets'">Assets</div>
+                <div class="card-tab" :class="{active:mcTab==='creatives'}" @click="mcTab='creatives'">Creatives</div>
               </div>
 
               <!-- Creative Group tab -->
@@ -313,9 +741,7 @@ tr:hover td{background:#f9fafb}
                   </select>
                   <input class="mc-input" v-model="groupFilter.adUnit" placeholder="- Ad Unit Name -">
                   <div class="mc-actions">
-                    <button class="btn btn-success" @click="openGroupModal()">Upload Creative Group</button>
-                    <button class="btn btn-danger-outline" :disabled="!selectedGroups.length" @click="deleteGroups">Delete Creative Group</button>
-                    <button class="btn btn-success" @click="filterGroups">Find Creative Group</button>
+                    <button class="btn btn-primary" @click="openGroupModal()">New Creative Group</button>
                   </div>
                 </div>
                 <div class="table-wrap">
@@ -325,6 +751,10 @@ tr:hover td{background:#f9fafb}
                         <th><input type="checkbox" :checked="allGroupsSelected" @change="toggleAllGroups"></th>
                         <th>ID</th>
                         <th>Creative Group Name</th>
+                        <th>Campaign Name</th>
+                        <th>Campaign ID</th>
+                        <th>Ad Group Name</th>
+                        <th>Ad Group ID</th>
                         <th>Combination Method</th>
                         <th>Creative Type</th>
                         <th>Deliverable Ad Types</th>
@@ -339,6 +769,10 @@ tr:hover td{background:#f9fafb}
                         <td><input type="checkbox" :value="g.id" v-model="selectedGroups"></td>
                         <td>{{ g.id }}</td>
                         <td>{{ g.name }}</td>
+                        <td>{{ g.campaignName }}</td>
+                        <td>{{ g.campaignId }}</td>
+                        <td>{{ g.adGroupName }}</td>
+                        <td>{{ g.adGroupId }}</td>
                         <td>{{ g.method }}</td>
                         <td><span v-for="(t,i) in g.types" :key="i" class="tag-type" style="margin-right:4px">{{ t }}</span></td>
                         <td style="max-width:200px;font-size:11px;line-height:1.6">{{ g.adTypes }}</td>
@@ -351,7 +785,7 @@ tr:hover td{background:#f9fafb}
                           <button class="btn-link danger" @click="deleteGroup(g.id)">Delete</button>
                         </td>
                       </tr>
-                      <tr v-if="!filteredGroups.length"><td colspan="10" style="text-align:center;padding:40px;color:#9ca3af">No creative groups found</td></tr>
+                      <tr v-if="!filteredGroups.length"><td colspan="14" style="text-align:center;padding:40px;color:#9ca3af">No creative groups found</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -364,8 +798,8 @@ tr:hover td{background:#f9fafb}
                 </div>
               </template>
 
-              <!-- Assets tab -->
-              <template v-if="mcTab==='assets'">
+              <!-- Creatives tab -->
+              <template v-if="mcTab==='creatives'">
                 <div class="toolbar">
                   <div class="toolbar-left">
                     <button class="btn btn-primary" @click="openAssetForm()">New</button>
@@ -461,9 +895,47 @@ tr:hover td{background:#f9fafb}
                   <label class="form-label">Description</label>
                   <textarea class="form-textarea" v-model="assetForm.description" placeholder="Build performant mobile growth loops..."></textarea>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Native CTA Text</label>
-                  <input class="form-input" v-model="assetForm.cta" placeholder="Install">
+                <div class="apply-group-section">
+                  <div class="apply-group-title">Apply materials to existing Creative Group</div>
+                  <div class="radio-row">
+                    <label><input type="radio" v-model="applyToGroupForm.enabled" value="yes"> Yes</label>
+                    <label><input type="radio" v-model="applyToGroupForm.enabled" value="no"> No</label>
+                  </div>
+                  <template v-if="applyToGroupForm.enabled==='yes'">
+                    <div class="apply-group-filters">
+                      <input class="mc-input" v-model="applyToGroupForm.name" placeholder="Creative Group Name">
+                      <input class="mc-input" v-model="applyToGroupForm.adUnit" placeholder="- Ad Unit Name -">
+                      <button class="btn btn-primary btn-sm" @click="searchApplyGroups">Find</button>
+                    </div>
+                    <div class="apply-group-table">
+                      <table>
+                        <thead>
+                          <tr>
+                            <th><input type="checkbox" :checked="allApplyGroupsSelected" @change="toggleAllApplyGroups"></th>
+                            <th>Creative Group ID</th>
+                            <th>Creative Group Name</th>
+                            <th>Ad Unit</th>
+                            <th>Ad Name</th>
+                            <th>Store ID</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="g in filteredApplyGroups" :key="g.id">
+                            <td><input type="checkbox" :value="g.id" v-model="applyToGroupForm.selected"></td>
+                            <td>{{ g.id }}</td>
+                            <td>{{ g.name }}</td>
+                            <td>{{ g.adUnit }}</td>
+                            <td>{{ g.adName }}</td>
+                            <td>{{ g.storeId }}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <div v-if="!filteredApplyGroups.length" class="empty-table">No creative groups found</div>
+                    </div>
+                    <div class="pagination" style="justify-content:flex-end;padding:8px 0 0">
+                      Total {{ filteredApplyGroups.length }}
+                    </div>
+                  </template>
                 </div>
               </div>
               <div class="phone-wrap">
@@ -487,7 +959,7 @@ tr:hover td{background:#f9fafb}
                         <div class="ad-body">
                           <div class="ad-title">{{ assetForm.title || 'Your next install starts here' }}</div>
                           <div class="ad-desc">{{ assetForm.description || 'Build performant mobile growth loops with native, banner and video creatives.' }}</div>
-                          <button class="ad-cta">{{ assetForm.cta || 'Install' }}</button>
+                          <button class="ad-cta">Install</button>
                         </div>
                       </div>
                     </div>
@@ -498,77 +970,589 @@ tr:hover td{background:#f9fafb}
           </template>
         </template>
 
-        <!-- ═══ Other placeholders ═══ -->
-        <template v-if="page==='reports'">
-          <div class="bread">Home <span>></span> Reports</div>
-          <div class="page-title" style="margin-bottom:20px">Reports</div>
-          <div class="card"><div class="placeholder"><h2>Reports</h2><p>Performance reports and analytics.</p></div></div>
+        <!-- ═══ REPORTS: Download ═══ -->
+        <template v-if="page==='reports-download'">
+          <div class="bread">Home <span>></span> Reports <span>></span> Download Reports</div>
+          <div class="page-head">
+            <h1 class="page-title">Download Reports</h1>
+            <button class="btn btn-primary" @click="showToast('Create report dialog coming soon')">+ Create</button>
+          </div>
+          <div class="card">
+            <div class="toolbar">
+              <div class="search-box">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <input v-model="reportSearch" placeholder="Search">
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Report name</th>
+                    <th>Time range</th>
+                    <th>Rows/size</th>
+                    <th>Status</th>
+                    <th>Create date</th>
+                    <th>Create by</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="r in filteredDownloadReports" :key="r.id">
+                    <td>{{ r.name }}</td>
+                    <td>{{ r.timeRange }}</td>
+                    <td>{{ r.rowsSize }}</td>
+                    <td><span class="status-available">{{ r.status }}</span></td>
+                    <td>{{ r.createDate }}</td>
+                    <td>{{ r.createBy }}</td>
+                    <td>
+                      <div class="report-actions">
+                        <button class="report-action-btn" title="Download" @click="showToast('Downloading ' + r.name)">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+                        </button>
+                        <button class="report-action-btn" title="View" @click="showToast('Viewing ' + r.name)">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        </button>
+                        <button class="report-action-btn danger" title="Delete" @click="deleteReport(r.id)">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr v-if="!filteredDownloadReports.length"><td colspan="7" style="text-align:center;padding:40px;color:#9ca3af">No reports found</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              Total {{ filteredDownloadReports.length }}
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+              <select class="page-size"><option>10 / page</option></select>
+            </div>
+          </div>
+        </template>
+
+        <!-- ═══ REPORTS: Ad Monitoring ═══ -->
+        <template v-if="page==='reports-ad-monitor'">
+          <div class="bread">Home <span>></span> Reports <span>></span> Ad Monitoring Report</div>
+          <div class="page-head">
+            <h1 class="page-title">Ad Performance Monitoring</h1>
+          </div>
+          <div class="card">
+            <!-- Filters -->
+            <div class="monitor-filters">
+              <div class="monitor-filter-grid">
+                <select class="form-select" v-model="adMonitorFilter.timezone">
+                  <option>UTC + 8 (Shanghai, Hong Kong, Kuala Lumpur)</option>
+                  <option>UTC + 0 (London)</option>
+                  <option>UTC - 5 (New York)</option>
+                </select>
+                <div class="date-range" style="justify-content:space-between">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  <input type="text" v-model="adMonitorFilter.dateRange" style="border:none;outline:none;font-size:12px;flex:1;background:transparent">
+                </div>
+                <input class="form-input" v-model="adMonitorFilter.campaignName" placeholder="Campaign Name">
+                <input class="form-input" v-model="adMonitorFilter.campaignId" placeholder="Campaign ID">
+              </div>
+              <div class="monitor-filter-grid">
+                <input class="form-input" v-model="adMonitorFilter.adGroupName" placeholder="Ad Group Name">
+                <input class="form-input" v-model="adMonitorFilter.adGroupId" placeholder="Ad Group ID">
+                <input class="form-input" v-model="adMonitorFilter.creativeName" placeholder="Creative Name">
+                <input class="form-input" v-model="adMonitorFilter.creativeId" placeholder="Creative ID">
+              </div>
+              <div class="monitor-filter-grid">
+                <input class="form-input" v-model="adMonitorFilter.creativeGroupName" placeholder="Creative Group Name">
+                <input class="form-input" v-model="adMonitorFilter.creativeGroupId" placeholder="Creative Group ID">
+                <select class="form-select" v-model="adMonitorFilter.creativeType">
+                  <option value="">Creative Type</option>
+                  <option>Banner</option>
+                  <option>Native Image</option>
+                  <option>Video</option>
+                  <option>Video EndCard</option>
+                  <option>Playable</option>
+                </select>
+                <input class="form-input" v-model="adMonitorFilter.region" placeholder="Delivery Region">
+              </div>
+              <div class="monitor-filter-actions">
+                <button class="btn btn-default btn-sm" @click="adMonitorAdvanced=!adMonitorAdvanced">
+                  Advanced Options {{ adMonitorAdvanced ? '▴' : '▾' }}
+                </button>
+                <button class="btn btn-primary btn-sm" @click="searchAdMonitor">Search Data</button>
+                <button class="btn btn-default btn-sm" @click="showToast('Exporting data...')">Export Data</button>
+              </div>
+            </div>
+
+            <!-- Dimensions & Metrics config -->
+            <div class="monitor-config">
+              <div class="monitor-config-block">
+                <div class="monitor-config-title">Data Dimensions</div>
+                <div class="monitor-check-grid">
+                  <label v-for="d in adMonitorDimensions" :key="d.key" class="monitor-check-item">
+                    <input type="checkbox" v-model="d.selected"> {{ d.label }}
+                  </label>
+                </div>
+              </div>
+              <div class="monitor-config-block">
+                <div class="monitor-metrics-bar">
+                  <div>
+                    <div class="monitor-config-title">Data Indicators</div>
+                    <div class="monitor-metrics-summary">{{ adMonitorSelectedMetrics.length }} columns selected</div>
+                    <div class="monitor-hint">Tip: To view Ad &amp; IAP indicators, configure Event Mapping first.</div>
+                  </div>
+                  <button class="btn btn-primary btn-sm" @click="openColumnsModal('ad')">Configure Columns</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Data table -->
+            <div class="monitor-table-section">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th v-for="col in adMonitorTableColumns" :key="col.key" class="sortable-th" @click="sortAdMonitor(col.key)">
+                      {{ col.label }}
+                      <span v-if="col.key===adMonitorSort.key">{{ adMonitorSort.dir==='asc'?'↑':'↓' }}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row,i) in adMonitorDisplayData" :key="i">
+                    <td v-for="col in adMonitorTableColumns" :key="col.key">{{ row[col.key] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div v-if="!adMonitorDisplayData.length" class="empty-data">
+                <div class="empty-data-icon">✈</div>
+                <div>No data</div>
+              </div>
+            </div>
+            <div class="pagination">
+              Total {{ adMonitorDisplayData.length }}
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+              <select class="page-size"><option>50 / page</option></select>
+            </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- ═══ REPORTS: Creative Monitoring ═══ -->
+        <template v-if="page==='reports-creative-monitor'">
+          <div class="bread">Home <span>></span> Reports <span>></span> Creative Monitoring Report</div>
+          <div class="page-head">
+            <h1 class="page-title">Creative Monitoring</h1>
+          </div>
+          <div class="card">
+            <div class="monitor-filters">
+              <div class="monitor-filter-grid">
+                <select class="form-select" v-model="creativeMonitorFilter.timezone">
+                  <option>UTC + 8 (Shanghai, Hong Kong, Kuala Lumpur)</option>
+                  <option>UTC + 0 (London)</option>
+                  <option>UTC - 5 (New York)</option>
+                </select>
+                <div class="date-range" style="justify-content:space-between">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                  <input type="text" v-model="creativeMonitorFilter.dateRange" style="border:none;outline:none;font-size:12px;flex:1;background:transparent">
+                </div>
+                <input class="form-input" v-model="creativeMonitorFilter.campaignName" placeholder="Campaign Name">
+                <input class="form-input" v-model="creativeMonitorFilter.campaignId" placeholder="Campaign ID">
+              </div>
+              <div class="monitor-filter-grid">
+                <input class="form-input" v-model="creativeMonitorFilter.adGroupName" placeholder="Ad Group Name">
+                <input class="form-input" v-model="creativeMonitorFilter.adGroupId" placeholder="Ad Group ID">
+                <input class="form-input" v-model="creativeMonitorFilter.creativeName" placeholder="Creative Name">
+                <input class="form-input" v-model="creativeMonitorFilter.creativeId" placeholder="Creative ID">
+              </div>
+              <div class="monitor-filter-grid">
+                <input class="form-input" v-model="creativeMonitorFilter.creativeGroupName" placeholder="Creative Group Name">
+                <input class="form-input" v-model="creativeMonitorFilter.creativeGroupId" placeholder="Creative Group ID">
+                <select class="form-select" v-model="creativeMonitorFilter.creativeType">
+                  <option value="">Creative Type</option>
+                  <option>Banner</option>
+                  <option>Native Image</option>
+                  <option>Video</option>
+                  <option>Video EndCard</option>
+                  <option>Playable</option>
+                </select>
+                <input class="form-input" v-model="creativeMonitorFilter.region" placeholder="Delivery Region">
+              </div>
+              <div class="monitor-filter-actions">
+                <button class="btn btn-default btn-sm" @click="creativeMonitorAdvanced=!creativeMonitorAdvanced">
+                  Advanced Options {{ creativeMonitorAdvanced ? '▴' : '▾' }}
+                </button>
+                <button class="btn btn-primary btn-sm" @click="searchCreativeMonitor">Search Data</button>
+                <button class="btn btn-default btn-sm" @click="showToast('Exporting data...')">Export Data</button>
+                <button class="btn btn-primary btn-sm" @click="showToast('CSV batch block traffic')">CSV Batch Block Traffic ▾</button>
+              </div>
+            </div>
+
+            <div class="monitor-config">
+              <div class="monitor-config-block">
+                <div class="monitor-config-title">Data Dimensions</div>
+                <div class="monitor-check-grid">
+                  <label v-for="d in creativeMonitorDimensions" :key="d.key" class="monitor-check-item">
+                    <input type="checkbox" v-model="d.selected"> {{ d.label }}
+                  </label>
+                </div>
+              </div>
+              <div class="monitor-config-block">
+                <div class="monitor-metrics-bar">
+                  <div>
+                    <div class="monitor-config-title">Data Indicators</div>
+                    <div class="monitor-metrics-summary">{{ creativeMonitorSelectedMetrics.length }} columns selected</div>
+                    <div class="monitor-hint">Tip: To view Ad &amp; IAP indicators, configure Event Mapping first.</div>
+                  </div>
+                  <button class="btn btn-primary btn-sm" @click="openColumnsModal('creative')">Configure Columns</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="monitor-table-section">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th v-for="col in creativeMonitorTableColumns" :key="col.key" class="sortable-th" @click="sortCreativeMonitor(col.key)">
+                      {{ col.label }}
+                      <span v-if="col.key===creativeMonitorSort.key">{{ creativeMonitorSort.dir==='asc'?'↑':'↓' }}</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(row,i) in creativeMonitorDisplayData" :key="i">
+                    <td v-for="col in creativeMonitorTableColumns" :key="col.key">{{ row[col.key] }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div v-if="!creativeMonitorDisplayData.length" class="empty-data">
+                <div class="empty-data-icon">✈</div>
+                <div>No data</div>
+              </div>
+            </div>
+            <div class="pagination">
+              Total {{ creativeMonitorDisplayData.length }}
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+              <select class="page-size"><option>50 / page</option></select>
+            </div>
+            </div>
+          </div>
         </template>
         <template v-if="page==='apps'">
           <div class="bread">Home <span>></span> My Apps</div>
           <div class="page-title" style="margin-bottom:20px">My Apps</div>
           <div class="card"><div class="placeholder"><h2>My Apps</h2><p>Manage your application inventory.</p></div></div>
         </template>
-        <template v-if="page==='settings'">
-          <div class="bread">Home <span>></span> Setting</div>
-          <div class="page-title" style="margin-bottom:20px">Setting</div>
-          <div class="card"><div class="placeholder"><h2>Setting</h2><p>Account and system preferences.</p></div></div>
+        <!-- ═══ ACCOUNT SETTINGS ═══ -->
+        <template v-if="page==='account-settings'">
+          <div class="settings-layout">
+            <aside class="settings-sidebar">
+              <div class="settings-sidebar-title">Account settings</div>
+              <div v-for="item in settingsNavItems" :key="item.id" class="settings-nav-item" :class="{active:settingsTab===item.id}" @click="settingsTab=item.id">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" v-html="item.icon"></svg>
+                {{ item.label }}
+              </div>
+            </aside>
+            <div class="settings-main">
+              <button class="settings-back" @click="page=previousPage">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <h1 class="settings-page-title">Account settings</h1>
+              <template v-if="settingsTab==='account-info'">
+                <div class="card">
+                  <div class="account-header">
+                    <div class="account-avatar-lg">{{ accountInfo.initials }}</div>
+                    <div class="account-header-info">
+                      <h3>{{ accountForm.accountName }}</h3>
+                      <p>Account ID: {{ accountInfo.accountId }}</p>
+                    </div>
+                  </div>
+                  <div class="account-form">
+                    <div class="form-group"><label class="form-label">Account name</label><input class="form-input" v-model="accountForm.accountName"></div>
+                    <div class="form-group"><label class="form-label">Company name</label><input class="form-input" v-model="accountForm.companyName"></div>
+                    <div class="form-group"><label class="form-label">Tax ID</label><input class="form-input" v-model="accountForm.taxId" placeholder="Enter tax ID"></div>
+                    <div class="form-group"><label class="form-label">Website to promote</label><div class="website-input"><span class="website-prefix">https://</span><input class="form-input" v-model="accountForm.website" placeholder="example.com"></div></div>
+                  </div>
+                  <div class="account-form-actions"><button class="btn btn-primary" @click="saveAccountInfo">Save</button></div>
+                </div>
+              </template>
+              <template v-if="settingsTab==='members'">
+                <div class="owner-card">
+                  <div class="owner-avatar">{{ accountOwner.initials }}</div>
+                  <div><div class="owner-label">Account owner</div><div class="owner-email">{{ accountOwner.email }}</div></div>
+                </div>
+                <div class="members-section-title">All users</div>
+                <div class="card">
+                  <div class="members-toolbar" style="padding:14px 16px;border-bottom:1px solid #f0f2f5">
+                    <input class="mc-input" v-model="memberSearch" placeholder="Search users by email">
+                    <select class="mc-select" v-model="memberAccessFilter"><option value="">Access level</option><option value="Owner">Owner</option><option value="Admin">Admin</option><option value="Read-only">Read-only</option></select>
+                    <span class="info-icon" title="Access levels determine what actions a user can perform">i</span>
+                    <div style="margin-left:auto"><button class="btn btn-primary" @click="inviteModal.show=true">Invite new user</button></div>
+                  </div>
+                  <div class="table-wrap">
+                    <table><thead><tr><th>User email</th><th>Last signed-in (UTC)</th><th>Access level</th><th>Expiration (UTC)</th><th>App access</th></tr></thead>
+                    <tbody>
+                      <tr v-for="m in filteredMembers" :key="m.email"><td>{{ m.email }}</td><td>{{ m.lastSignedIn }}</td><td><span class="access-badge">{{ m.accessLevel }}</span></td><td>{{ m.expiration }}</td><td>{{ m.appAccess }}</td></tr>
+                      <tr v-if="!filteredMembers.length"><td colspan="5"><div class="empty-state">No users found</div></td></tr>
+                    </tbody></table>
+                  </div>
+                  <div class="pagination">Total {{ filteredMembers.length }} <span>Rows per page</span><select class="page-size"><option>10</option></select><span>Go to</span><input class="page-size" style="width:40px;text-align:center" value="1"><span>{{ filteredMembers.length ? '1-'+filteredMembers.length : '0-0' }} of {{ filteredMembers.length }}</span><button class="page-btn">‹</button><button class="page-btn">›</button></div>
+                </div>
+              </template>
+              <template v-if="settingsTab==='billing'">
+                <div class="billing-banner"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><div>Learn how tarrific.tv charges and bills. Still have questions about your bill? <a href="#">Schedule a call</a> with our representative. <a href="#">Learn more</a></div></div>
+                <div class="billing-cards">
+                  <div class="card billing-card"><div class="billing-card-head"><h4>Balance</h4><button class="btn btn-primary btn-sm" @click="showToast('Add funds coming soon')">Add funds</button></div><div class="billing-balance">${{ billing.balance.toFixed(2) }}</div><div class="billing-breakdown">Added funds: <span>${{ billing.addedFunds.toFixed(2) }}</span><br>Ad credit: <span>${{ billing.adCredit.toFixed(2) }}</span><br>Held for spend: <span>${{ billing.heldForSpend.toFixed(2) }}</span></div></div>
+                  <div class="card billing-card"><div class="billing-card-head"><h4>Payment method</h4><span v-if="billing.paymentMethod" class="auto-reload-badge">Auto reload</span></div>
+                    <template v-if="billing.paymentMethod"><div style="display:flex;align-items:center;gap:12px;padding:12px 0"><svg width="32" height="24" viewBox="0 0 32 24" fill="none"><rect width="32" height="24" rx="4" fill="#1c2b4a"/><text x="16" y="15" text-anchor="middle" fill="#fff" font-size="8" font-weight="600">VISA</text></svg><div><div style="font-size:13px;font-weight:600;color:#374151">•••• {{ billing.paymentMethod.last4 }}</div><div style="font-size:12px;color:#9ca3af">Expires {{ billing.paymentMethod.expiry }}</div></div></div></template>
+                    <template v-else><div class="no-payment"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/></svg><p>No payment method added</p><button class="btn btn-primary" @click="addCardModal.show=true">Add payment method</button></div></template>
+                  </div>
+                </div>
+                <div class="card">
+                  <div class="billing-section-head" style="padding:16px 16px 0"><h4>All billing activities</h4><div class="billing-controls"><label class="receipt-toggle">Receive receipt emails <label class="switch"><input type="checkbox" v-model="billing.receiptEmails"><span class="switch-slider"></span></label></label><input class="mc-input" style="width:140px" placeholder="Search by ID"><button class="btn btn-default btn-sm">Filter</button><button class="btn btn-default btn-sm">Export data ▾</button><select class="page-size"><option>All time</option></select></div></div>
+                  <div class="billing-filters" style="padding:12px 16px"><button class="filter-chip">Category ▾</button><button class="filter-chip">Status ▾</button></div>
+                  <div class="table-wrap"><table><thead><tr><th>ID</th><th>Time (UTC)</th><th>Category</th><th>Description</th><th>Amount</th><th>Payment method</th><th>Status</th></tr></thead>
+                  <tbody><tr v-for="act in billingActivities" :key="act.id"><td>{{ act.id }}</td><td>{{ act.time }}</td><td>{{ act.category }}</td><td>{{ act.description }}</td><td>{{ act.amount }}</td><td>{{ act.paymentMethod }}</td><td>{{ act.status }}</td></tr>
+                  <tr v-if="!billingActivities.length"><td colspan="7"><div class="empty-state"><p>No results found</p><p style="font-size:12px">Try adjusting your search or filters.</p></div></td></tr></tbody></table></div>
+                  <div class="pagination">Total {{ billingActivities.length }} <span>Rows per page</span><select class="page-size"><option>50</option></select><span>Go to</span><input class="page-size" style="width:40px;text-align:center" value="1"><span>0-0 of 0</span><button class="page-btn">‹</button><button class="page-btn">›</button></div>
+                </div>
+                <div class="card billing-address-card"><div class="billing-address-left"><div class="billing-address-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg></div><div class="billing-address-info"><h4>Billing address</h4><p>{{ billingAddressText }}</p></div></div><button class="btn btn-primary" @click="billingInfoModal.show=true">{{ billing.billingAddress ? 'Edit billing information' : 'Add billing information' }}</button></div>
+                <div class="stripe-badge">Powered by <strong>Stripe</strong></div>
+              </template>
+            </div>
+          </div>
         </template>
       </div>
     </div>
   </div>
 
-  <!-- Creative Group Upload Modal -->
+  <!-- Creative Group Modal -->
   <div class="modal-overlay" v-if="groupModal.show" @click.self="groupModal.show=false">
     <div class="modal">
       <div class="modal-head">
-        <h3>{{ groupModal.editing ? 'Edit Creative Group' : 'Upload Creative Group' }}</h3>
+        <h3>{{ groupModal.editing ? 'Edit Creative Group' : 'New Creative Group' }}</h3>
         <button class="modal-close" @click="groupModal.show=false">&times;</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label">Creative Group Name</label>
+          <label class="form-label">Creative Group Name <span style="color:#ef4444">*</span></label>
           <input class="form-input" v-model="groupModal.name" placeholder="e.g. S1S2nativevideo">
         </div>
         <div class="form-group">
-          <label class="form-label">Combination Method</label>
-          <select class="form-input" v-model="groupModal.method">
-            <option value="Programmatic Creative">Programmatic Creative</option>
-            <option value="Manual Combination">Manual Combination</option>
-          </select>
+          <label class="form-label">Creative Type</label>
+          <div class="type-seg" style="margin-bottom:0">
+            <button v-for="t in creativeTypes" :key="t" type="button" class="type-seg-btn" :class="{active:groupModal.creativeTypes.includes(t)}" @click="toggleGroupCreativeType(t)">{{ t }}</button>
+          </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Ad Unit</label>
-          <input class="form-input" v-model="groupModal.adUnit" placeholder="Ad unit name or ID">
+          <label class="form-label">Materials</label>
+          <div class="group-asset-toolbar">
+            <button class="btn btn-primary btn-sm" @click="$refs.groupUpload.click()">Upload</button>
+            <button class="btn btn-primary btn-sm" @click="openPickCreative()">Add Existing Creative</button>
+            <button class="btn btn-danger-outline btn-sm" :disabled="!selectedGroupMaterials.length" @click="removeGroupMaterials">Delete Selected</button>
+          </div>
+          <input ref="groupUpload" type="file" accept="image/*,video/*,.html,.zip" style="display:none" @change="onGroupUpload">
+          <div class="group-asset-table">
+            <table>
+              <thead>
+                <tr>
+                  <th><input type="checkbox" :checked="allGroupMaterialsSelected" @change="toggleAllGroupMaterials"></th>
+                  <th>Creative ID</th>
+                  <th>Asset Name</th>
+                  <th>Type</th>
+                  <th>Preview</th>
+                  <th>Resolution</th>
+                  <th>Source</th>
+                  <th>Upload Time</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="m in groupMaterials" :key="m.uid">
+                  <td><input type="checkbox" :value="m.uid" v-model="selectedGroupMaterials"></td>
+                  <td>{{ m.creativeId || '—' }}</td>
+                  <td>{{ m.name }}</td>
+                  <td><span class="tag-type">{{ m.type }}</span></td>
+                  <td>
+                    <div class="preview-thumb">
+                      <img v-if="m.preview && m.previewType==='image'" :src="m.preview">
+                      <video v-else-if="m.preview && m.previewType==='video'" :src="m.preview" muted></video>
+                      <span v-else>{{ m.type.slice(0,3) }}</span>
+                    </div>
+                  </td>
+                  <td>{{ m.resolution || '—' }}</td>
+                  <td>{{ m.source === 'existing' ? 'Existing' : 'Upload' }}</td>
+                  <td>{{ m.uploadedAt }}</td>
+                  <td><span class="status-dot active"></span>{{ m.status }}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div v-if="!groupMaterials.length" class="empty-table">No materials yet. Upload or select from Creatives.</div>
+          </div>
+          <p class="form-hint" v-if="!groupMaterials.length">Add at least one material by uploading or selecting from Creatives.</p>
         </div>
         <div class="form-group">
           <label class="form-label">Country</label>
           <input class="form-input" v-model="groupModal.country" placeholder="ALL">
         </div>
-        <div class="form-group">
-          <label class="form-label">Upload Materials (multiple types supported)</label>
-          <div class="material-slots">
-            <div class="material-slot" v-for="slot in materialSlots" :key="slot.type">
-              <h4>
-                <input type="checkbox" v-model="slot.enabled">
-                {{ slot.type }}
-              </h4>
-              <div v-if="slot.enabled" class="upload-zone" style="padding:16px" @click="slot.$input.click()" @dragover.prevent @drop.prevent="onSlotDrop($event,slot)">
-                <p style="font-size:12px">{{ slot.preview ? 'Click to replace' : 'Drag & Drop or Click' }}</p>
-                <div class="slot-preview" v-if="slot.preview">
-                  <img v-if="slot.previewType==='image'" :src="slot.preview">
-                  <video v-else :src="slot.preview" controls style="max-height:60px"></video>
-                </div>
-              </div>
-              <input :ref="el => slotInputRef(el, slot)" type="file" accept="image/*,video/*" style="display:none" @change="onSlotFile($event,slot)">
-            </div>
-          </div>
-        </div>
       </div>
       <div class="modal-foot">
         <button class="btn btn-default" @click="groupModal.show=false">Cancel</button>
-        <button class="btn btn-success" @click="saveGroup">Save Creative Group</button>
+        <button class="btn btn-primary" @click="saveGroup">Save Creative Group</button>
       </div>
+    </div>
+  </div>
+
+  <!-- Pick Existing Creative Modal -->
+  <div class="modal-overlay" v-if="pickCreativeModal.show" @click.self="pickCreativeModal.show=false" style="z-index:110">
+    <div class="modal modal-sm">
+      <div class="modal-head">
+        <h3>Add Existing Creative</h3>
+        <button class="modal-close" @click="pickCreativeModal.show=false">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input class="form-input" v-model="pickCreativeModal.search" placeholder="Search by name or ID..." style="margin-bottom:12px">
+        <div class="picker-list">
+          <div v-for="a in pickableCreatives" :key="a.id" class="picker-item" :class="{selected: pickCreativeModal.selected.includes(a.id)}" @click="togglePickCreative(a.id)">
+            <input type="checkbox" :checked="pickCreativeModal.selected.includes(a.id)" @click.stop="togglePickCreative(a.id)">
+            <div class="preview-thumb"><span>{{ a.type.slice(0,3) }}</span></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-weight:600;color:#111">{{ a.name }}</div>
+              <div style="font-size:11px;color:#9ca3af">ID: {{ a.id }} · {{ a.type }} · {{ a.campaignName }}</div>
+            </div>
+          </div>
+          <div v-if="!pickableCreatives.length" class="empty-table">No creatives found</div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-default" @click="pickCreativeModal.show=false">Cancel</button>
+        <button class="btn btn-primary" @click="confirmPickCreatives">Add Selected</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Columns Configuration Modal -->
+  <div class="modal-overlay" v-if="columnsModal.show" @click.self="columnsModal.show=false" style="z-index:110">
+    <div class="columns-modal">
+      <div class="columns-modal-head">
+        <h3>Columns</h3>
+        <input class="columns-search" v-model="columnsModal.search" placeholder="Search columns by name">
+      </div>
+      <div class="columns-modal-body">
+        <!-- Selected -->
+        <div class="columns-pane">
+          <div class="columns-pane-head">
+            <div>
+              <h4>Selected columns</h4>
+              <div class="columns-pane-sub">Drag to order</div>
+            </div>
+            <button class="columns-pane-action" @click="removeAllColumns">Remove all</button>
+          </div>
+          <div class="columns-pane-list">
+            <div v-for="group in filteredSelectedColumnGroups" :key="group.id" class="col-group">
+              <div class="col-group-head">
+                <button class="col-group-toggle" @click="columnGroupExpanded[group.id]=!columnGroupExpanded[group.id]">
+                  <span>{{ columnGroupExpanded[group.id] !== false ? '▾' : '▸' }}</span> {{ group.label }}
+                </button>
+                <button class="col-add-group" @click="removeColumnGroup(group.id)">Remove group</button>
+              </div>
+              <template v-if="columnGroupExpanded[group.id] !== false">
+                <div v-for="col in group.columns" :key="col.key" class="col-item">
+                  <span class="col-drag">⠿</span>
+                  <span>{{ col.label }}</span>
+                  <button class="col-remove" @click="removeColumn(col.key)" title="Remove">×</button>
+                </div>
+              </template>
+            </div>
+            <div v-if="!filteredSelectedColumnGroups.length" class="empty-table" style="padding:24px">No columns selected</div>
+          </div>
+        </div>
+        <!-- Unselected -->
+        <div class="columns-pane">
+          <div class="columns-pane-head">
+            <h4>Unselected columns</h4>
+            <button class="columns-pane-action" @click="addAllColumnGroups">Add all</button>
+          </div>
+          <div class="columns-pane-list">
+            <template v-for="group in filteredUnselectedColumnGroups" :key="group.id">
+              <div class="unsel-group">
+                <button class="col-group-toggle" @click="columnGroupExpanded[group.id+'_u']=!columnGroupExpanded[group.id+'_u']">
+                  <span>{{ columnGroupExpanded[group.id+'_u'] !== false ? '▾' : '▸' }}</span> {{ group.label }}
+                </button>
+                <button class="col-add-group" @click="addColumnGroup(group.id)">Add group</button>
+              </div>
+              <template v-if="columnGroupExpanded[group.id+'_u'] !== false">
+                <div v-for="col in group.columns" :key="col.key" class="col-item" style="padding-left:36px">
+                  <span>{{ col.label }}</span>
+                  <button class="col-add-group" style="margin-left:auto" @click="addColumn(col.key)">Add</button>
+                </div>
+              </template>
+            </template>
+            <div v-if="!filteredUnselectedColumnGroups.length" class="empty-table" style="padding:24px">All columns selected</div>
+          </div>
+        </div>
+      </div>
+      <div class="columns-modal-foot">
+        <button class="btn btn-default" @click="columnsModal.show=false">Cancel</button>
+        <button class="btn btn-dark" @click="applyColumns">Apply</button>
+      </div>
+    </div>
+  </div>
+  <!-- Invite User Modal -->
+  <div class="modal-overlay" v-if="inviteModal.show" @click.self="inviteModal.show=false">
+    <div class="modal modal-sm">
+      <div class="modal-head"><h3>Invite new user</h3><button class="modal-close" @click="inviteModal.show=false">&times;</button></div>
+      <div class="modal-body">
+        <p style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:20px">We will send an invitation email to the invited user(s). Once the invitation is accepted, you will see the new member(s) here. You can add multiple users by separating the emails with a comma.</p>
+        <div class="form-group"><label class="form-label form-required">Email addresses</label><input class="form-input" v-model="inviteModal.emails" placeholder="Enter email addresses"></div>
+        <div class="form-group"><label class="form-label">Access level</label><select class="form-input" v-model="inviteModal.accessLevel"><option value="Read-only">Read-only</option><option value="Admin">Admin</option></select></div>
+        <div class="form-group"><label class="form-label">Access expiration</label><select class="form-input" v-model="inviteModal.expiration"><option value="Never">Never</option><option value="30 days">30 days</option><option value="90 days">90 days</option></select></div>
+        <div class="form-group"><label class="form-label">App access</label><select class="form-input" v-model="inviteModal.appAccess"><option value="All apps">All apps</option><option value="Selected apps">Selected apps</option></select></div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-default" @click="inviteModal.show=false">Cancel</button><button class="btn btn-primary" @click="inviteUser">Invite</button></div>
+    </div>
+  </div>
+  <!-- Add Card Modal -->
+  <div class="modal-overlay" v-if="addCardModal.show" @click.self="addCardModal.show=false">
+    <div class="modal modal-sm">
+      <div class="modal-head"><h3>Add card</h3><button class="modal-close" @click="addCardModal.show=false">&times;</button></div>
+      <div class="modal-body">
+        <div class="modal-section-title">Card details</div>
+        <p style="font-size:12px;color:#6b7280;margin-bottom:16px">A small amount will be temporarily deducted to validate your card.</p>
+        <div class="card-details-box">
+          <div class="form-group"><label class="form-label">Card number</label><input class="form-input" v-model="addCardModal.cardNumber" placeholder="1234 1234 1234 1234"></div>
+          <div class="form-row"><div class="form-group"><label class="form-label">Expiry date</label><input class="form-input" v-model="addCardModal.expiry" placeholder="MM / YY"></div><div class="form-group"><label class="form-label">CVV</label><input class="form-input" v-model="addCardModal.cvv" placeholder="CVC"></div></div>
+        </div>
+        <div class="modal-section-title">Billing address</div>
+        <div class="card-details-box">
+          <div class="form-group"><label class="form-label">Full name</label><input class="form-input" v-model="addCardModal.fullName"></div>
+          <div class="form-group"><label class="form-label">Country or region</label><select class="form-input" v-model="addCardModal.country"><option value="US">United States</option><option value="CN">China</option><option value="GB">United Kingdom</option><option value="JP">Japan</option></select></div>
+          <div class="form-group"><label class="form-label">Postal code</label><input class="form-input" v-model="addCardModal.postalCode"></div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-default" @click="addCardModal.show=false">Cancel</button><button class="btn btn-primary" @click="saveCard">Save</button></div>
+    </div>
+  </div>
+  <!-- Add Billing Information Modal -->
+  <div class="modal-overlay" v-if="billingInfoModal.show" @click.self="billingInfoModal.show=false">
+    <div class="modal modal-sm">
+      <div class="modal-head"><h3>Add billing information</h3><button class="modal-close" @click="billingInfoModal.show=false">&times;</button></div>
+      <div class="modal-body">
+        <div class="modal-info"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>Please note that billing information cannot be modified once submitted.</div>
+        <div class="modal-section-title">Company billing address</div>
+        <div class="card-details-box">
+          <div class="form-group"><label class="form-label">Full name</label><input class="form-input" v-model="billingInfoModal.fullName"></div>
+          <div class="form-group"><label class="form-label">Country or region</label><select class="form-input" v-model="billingInfoModal.country"><option value="US">United States</option><option value="CN">China</option><option value="GB">United Kingdom</option><option value="JP">Japan</option></select></div>
+          <div class="form-group"><label class="form-label">Postal code</label><input class="form-input" v-model="billingInfoModal.postalCode"></div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-default" @click="billingInfoModal.show=false">Cancel</button><button class="btn btn-primary" @click="saveBillingInfo">Save</button></div>
+      <div class="stripe-badge" style="padding:12px 0 16px">Powered by <strong>Stripe</strong></div>
     </div>
   </div>
 </div>
@@ -578,25 +1562,477 @@ const { createApp, ref, computed, reactive } = Vue;
 
 createApp({
   setup() {
-    const page = ref('manage-creative');
+    const page = ref('dashboard');
     const adsTab = ref('campaign');
-    const mcTab = ref('assets');
+    const mcTab = ref('creatives');
     const mcView = ref('list');
+    const reportsNavOpen = ref(true);
+    const reportSearch = ref('');
     const dragOver = ref(false);
     const showMetrics = ref(true);
     const selectedAssets = ref([]);
     const selectedGroups = ref([]);
+    const selectedGroupMaterials = ref([]);
+    const groupMaterials = ref([]);
     const toast = reactive({ show: false, text: '' });
     let toastTimer = null;
+
+    const dashboard = reactive({
+      healthScore: 78,
+      healthLabel: 'Good',
+      healthSummary: 'Account is operating normally with minor budget pacing warnings on 1 campaign. Creative approval rate and traffic quality are within acceptable thresholds.',
+      healthTags: [
+        { label: 'Account Active', level: 'good' },
+        { label: 'Payment OK', level: 'good' },
+        { label: 'Policy Compliant', level: 'good' },
+        { label: 'Budget Pacing Warning', level: 'warn' },
+      ],
+      kpis: [
+        { label: 'Available Balance', value: '$124,580', foot: 'Auto-recharge enabled at $50K', trend: '' },
+        { label: 'Monthly Budget Used', value: '67%', foot: '$335,200 / $500,000 cap', trend: '' },
+        { label: 'Campaigns at Risk', value: '3', foot: '2 over-pacing · 1 low delivery', trend: 'warn' },
+        { label: 'Creative Pass Rate', value: '94.2%', foot: '↑ 1.8% vs last week', trend: 'up' },
+      ],
+      monthlySpent: 335200,
+      monthlyCap: 500000,
+      monthlyPct: 67,
+      todaySpent: 18420,
+      todayCap: 16000,
+      todayPct: 115,
+      pacingDays: [
+        { label: 'Mon', pct: 72, targetPct: 70 },
+        { label: 'Tue', pct: 85, targetPct: 80 },
+        { label: 'Wed', pct: 68, targetPct: 75 },
+        { label: 'Thu', pct: 91, targetPct: 85 },
+        { label: 'Fri', pct: 78, targetPct: 80 },
+        { label: 'Sat', pct: 55, targetPct: 60 },
+        { label: 'Sun', pct: 48, targetPct: 50 },
+      ],
+      deliveryMetrics: [
+        { name: 'Win Rate', value: '34.2%', desc: 'Bid win / total bids', status: 'good', statusLabel: 'Healthy' },
+        { name: 'Creative Rejection', value: '5.8%', desc: 'Rejected / submitted', status: 'warn', statusLabel: 'Watch' },
+        { name: 'Invalid Traffic (IVT)', value: '1.2%', desc: 'Fraud & invalid impressions', status: 'good', statusLabel: 'Low' },
+        { name: 'Bid Floor Hit Rate', value: '8.4%', desc: 'Bids below floor', status: 'good', statusLabel: 'Normal' },
+        { name: 'Under-delivery', value: '2 camps', desc: 'Below 80% daily goal', status: 'warn', statusLabel: 'Action' },
+      ],
+      campaignBudgets: [
+        { name: 'Summer Promo US', dailyBudget: 8000, spent: 6240, pct: 78, pacingStatus: 'good', pacingLabel: 'On Pace' },
+        { name: 'Brand Awareness EU', dailyBudget: 5000, spent: 5600, pct: 112, pacingStatus: 'bad', pacingLabel: 'Over Budget' },
+        { name: 'Retargeting APAC', dailyBudget: 3000, spent: 2580, pct: 86, pacingStatus: 'warn', pacingLabel: 'Near Cap' },
+        { name: 'App Install LATAM', dailyBudget: 4000, spent: 2100, pct: 53, pacingStatus: 'warn', pacingLabel: 'Under Pace' },
+      ],
+      alerts: [
+        { level: 'bad', title: 'Daily budget exceeded', desc: 'Brand Awareness EU spent $5,600 against $5,000 daily cap (+12%). Delivery may be throttled.', time: '2h ago' },
+        { level: 'warn', title: 'Creative rejected', desc: '2 creatives pending policy review — "Playable Q3" and "Banner EU v3".', time: '4h ago' },
+        { level: 'warn', title: 'Under-delivery detected', desc: 'App Install LATAM at 53% of daily budget with 6h remaining. Check bids & targeting.', time: '6h ago' },
+        { level: 'info', title: 'Balance threshold notice', desc: 'Available balance will reach auto-recharge threshold ($50K) in ~3 days at current burn rate.', time: '1d ago' },
+      ],
+    });
 
     const navItems = [
       { id: 'dashboard', label: 'Dashboard', icon: '<rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>' },
       { id: 'ads', label: 'Ads', icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>' },
       { id: 'manage-creative', label: 'Manage Creative', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' },
-      { id: 'reports', label: 'Reports', icon: '<path d="M18 20V10M12 20V4M6 20v-6"/>' },
+      {
+        id: 'reports', label: 'Reports', icon: '<path d="M18 20V10M12 20V4M6 20v-6"/>',
+        children: [
+          { id: 'reports-download', label: 'Download Reports' },
+          { id: 'reports-ad-monitor', label: 'Ad Monitoring Report' },
+          { id: 'reports-creative-monitor', label: 'Creative Monitoring Report' },
+        ]
+      },
       { id: 'apps', label: 'My Apps', icon: '<rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>' },
-      { id: 'settings', label: 'Setting', icon: '<circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>' },
     ];
+
+    const isReportsPage = computed(() => page.value.startsWith('reports-'));
+
+    function toggleReportsNav() {
+      if (!isReportsPage.value) {
+        page.value = 'reports-download';
+        reportsNavOpen.value = true;
+      } else {
+        reportsNavOpen.value = !reportsNavOpen.value;
+      }
+    }
+
+    const downloadReports = ref([
+      { id: 1, name: 'dqdadad', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+      { id: 2, name: '11543分', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+      { id: 3, name: 'test6', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+      { id: 4, name: 'test5', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+      { id: 5, name: 'test4', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+      { id: 6, name: 'test3', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+      { id: 7, name: 'test2', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+      { id: 8, name: 'test1', timeRange: 'Jun 27, 2026 - Jul 3, 2026', rowsSize: '16/1.50 KB', status: 'Available for download until 2026-07-10', createDate: 'Jul 3, 2026', createBy: 'DSP Admin' },
+    ]);
+
+    const filteredDownloadReports = computed(() => {
+      const q = reportSearch.value.trim().toLowerCase();
+      if (!q) return downloadReports.value;
+      return downloadReports.value.filter(r => r.name.toLowerCase().includes(q) || r.createBy.toLowerCase().includes(q));
+    });
+
+    function deleteReport(id) {
+      downloadReports.value = downloadReports.value.filter(r => r.id !== id);
+      showToast('Report deleted');
+    }
+
+
+    const userMenuOpen = ref(false);
+    const settingsTab = ref('account-info');
+    const previousPage = ref('dashboard');
+    const memberSearch = ref('');
+    const memberAccessFilter = ref('');
+
+    const settingsNavItems = [
+      { id: 'account-info', label: 'Account info', icon: '<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>' },
+      { id: 'members', label: 'Members', icon: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>' },
+      { id: 'billing', label: 'Payment & billing', icon: '<rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>' },
+    ];
+
+    const accountInfo = reactive({
+      displayName: 'TaurusX DSP Demo',
+      initials: 'TD',
+      accountId: '1800769483',
+    });
+
+    const accountForm = reactive({
+      accountName: 'TaurusX DSP Demo',
+      companyName: 'TaurusX DSP Demo',
+      taxId: '',
+      website: 'tarrific.tv',
+    });
+
+    const accountOwner = reactive({ initials: 'DA', email: 'admin@taurusx.local' });
+
+    const members = ref([
+      { email: 'admin@taurusx.local', lastSignedIn: '2026-07-13 02:06', accessLevel: 'Owner', expiration: 'Never', appAccess: 'All apps' },
+    ]);
+
+    const filteredMembers = computed(() => members.value.filter(m => {
+      if (memberSearch.value && !m.email.toLowerCase().includes(memberSearch.value.toLowerCase())) return false;
+      if (memberAccessFilter.value && m.accessLevel !== memberAccessFilter.value) return false;
+      return true;
+    }));
+
+    const inviteModal = reactive({ show: false, emails: '', accessLevel: 'Read-only', expiration: 'Never', appAccess: 'All apps' });
+    const billing = reactive({ balance: 0, addedFunds: 0, adCredit: 0, heldForSpend: 0, paymentMethod: null, receiptEmails: true, billingAddress: null });
+    const billingActivities = ref([]);
+    const billingAddressText = computed(() => {
+      if (!billing.billingAddress) return '—';
+      const a = billing.billingAddress;
+      const names = { US: 'United States', CN: 'China', GB: 'United Kingdom', JP: 'Japan' };
+      return `${a.fullName}, ${names[a.country] || a.country}, ${a.postalCode}`;
+    });
+    const addCardModal = reactive({ show: false, cardNumber: '', expiry: '', cvv: '', fullName: '', country: 'US', postalCode: '' });
+    const billingInfoModal = reactive({ show: false, fullName: '', country: 'US', postalCode: '' });
+
+    function openAccountSettings(tab) {
+      previousPage.value = page.value;
+      settingsTab.value = tab || 'account-info';
+      page.value = 'account-settings';
+      userMenuOpen.value = false;
+    }
+    function saveAccountInfo() {
+      accountInfo.displayName = accountForm.accountName;
+      accountInfo.initials = accountForm.accountName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+      showToast('Account info saved');
+    }
+    function inviteUser() {
+      if (!inviteModal.emails.trim()) { showToast('Please enter email addresses'); return; }
+      inviteModal.emails.split(',').map(e => e.trim()).filter(Boolean).forEach(email => {
+        if (!members.value.find(m => m.email === email)) {
+          members.value.push({ email, lastSignedIn: '—', accessLevel: inviteModal.accessLevel, expiration: inviteModal.expiration, appAccess: inviteModal.appAccess });
+        }
+      });
+      inviteModal.show = false;
+      inviteModal.emails = '';
+      showToast('Invitation sent');
+    }
+    function saveCard() {
+      if (!addCardModal.cardNumber.trim()) { showToast('Please enter card number'); return; }
+      billing.paymentMethod = { last4: addCardModal.cardNumber.replace(/\s/g, '').slice(-4), expiry: addCardModal.expiry || '12/28' };
+      addCardModal.show = false;
+      Object.assign(addCardModal, { cardNumber: '', expiry: '', cvv: '', fullName: '', country: 'US', postalCode: '' });
+      showToast('Payment method added');
+    }
+    function saveBillingInfo() {
+      if (!billingInfoModal.fullName.trim()) { showToast('Please enter full name'); return; }
+      billing.billingAddress = { fullName: billingInfoModal.fullName, country: billingInfoModal.country, postalCode: billingInfoModal.postalCode };
+      billingInfoModal.show = false;
+      showToast('Billing information saved');
+    }
+
+    // ── Ad Monitoring Report ──
+    const adMonitorAdvanced = ref(false);
+    const adMonitorSearched = ref(false);
+    const adMonitorFilter = reactive({
+      timezone: 'UTC + 8 (Shanghai, Hong Kong, Kuala Lumpur)',
+      dateRange: '2026-07-08 - 2026-07-10',
+      campaignName: '', campaignId: '', adGroupName: '', adGroupId: '',
+      creativeName: '', creativeId: '', creativeGroupName: '', creativeGroupId: '',
+      creativeType: '', region: ''
+    });
+    const adMonitorSort = reactive({ key: '', dir: 'asc' });
+
+    const adMonitorDimensions = ref([
+      { key: 'day', label: 'Day', selected: true },
+      { key: 'hour', label: 'Hour', selected: false },
+      { key: 'week', label: 'Week', selected: false },
+      { key: 'month', label: 'Month', selected: false },
+      { key: 'campaignName', label: 'Campaign Name', selected: true },
+      { key: 'campaignId', label: 'Campaign ID', selected: false },
+      { key: 'adGroupName', label: 'Ad Group Name', selected: true },
+      { key: 'adGroupId', label: 'Ad Group ID', selected: false },
+      { key: 'creativeGroupName', label: 'Creative Group Name', selected: false },
+      { key: 'creativeGroupId', label: 'Creative Group ID', selected: false },
+      { key: 'creativeName', label: 'Creative Name', selected: false },
+      { key: 'creativeId', label: 'Creative ID', selected: false },
+      { key: 'creativeType', label: 'Creative Type', selected: false },
+      { key: 'country', label: 'Country / Region', selected: false },
+    ]);
+
+    const columnCatalog = [
+      { id: 'basic', label: 'Basic', columns: [
+        { key: 'impressions', label: 'Impressions' }, { key: 'clicks', label: 'Clicks' },
+        { key: 'conversions', label: 'Conversions' }, { key: 'ecpm', label: 'eCPM' },
+        { key: 'cpc', label: 'CPC' }, { key: 'ecpi', label: 'eCPI' },
+        { key: 'ctr', label: 'CTR' }, { key: 'ivr', label: 'IVR' },
+        { key: 'cvr', label: 'CVR' }, { key: 'spend', label: 'Spend' },
+      ]},
+      { id: 'campaign-goals', label: 'Campaign goals', columns: [
+        { key: 'installs', label: 'Installs' }, { key: 'cpi', label: 'CPI' }, { key: 'ir', label: 'IR' },
+      ]},
+      { id: 'retention', label: 'Retention', columns: [
+        { key: 'd1Retention', label: 'D1 Retention' }, { key: 'd7Retention', label: 'D7 Retention' },
+      ]},
+      { id: 'iaa', label: 'IAA revenue', columns: [
+        { key: 'd0AdRev', label: 'D0 Ad Rev' }, { key: 'd3AdRev', label: 'D3 Ad Rev' },
+        { key: 'd7AdRev', label: 'D7 Ad Rev' }, { key: 'd0AdRoas', label: 'D0 Ad Roas' },
+        { key: 'd3AdRoas', label: 'D3 Ad Roas' }, { key: 'd7AdRoas', label: 'D7 Ad Roas' },
+      ]},
+      { id: 'iap', label: 'IAP revenue', columns: [
+        { key: 'd0IapRev', label: 'D0 IAP Rev' }, { key: 'd3IapRev', label: 'D3 IAP Rev' },
+        { key: 'd7IapRev', label: 'D7 IAP Rev' }, { key: 'd0IapRoas', label: 'D0 IAP Roas' },
+        { key: 'd3IapRoas', label: 'D3 IAP Roas' }, { key: 'd7IapRoas', label: 'D7 IAP Roas' },
+      ]},
+      { id: 'total-revenue', label: 'Total revenue', columns: [
+        { key: 'd0TotalRev', label: 'D0 total rev' }, { key: 'd0TotalRoas', label: 'D0 total ROAS' },
+      ]},
+      { id: 'purchases', label: 'Purchases', columns: [
+        { key: 'd0Purchases', label: 'D0 Purchases' }, { key: 'd7Purchases', label: 'D7 Purchases' },
+      ]},
+      { id: 'target-events', label: 'Target events', columns: [
+        { key: 'd0UniqueEvents', label: 'D0 Unique Events' }, { key: 'd7UniqueEvents', label: 'D7 Unique Events' },
+      ]},
+    ];
+
+    const defaultMetricKeys = ['impressions','clicks','conversions','ecpm','cpc','ecpi','ctr','ivr','cvr','spend'];
+    const adMonitorSelectedMetrics = ref([...defaultMetricKeys]);
+    const columnsModal = reactive({ show: false, search: '', for: 'ad' });
+    const columnsDraft = ref([...defaultMetricKeys]);
+    const columnGroupExpanded = reactive({});
+
+    columnCatalog.forEach(g => { columnGroupExpanded[g.id] = true; });
+
+    function getColumnLabel(key) {
+      for (const g of columnCatalog) {
+        const c = g.columns.find(x => x.key === key);
+        if (c) return c.label;
+      }
+      return key;
+    }
+
+    const filteredSelectedColumnGroups = computed(() => {
+      const q = columnsModal.search.trim().toLowerCase();
+      const groups = [];
+      columnCatalog.forEach(g => {
+        const cols = g.columns.filter(c => columnsDraft.value.includes(c.key));
+        if (!cols.length) return;
+        const filtered = q ? cols.filter(c => c.label.toLowerCase().includes(q)) : cols;
+        if (!filtered.length) return;
+        groups.push({ id: g.id, label: g.label, expanded: columnGroupExpanded[g.id] !== false, columns: filtered });
+      });
+      return groups;
+    });
+
+    const filteredUnselectedColumnGroups = computed(() => {
+      const q = columnsModal.search.trim().toLowerCase();
+      return columnCatalog.map(g => {
+        const cols = g.columns.filter(c => !columnsDraft.value.includes(c.key));
+        const filtered = q ? cols.filter(c => c.label.toLowerCase().includes(q)) : cols;
+        return { id: g.id, label: g.label, expanded: columnGroupExpanded[g.id + '_u'] !== false, columns: filtered };
+      }).filter(g => g.columns.length);
+    });
+
+    function openColumnsModal(target) {
+      columnsModal.for = target;
+      const source = target === 'creative' ? creativeMonitorSelectedMetrics : adMonitorSelectedMetrics;
+      columnsDraft.value = [...source.value];
+      columnsModal.search = '';
+      columnsModal.show = true;
+    }
+
+    function applyColumns() {
+      const target = columnsModal.for === 'creative' ? creativeMonitorSelectedMetrics : adMonitorSelectedMetrics;
+      target.value = [...columnsDraft.value];
+      columnsModal.show = false;
+      showToast('Columns updated');
+    }
+
+    function addColumn(key) {
+      if (!columnsDraft.value.includes(key)) columnsDraft.value.push(key);
+    }
+
+    function removeColumn(key) {
+      columnsDraft.value = columnsDraft.value.filter(k => k !== key);
+    }
+
+    function addColumnGroup(groupId) {
+      const g = columnCatalog.find(x => x.id === groupId);
+      if (!g) return;
+      g.columns.forEach(c => { if (!columnsDraft.value.includes(c.key)) columnsDraft.value.push(c.key); });
+    }
+
+    function removeColumnGroup(groupId) {
+      const g = columnCatalog.find(x => x.id === groupId);
+      if (!g) return;
+      const keys = new Set(g.columns.map(c => c.key));
+      columnsDraft.value = columnsDraft.value.filter(k => !keys.has(k));
+    }
+
+    function removeAllColumns() { columnsDraft.value = []; }
+
+    function addAllColumnGroups() {
+      columnCatalog.forEach(g => g.columns.forEach(c => {
+        if (!columnsDraft.value.includes(c.key)) columnsDraft.value.push(c.key);
+      }));
+    }
+
+    const adMonitorTableColumns = computed(() => {
+      const cols = [];
+      adMonitorDimensions.value.filter(d => d.selected).forEach(d => cols.push({ key: d.key, label: d.label }));
+      adMonitorSelectedMetrics.value.forEach(key => cols.push({ key, label: getColumnLabel(key) }));
+      return cols;
+    });
+
+    const adMonitorRawData = ref([
+      { day: '2026-07-08', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '125,430', clicks: '3,842', conversions: '892', ecpm: '$4.21', cpc: '$0.38', ecpi: '$2.15', ctr: '3.06%', ivr: '23.2%', cvr: '23.2%', spend: '$528.40' },
+      { day: '2026-07-09', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '118,220', clicks: '3,510', conversions: '810', ecpm: '$4.05', cpc: '$0.36', ecpi: '$2.08', ctr: '2.97%', ivr: '23.1%', cvr: '23.1%', spend: '$478.80' },
+      { day: '2026-07-10', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', creativeGroupName: 'Q3_Playable_Set', creativeGroupId: '976385', creativeId: '8641', creativeName: 'Native Video Ad', creativeType: 'Video', impressions: '98,650', clicks: '2,940', conversions: '654', ecpm: '$3.88', cpc: '$0.34', ecpi: '$1.95', ctr: '2.98%', ivr: '22.2%', cvr: '22.2%', spend: '$382.60' },
+    ]);
+
+    const adMonitorDisplayData = computed(() => {
+      if (!adMonitorSearched.value) return [];
+      let data = [...adMonitorRawData.value];
+      const f = adMonitorFilter;
+      if (f.campaignName) data = data.filter(r => r.campaignName.toLowerCase().includes(f.campaignName.toLowerCase()));
+      if (f.campaignId) data = data.filter(r => r.campaignId.includes(f.campaignId));
+      if (f.adGroupName) data = data.filter(r => r.adGroupName.toLowerCase().includes(f.adGroupName.toLowerCase()));
+      if (f.adGroupId) data = data.filter(r => r.adGroupId.includes(f.adGroupId));
+      if (f.creativeName) data = data.filter(r => r.creativeName.toLowerCase().includes(f.creativeName.toLowerCase()));
+      if (f.creativeId) data = data.filter(r => r.creativeId.includes(f.creativeId));
+      if (f.creativeGroupName) data = data.filter(r => r.creativeGroupName.toLowerCase().includes(f.creativeGroupName.toLowerCase()));
+      if (f.creativeGroupId) data = data.filter(r => r.creativeGroupId.includes(f.creativeGroupId));
+      if (f.creativeType) data = data.filter(r => r.creativeType === f.creativeType);
+      if (adMonitorSort.key) {
+        data.sort((a, b) => {
+          const av = a[adMonitorSort.key] || '';
+          const bv = b[adMonitorSort.key] || '';
+          const cmp = String(av).localeCompare(String(bv), undefined, { numeric: true });
+          return adMonitorSort.dir === 'asc' ? cmp : -cmp;
+        });
+      }
+      return data;
+    });
+
+    function searchAdMonitor() {
+      adMonitorSearched.value = true;
+      showToast('Found ' + adMonitorDisplayData.value.length + ' row(s)');
+    }
+
+    function sortAdMonitor(key) {
+      if (adMonitorSort.key === key) adMonitorSort.dir = adMonitorSort.dir === 'asc' ? 'desc' : 'asc';
+      else { adMonitorSort.key = key; adMonitorSort.dir = 'asc'; }
+    }
+
+    // ── Creative Monitoring Report ──
+    const creativeMonitorAdvanced = ref(false);
+    const creativeMonitorSearched = ref(false);
+    const creativeMonitorFilter = reactive({
+      timezone: 'UTC + 8 (Shanghai, Hong Kong, Kuala Lumpur)',
+      dateRange: '2026-07-08 - 2026-07-10',
+      campaignName: '', campaignId: '', adGroupName: '', adGroupId: '',
+      creativeName: '', creativeId: '', creativeGroupName: '', creativeGroupId: '',
+      creativeType: '', region: ''
+    });
+    const creativeMonitorSort = reactive({ key: '', dir: 'asc' });
+
+    const creativeMonitorDimensions = ref([
+      { key: 'day', label: 'Day', selected: true },
+      { key: 'hour', label: 'Hour', selected: false },
+      { key: 'week', label: 'Week', selected: false },
+      { key: 'month', label: 'Month', selected: false },
+      { key: 'campaignName', label: 'Campaign Name', selected: false },
+      { key: 'campaignId', label: 'Campaign ID', selected: false },
+      { key: 'adGroupName', label: 'Ad Group Name', selected: true },
+      { key: 'adGroupId', label: 'Ad Group ID', selected: false },
+      { key: 'creativeGroupName', label: 'Creative Group Name', selected: false },
+      { key: 'creativeGroupId', label: 'Creative Group ID', selected: false },
+      { key: 'creativeName', label: 'Creative Name', selected: true },
+      { key: 'creativeId', label: 'Creative ID', selected: true },
+      { key: 'creativeType', label: 'Creative Type', selected: false },
+      { key: 'country', label: 'Country / Region', selected: false },
+    ]);
+
+    const creativeMonitorSelectedMetrics = ref([...defaultMetricKeys]);
+
+    const creativeMonitorTableColumns = computed(() => {
+      const cols = [];
+      creativeMonitorDimensions.value.filter(d => d.selected).forEach(d => cols.push({ key: d.key, label: d.label }));
+      creativeMonitorSelectedMetrics.value.forEach(key => cols.push({ key, label: getColumnLabel(key) }));
+      return cols;
+    });
+
+    const creativeMonitorRawData = ref([
+      { day: '2026-07-08', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '86,240', clicks: '2,618', conversions: '612', ecpm: '$3.92', cpc: '$0.35', ecpi: '$1.98', ctr: '3.04%', ivr: '23.4%', cvr: '23.4%', spend: '$337.80' },
+      { day: '2026-07-09', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '79,110', clicks: '2,402', conversions: '558', ecpm: '$3.78', cpc: '$0.33', ecpi: '$1.89', ctr: '3.04%', ivr: '23.2%', cvr: '23.2%', spend: '$298.90' },
+      { day: '2026-07-10', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', creativeGroupName: 'Q3_Playable_Set', creativeGroupId: '976385', creativeId: '8641', creativeName: 'Native Video Ad', creativeType: 'Video', impressions: '64,520', clicks: '1,890', conversions: '421', ecpm: '$4.15', cpc: '$0.37', ecpi: '$2.05', ctr: '2.93%', ivr: '22.3%', cvr: '22.3%', spend: '$267.70' },
+    ]);
+
+    const creativeMonitorDisplayData = computed(() => {
+      if (!creativeMonitorSearched.value) return [];
+      let data = [...creativeMonitorRawData.value];
+      const f = creativeMonitorFilter;
+      if (f.campaignName) data = data.filter(r => r.campaignName.toLowerCase().includes(f.campaignName.toLowerCase()));
+      if (f.campaignId) data = data.filter(r => r.campaignId.includes(f.campaignId));
+      if (f.adGroupName) data = data.filter(r => r.adGroupName.toLowerCase().includes(f.adGroupName.toLowerCase()));
+      if (f.adGroupId) data = data.filter(r => r.adGroupId.includes(f.adGroupId));
+      if (f.creativeName) data = data.filter(r => r.creativeName.toLowerCase().includes(f.creativeName.toLowerCase()));
+      if (f.creativeId) data = data.filter(r => r.creativeId.includes(f.creativeId));
+      if (f.creativeGroupName) data = data.filter(r => r.creativeGroupName.toLowerCase().includes(f.creativeGroupName.toLowerCase()));
+      if (f.creativeGroupId) data = data.filter(r => r.creativeGroupId.includes(f.creativeGroupId));
+      if (f.creativeType) data = data.filter(r => r.creativeType === f.creativeType);
+      if (creativeMonitorSort.key) {
+        data.sort((a, b) => {
+          const av = a[creativeMonitorSort.key] || '';
+          const bv = b[creativeMonitorSort.key] || '';
+          const cmp = String(av).localeCompare(String(bv), undefined, { numeric: true });
+          return creativeMonitorSort.dir === 'asc' ? cmp : -cmp;
+        });
+      }
+      return data;
+    });
+
+    function searchCreativeMonitor() {
+      creativeMonitorSearched.value = true;
+      showToast('Found ' + creativeMonitorDisplayData.value.length + ' row(s)');
+    }
+
+    function sortCreativeMonitor(key) {
+      if (creativeMonitorSort.key === key) creativeMonitorSort.dir = creativeMonitorSort.dir === 'asc' ? 'desc' : 'asc';
+      else { creativeMonitorSort.key = key; creativeMonitorSort.dir = 'asc'; }
+    }
 
     const adsData = [
       { id: '10021', name: 'Summer Promo US', active: true, updated: '2026-07-08 14:22', created: '2026-06-15 09:10' },
@@ -611,8 +2047,8 @@ createApp({
     ]);
 
     const groups = ref([
-      { id: 1448904, name: 'S1S2nativevideo', method: 'Programmatic Creative', types: ['Full-screen Image', 'Landscape Image', 'Icon', 'Basic Banner'], adTypes: 'Banner, Display Interstitial, Native Video, Rewarded Video, Splash AD', country: 'ALL', adUnit: 'Unit-88421', created: '2026-06-10 15:30', materials: {} },
-      { id: 1448905, name: 'Q3_Playable_Set', method: 'Manual Combination', types: ['Playable', 'Video EndCard'], adTypes: 'Rewarded Video, Interstitial', country: 'US', adUnit: 'Unit-90210', created: '2026-07-01 09:15', materials: {} },
+      { id: 1448904, name: 'S1S2nativevideo', method: 'Programmatic Creative', types: ['Full-screen Image', 'Landscape Image', 'Icon', 'Basic Banner'], adTypes: 'Banner, Display Interstitial, Native Video, Rewarded Video, Splash AD', country: 'ALL', adUnit: '1231111', adName: '11asdf', storeId: 'com.global.pnck', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', created: '2026-06-10 15:30', materials: [] },
+      { id: 976385, name: 'Q3_Playable_Set', method: 'Manual Combination', types: ['Playable', 'Video EndCard'], adTypes: 'Rewarded Video, Interstitial', country: 'US', adUnit: '1231111', adName: '11asdf', storeId: 'com.global.pnck', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', created: '2026-07-01 09:15', materials: [] },
     ]);
 
     const groupFilter = reactive({ name: '', method: '', adUnit: '' });
@@ -626,20 +2062,40 @@ createApp({
       });
     });
 
-    const assetForm = reactive({ id: null, type: 'Banner', title: '', description: '', cta: '', preview: null, previewType: null, name: '' });
+    const assetForm = reactive({ id: null, type: 'Banner', title: '', description: '', preview: null, previewType: null, name: '' });
 
-    const groupModal = reactive({
-      show: false, editing: null, name: '', method: 'Programmatic Creative', adUnit: '', country: 'ALL'
+    const applyToGroupForm = reactive({ enabled: 'no', name: '', adUnit: '', selected: [] });
+
+    const filteredApplyGroups = computed(() => {
+      return groups.value.filter(g => {
+        if (applyToGroupForm.name && !g.name.toLowerCase().includes(applyToGroupForm.name.toLowerCase())) return false;
+        if (applyToGroupForm.adUnit && !String(g.adUnit).toLowerCase().includes(applyToGroupForm.adUnit.toLowerCase())) return false;
+        return true;
+      });
     });
 
-    const materialSlots = ref([
-      { type: 'Banner', enabled: false, preview: null, previewType: null, file: null, $input: null },
-      { type: 'Native Image', enabled: false, preview: null, previewType: null, file: null, $input: null },
-      { type: 'Video', enabled: false, preview: null, previewType: null, file: null, $input: null },
-      { type: 'Video EndCard', enabled: false, preview: null, previewType: null, file: null, $input: null },
-      { type: 'Playable', enabled: false, preview: null, previewType: null, file: null, $input: null },
-      { type: 'Icon', enabled: false, preview: null, previewType: null, file: null, $input: null },
-    ]);
+    const allApplyGroupsSelected = computed(() => filteredApplyGroups.value.length && applyToGroupForm.selected.length === filteredApplyGroups.value.length);
+
+    const groupModal = reactive({
+      show: false, editing: null, name: '', creativeTypes: ['Banner'], adUnit: '', country: 'ALL'
+    });
+
+    const pickCreativeModal = reactive({ show: false, search: '', selected: [] });
+
+    let materialUid = 0;
+    function nextMaterialUid() { return 'm' + (++materialUid); }
+
+    const allGroupMaterialsSelected = computed(() => groupMaterials.value.length && selectedGroupMaterials.value.length === groupMaterials.value.length);
+
+    const pickableCreatives = computed(() => {
+      const q = pickCreativeModal.search.trim().toLowerCase();
+      const existingIds = new Set(groupMaterials.value.filter(m => m.source === 'existing').map(m => m.creativeId));
+      return assets.value.filter(a => {
+        if (existingIds.has(a.id)) return false;
+        if (!q) return true;
+        return a.name.toLowerCase().includes(q) || a.id.includes(q) || a.type.toLowerCase().includes(q);
+      });
+    });
 
     const allAssetsSelected = computed(() => assets.value.length && selectedAssets.value.length === assets.value.length);
     const allGroupsSelected = computed(() => filteredGroups.value.length && selectedGroups.value.length === filteredGroups.value.length);
@@ -658,11 +2114,59 @@ createApp({
       selectedGroups.value = e.target.checked ? filteredGroups.value.map(g => g.id) : [];
     }
 
+    function resetApplyToGroupForm() {
+      applyToGroupForm.enabled = 'no';
+      applyToGroupForm.name = '';
+      applyToGroupForm.adUnit = '';
+      applyToGroupForm.selected = [];
+    }
+
+    function toggleAllApplyGroups(e) {
+      applyToGroupForm.selected = e.target.checked ? filteredApplyGroups.value.map(g => g.id) : [];
+    }
+
+    function searchApplyGroups() {
+      showToast('Found ' + filteredApplyGroups.value.length + ' creative group(s)');
+    }
+
+    function buildMaterialFromAsset(asset) {
+      return {
+        uid: nextMaterialUid(),
+        source: 'existing',
+        creativeId: asset.id,
+        name: asset.name,
+        type: asset.type,
+        preview: asset.preview,
+        previewType: asset.previewType,
+        resolution: '—',
+        extension: '—',
+        uploadedAt: asset.created,
+        status: asset.active ? 'Active' : 'Paused',
+        campaignName: asset.campaignName,
+        campaignId: asset.campaignId,
+        adGroupName: asset.adGroupName,
+        adGroupId: asset.adGroupId
+      };
+    }
+
+    function applyAssetToGroups(asset) {
+      if (applyToGroupForm.enabled !== 'yes' || !applyToGroupForm.selected.length) return;
+      applyToGroupForm.selected.forEach(groupId => {
+        const g = groups.value.find(x => x.id === groupId);
+        if (!g) return;
+        if (!g.materials) g.materials = [];
+        if (g.materials.some(m => m.source === 'existing' && m.creativeId === asset.id)) return;
+        g.materials.push(buildMaterialFromAsset(asset));
+        if (!g.types.includes(asset.type)) g.types.push(asset.type);
+      });
+    }
+
     function openAssetForm(asset) {
+      resetApplyToGroupForm();
       if (asset) {
-        Object.assign(assetForm, { id: asset.id, type: asset.type, title: asset.title, description: asset.description, cta: asset.cta, preview: asset.preview, previewType: asset.previewType, name: asset.name });
+        Object.assign(assetForm, { id: asset.id, type: asset.type, title: asset.title, description: asset.description, preview: asset.preview, previewType: asset.previewType, name: asset.name });
       } else {
-        Object.assign(assetForm, { id: null, type: 'Banner', title: '', description: '', cta: 'Install', preview: null, previewType: null, name: '' });
+        Object.assign(assetForm, { id: null, type: 'Banner', title: '', description: '', preview: null, previewType: null, name: '' });
       }
       mcView.value = 'asset-form';
     }
@@ -689,81 +2193,205 @@ createApp({
 
     function saveAsset() {
       const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+      let savedAsset;
       if (assetForm.id) {
         const a = assets.value.find(x => x.id === assetForm.id);
-        if (a) Object.assign(a, { type: assetForm.type, title: assetForm.title, description: assetForm.description, cta: assetForm.cta, preview: assetForm.preview, previewType: assetForm.previewType, updated: now });
+        if (a) {
+          Object.assign(a, { type: assetForm.type, title: assetForm.title, description: assetForm.description, preview: assetForm.preview, previewType: assetForm.previewType, updated: now });
+          savedAsset = a;
+        }
         showToast('Asset updated');
       } else {
         const id = String(Math.floor(10000 + Math.random() * 90000));
-        assets.value.unshift({
+        savedAsset = {
           id, name: assetForm.title || 'New ' + assetForm.type, type: assetForm.type,
           campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021',
           active: true, updated: now, created: now, schedule: 'Always',
-          title: assetForm.title, description: assetForm.description, cta: assetForm.cta,
+          title: assetForm.title, description: assetForm.description,
           preview: assetForm.preview, previewType: assetForm.previewType
-        });
+        };
+        assets.value.unshift(savedAsset);
         showToast('Asset created');
       }
+      if (savedAsset) applyAssetToGroups(savedAsset);
       mcView.value = 'list';
-      mcTab.value = 'assets';
+      mcTab.value = 'creatives';
     }
 
-    function resetMaterialSlots() {
-      materialSlots.value.forEach(s => { s.enabled = false; s.preview = null; s.previewType = null; s.file = null; });
+    function resetGroupMaterials() {
+      groupMaterials.value = [];
+      selectedGroupMaterials.value = [];
     }
 
-    function slotInputRef(el, slot) {
-      if (el) slot.$input = el;
+    function toggleAllGroupMaterials(e) {
+      selectedGroupMaterials.value = e.target.checked ? groupMaterials.value.map(m => m.uid) : [];
+    }
+
+    function removeGroupMaterials() {
+      groupMaterials.value = groupMaterials.value.filter(m => !selectedGroupMaterials.value.includes(m.uid));
+      selectedGroupMaterials.value = [];
+    }
+
+    function toggleGroupCreativeType(t) {
+      const idx = groupModal.creativeTypes.indexOf(t);
+      if (idx >= 0) groupModal.creativeTypes.splice(idx, 1);
+      else groupModal.creativeTypes.push(t);
+    }
+
+    function inferMaterialType(file) {
+      const selected = groupModal.creativeTypes;
+      if (!selected.length) return null;
+      if (file.type.startsWith('video/')) {
+        return selected.find(t => t === 'Video') || selected[0];
+      }
+      if (/\.(html|zip)$/i.test(file.name)) {
+        return selected.find(t => t === 'Playable') || selected[0];
+      }
+      return selected.find(t => t === 'Banner' || t === 'Native Image') || selected[0];
+    }
+
+    function guessResolution(file) {
+      if (file.type.startsWith('image/')) return '1200×628';
+      if (file.type.startsWith('video/')) return '1280×720';
+      return '—';
+    }
+
+    function addUploadedMaterial(file) {
+      if (!groupModal.creativeTypes.length) {
+        showToast('Please select at least one creative type');
+        return;
+      }
+      const materialType = inferMaterialType(file);
+      if (!materialType) return;
+      const isVideo = file.type.startsWith('video/');
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+        groupMaterials.value.push({
+          uid: nextMaterialUid(),
+          source: 'upload',
+          creativeId: null,
+          name: file.name.replace(/\.[^.]+$/, ''),
+          type: materialType,
+          preview: e.target.result,
+          previewType: isVideo ? 'video' : 'image',
+          resolution: guessResolution(file),
+          extension: file.name.split('.').pop(),
+          uploadedAt: now,
+          status: 'Active'
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function onGroupUpload(e) {
+      const file = e.target.files[0];
+      if (file) addUploadedMaterial(file);
+      e.target.value = '';
+    }
+
+    function openPickCreative() {
+      pickCreativeModal.search = '';
+      pickCreativeModal.selected = [];
+      pickCreativeModal.show = true;
+    }
+
+    function togglePickCreative(id) {
+      const idx = pickCreativeModal.selected.indexOf(id);
+      if (idx >= 0) pickCreativeModal.selected.splice(idx, 1);
+      else pickCreativeModal.selected.push(id);
+    }
+
+    function confirmPickCreatives() {
+      pickCreativeModal.selected.forEach(id => {
+        const a = assets.value.find(x => x.id === id);
+        if (!a) return;
+        if (groupMaterials.value.some(m => m.source === 'existing' && m.creativeId === a.id)) return;
+        groupMaterials.value.push({
+          uid: nextMaterialUid(),
+          source: 'existing',
+          creativeId: a.id,
+          name: a.name,
+          type: a.type,
+          preview: a.preview,
+          previewType: a.previewType,
+          resolution: '—',
+          extension: '—',
+          uploadedAt: a.created,
+          status: a.active ? 'Active' : 'Paused',
+          campaignName: a.campaignName,
+          campaignId: a.campaignId,
+          adGroupName: a.adGroupName,
+          adGroupId: a.adGroupId
+        });
+      });
+      pickCreativeModal.show = false;
+      showToast('Added ' + pickCreativeModal.selected.length + ' creative(s)');
+    }
+
+    function deriveGroupCampaignInfo() {
+      const existing = groupMaterials.value.find(m => m.source === 'existing');
+      if (existing) {
+        return {
+          campaignName: existing.campaignName,
+          campaignId: existing.campaignId,
+          adGroupName: existing.adGroupName,
+          adGroupId: existing.adGroupId
+        };
+      }
+      return {
+        campaignName: 'Summer Promo US',
+        campaignId: '10021',
+        adGroupName: 'US_Android',
+        adGroupId: '5021'
+      };
     }
 
     function openGroupModal(group) {
-      resetMaterialSlots();
+      resetGroupMaterials();
       if (group) {
         groupModal.editing = group.id;
         groupModal.name = group.name;
-        groupModal.method = group.method;
         groupModal.adUnit = group.adUnit;
         groupModal.country = group.country;
-        if (group.materials) {
-          Object.entries(group.materials).forEach(([type, data]) => {
-            const slot = materialSlots.value.find(s => s.type === type);
-            if (slot) { slot.enabled = true; slot.preview = data.preview; slot.previewType = data.previewType; }
-          });
+        groupModal.creativeTypes = group.creativeTypes ? [...group.creativeTypes] : [...(group.types || ['Banner'])];
+        if (group.materials && group.materials.length) {
+          groupMaterials.value = group.materials.map(m => ({ ...m, uid: m.uid || nextMaterialUid() }));
         }
       } else {
         groupModal.editing = null;
         groupModal.name = '';
-        groupModal.method = 'Programmatic Creative';
         groupModal.adUnit = '';
         groupModal.country = 'ALL';
+        groupModal.creativeTypes = ['Banner'];
       }
       groupModal.show = true;
     }
 
-    function onSlotFile(e, slot) { handleFile(e.target.files[0], slot); e.target.value = ''; }
-    function onSlotDrop(e, slot) { handleFile(e.dataTransfer.files[0], slot); }
-
     function saveGroup() {
-      if (!groupModal.name.trim()) { showToast('Please enter a group name'); return; }
-      const enabledSlots = materialSlots.value.filter(s => s.enabled);
-      if (!enabledSlots.length) { showToast('Please enable at least one material type'); return; }
+      if (!groupModal.name.trim()) { showToast('Please enter a creative group name'); return; }
+      if (!groupModal.creativeTypes.length) { showToast('Please select at least one creative type'); return; }
+      if (!groupMaterials.value.length) { showToast('Please add at least one material'); return; }
 
-      const materials = {};
-      enabledSlots.forEach(s => { materials[s.type] = { preview: s.preview, previewType: s.previewType }; });
-
-      const types = enabledSlots.map(s => s.type);
+      const types = [...groupModal.creativeTypes];
+      const campaignInfo = deriveGroupCampaignInfo();
+      const materials = groupMaterials.value.map(m => ({ ...m }));
       const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
 
       if (groupModal.editing) {
         const g = groups.value.find(x => x.id === groupModal.editing);
-        if (g) Object.assign(g, { name: groupModal.name, method: groupModal.method, adUnit: groupModal.adUnit, country: groupModal.country, types, materials });
+        if (g) Object.assign(g, {
+          name: groupModal.name, adUnit: groupModal.adUnit,
+          country: groupModal.country, creativeTypes: [...groupModal.creativeTypes], types, materials, ...campaignInfo
+        });
         showToast('Creative group updated');
       } else {
         groups.value.unshift({
           id: Math.floor(1000000 + Math.random() * 9000000),
-          name: groupModal.name, method: groupModal.method, types,
+          name: groupModal.name, creativeTypes: [...groupModal.creativeTypes], types,
           adTypes: 'Banner, Display Interstitial, Native Video, Rewarded Video, Splash AD',
-          country: groupModal.country, adUnit: groupModal.adUnit, created: now, materials
+          country: groupModal.country, adUnit: groupModal.adUnit || 'Unit-' + Math.floor(10000 + Math.random() * 90000),
+          created: now, materials, ...campaignInfo
         });
         showToast('Creative group created');
       }
@@ -794,13 +2422,29 @@ createApp({
     function filterGroups() { showToast('Found ' + filteredGroups.value.length + ' groups'); }
 
     return {
-      page, adsTab, mcTab, mcView, navItems, adsData, creativeTypes, assets, groups,
-      groupFilter, filteredGroups, assetForm, groupModal, materialSlots,
+      page, dashboard, adsTab, mcTab, mcView, reportsNavOpen, isReportsPage, reportSearch, downloadReports, filteredDownloadReports,
+      adMonitorAdvanced, adMonitorFilter, adMonitorDimensions, adMonitorSelectedMetrics, adMonitorTableColumns,
+      adMonitorDisplayData, adMonitorSort, columnsModal, filteredSelectedColumnGroups, filteredUnselectedColumnGroups,
+      openColumnsModal, applyColumns, addColumn, removeColumn, addColumnGroup, removeColumnGroup, removeAllColumns, addAllColumnGroups, columnGroupExpanded,
+      searchAdMonitor, sortAdMonitor,
+      creativeMonitorAdvanced, creativeMonitorFilter, creativeMonitorDimensions, creativeMonitorSelectedMetrics,
+      creativeMonitorTableColumns, creativeMonitorDisplayData, creativeMonitorSort,
+      searchCreativeMonitor, sortCreativeMonitor,
+      navItems, adsData, creativeTypes, assets, groups,
+      groupFilter, filteredGroups, assetForm, applyToGroupForm, filteredApplyGroups, allApplyGroupsSelected,
+      groupModal, pickCreativeModal,
+      groupMaterials, selectedGroupMaterials, allGroupMaterialsSelected, pickableCreatives,
       selectedAssets, selectedGroups, allAssetsSelected, allGroupsSelected,
       dragOver, showMetrics, toast,
+      userMenuOpen, settingsTab, settingsNavItems, previousPage,
+      accountInfo, accountForm, accountOwner, members, filteredMembers,
+      memberSearch, memberAccessFilter, inviteModal, billing, billingActivities,
+      billingAddressText, addCardModal, billingInfoModal,
+      openAccountSettings, saveAccountInfo, inviteUser, saveCard, saveBillingInfo,
       showToast, toggleAllAssets, toggleAllGroups, openAssetForm, editSelectedAsset,
-      onAssetFile, onAssetDrop, saveAsset, openGroupModal, slotInputRef,
-      onSlotFile, onSlotDrop, saveGroup, deleteGroup, deleteGroups, copyGroup, filterGroups
+      onAssetFile, onAssetDrop, saveAsset, searchApplyGroups, toggleAllApplyGroups, openGroupModal,
+      onGroupUpload, openPickCreative, togglePickCreative, confirmPickCreatives, toggleGroupCreativeType, toggleReportsNav,
+      toggleAllGroupMaterials, removeGroupMaterials, saveGroup, deleteGroup, deleteGroups, copyGroup, filterGroups, deleteReport
     };
   }
 }).mount('#app');
