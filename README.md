@@ -14,6 +14,6 @@ python3 -m http.server 8080
 ## 协作
 
 ```bash
-git clone https://github.com/msuper123/tarrific-admin.git
+git clone https://github.com/mssuper123/tarrific-admin.git
 cd tarrific-admin
 ```
