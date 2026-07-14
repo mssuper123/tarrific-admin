@@ -130,6 +130,94 @@ tr:hover td{background:#f9fafb}
 .form-head h2{font-size:18px;font-weight:700;color:#111827;margin-bottom:4px}
 .form-head p{font-size:12px;color:#9ca3af}
 .form-actions-top{display:flex;gap:8px}
+
+/* Ads creation wizard */
+.ads-wizard{background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.06);min-height:calc(100vh - 140px);display:flex;flex-direction:column}
+.ads-wizard-top{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid #f0f2f5}
+.ads-wizard-close{background:none;border:none;font-size:18px;color:#9ca3af;cursor:pointer;line-height:1;padding:4px}
+.ads-wizard-close:hover{color:#374151}
+.ads-wizard-top-title{font-size:15px;font-weight:600;color:#111827}
+.ads-wizard-main{display:flex;flex:1;min-height:0}
+.ads-wizard-steps{width:200px;flex-shrink:0;border-right:1px solid #f0f2f5;padding:28px 20px;background:#fafbfc}
+.ads-wizard-step{display:flex;align-items:flex-start;gap:12px;position:relative;padding-bottom:28px;cursor:pointer;user-select:none}
+.ads-wizard-step:last-child{padding-bottom:0}
+.ads-wizard-step:hover .ads-wizard-step-label{color:#5bc0eb}
+.ads-wizard-step.active:hover .ads-wizard-step-label{color:#5bc0eb}
+.ads-wizard-step:not(:last-child)::after{content:'';position:absolute;left:13px;top:30px;bottom:4px;width:2px;background:#e5e7eb}
+.ads-wizard-step.done:not(:last-child)::after{background:#5bc0eb}
+.ads-wizard-step-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;background:#fff;border:2px solid #d1d5db;color:#9ca3af}
+.ads-wizard-step.active .ads-wizard-step-icon{border-color:#5bc0eb;background:#5bc0eb;color:#fff}
+.ads-wizard-step.done .ads-wizard-step-icon{border-color:#5bc0eb;background:#5bc0eb;color:#fff;font-size:14px}
+.ads-wizard-step-label{font-size:13px;font-weight:600;color:#9ca3af;padding-top:5px}
+.ads-wizard-step.active .ads-wizard-step-label{color:#5bc0eb}
+.ads-wizard-step.done .ads-wizard-step-label{color:#374151}
+.ads-wizard-body{flex:1;padding:24px 28px 32px;overflow-y:auto}
+.ads-wizard-creative-layout{margin-top:4px}
+.ads-wizard-creative-layout .form-card{padding:0;box-shadow:none;background:transparent}
+.ads-wizard-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:24px}
+.ads-wizard-head h2{font-size:22px;font-weight:700;color:#111827;margin-bottom:6px}
+.ads-wizard-head p{font-size:12px;color:#9ca3af;line-height:1.5;max-width:640px}
+.ads-wizard-actions{display:flex;gap:8px;flex-shrink:0}
+.creation-mode-seg{display:flex;gap:0;border:1px solid #d1d9e6;border-radius:4px;overflow:hidden;margin-bottom:20px;max-width:360px}
+.creation-mode-btn{flex:1;padding:10px 16px;font-size:13px;font-weight:500;border:none;background:#fff;color:#6b7280;cursor:pointer;border-right:1px solid #d1d9e6;transition:all .15s}
+.creation-mode-btn:last-child{border-right:none}
+.creation-mode-btn.active{background:#eff8fd;color:#5bc0eb;box-shadow:inset 0 0 0 1px #5bc0eb}
+.wizard-tab-bar{display:flex;gap:24px;border-bottom:1px solid #e8ecf1;margin-bottom:20px}
+.wizard-tab{padding:10px 0;font-size:13px;font-weight:600;color:#9ca3af;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:default}
+.wizard-tab.active{color:#5bc0eb;border-bottom-color:#5bc0eb}
+.wizard-section{border:1px solid #e8ecf1;border-radius:4px;padding:20px;margin-bottom:16px;background:#fff}
+.wizard-section .form-select,.wizard-section .form-input{width:100%}
+.wizard-section-title{font-size:13px;font-weight:700;color:#111827;margin-bottom:14px}
+.objective-seg{display:flex;gap:12px;flex-wrap:wrap}
+.objective-btn{padding:10px 20px;font-size:13px;font-weight:500;border:1px solid #d1d9e6;border-radius:4px;background:#fff;color:#6b7280;cursor:pointer;transition:all .15s}
+.objective-btn.active{border-color:#5bc0eb;color:#5bc0eb;background:#eff8fd;box-shadow:inset 0 0 0 1px #5bc0eb}
+.wizard-field-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #f3f4f6}
+.wizard-field-row:last-child{border-bottom:none;padding-bottom:0}
+.wizard-field-row:first-child{padding-top:0}
+.wizard-field-label{font-size:13px;color:#374151;font-weight:500}
+.target-row{margin-bottom:18px}
+.target-row:last-child{margin-bottom:0}
+.target-row-label{font-size:13px;font-weight:600;color:#374151;margin-bottom:10px}
+.input-suffix-wrap{display:flex;align-items:stretch;border:1px solid #d1d9e6;border-radius:4px;overflow:hidden;background:#fff}
+.input-suffix-wrap .form-input{border:none;border-radius:0;flex:1}
+.input-suffix-wrap .form-input:focus{box-shadow:none}
+.input-suffix-tag{padding:8px 14px;background:#f9fafb;border-left:1px solid #d1d9e6;font-size:13px;color:#6b7280;white-space:nowrap;display:flex;align-items:center}
+.audience-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid #f3f4f6;margin-bottom:16px}
+.audience-toggle-label{font-size:13px;font-weight:600;color:#374151}
+.audience-device-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.audience-device-row:last-of-type{margin-bottom:0}
+.search-select{position:relative}
+.search-select-input-wrap{display:flex;align-items:center;gap:6px;border:1px solid #d1d9e6;border-radius:4px;background:#fff;padding:0 10px;min-height:38px;transition:border-color .15s}
+.search-select.open .search-select-input-wrap,.search-select-input-wrap:focus-within{border-color:#5bc0eb}
+.search-select-input{border:none;flex:1;padding:8px 0;font-size:13px;outline:none;background:transparent;color:#374151;min-width:0}
+.search-select-input::placeholder{color:#9ca3af}
+.search-select-icon{color:#9ca3af;flex-shrink:0}
+.search-select-panel{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:4px;box-shadow:0 4px 12px rgba(0,0,0,.08);z-index:30;max-height:220px;overflow-y:auto}
+.search-select-option{padding:10px 12px;font-size:13px;color:#374151;cursor:pointer}
+.search-select-option:hover,.search-select-option.active{background:#eff8fd;color:#5bc0eb}
+.device-row-add{margin-top:10px;font-size:12px;color:#5bc0eb;background:none;border:none;cursor:pointer;padding:0}
+.device-row-add:hover{text-decoration:underline}
+.schedule-date-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.schedule-date-field{position:relative}
+.schedule-date-field .form-input{padding-right:36px}
+.schedule-date-icon{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:#9ca3af;pointer-events:none}
+.schedule-grid-wrap{overflow-x:auto;margin-top:12px;border:1px solid #e8ecf1;border-radius:4px;padding:10px 12px 12px}
+.schedule-grid{width:100%;border-collapse:collapse;table-layout:fixed;min-width:720px}
+.schedule-grid th,.schedule-grid td{border:1px solid #eef2f6;padding:0}
+.schedule-grid-range th{background:#fafbfc;font-size:11px;font-weight:600;color:#9ca3af;padding:6px 4px;text-align:center}
+.schedule-grid-hour th{background:#fafbfc;font-size:11px;font-weight:500;color:#6b7280;padding:5px 2px;text-align:center}
+.schedule-grid-day{font-size:12px;font-weight:600;color:#374151;padding:8px 6px;background:#fafbfc;white-space:nowrap;width:76px}
+.schedule-grid-cell{height:30px;cursor:pointer;background:#fff;transition:background .12s}
+.schedule-grid-cell:hover{background:#eff8fd}
+.schedule-grid-cell.selected{background:#5bc0eb}
+.schedule-summary{margin-top:12px;padding:12px 14px;background:#fafbfc;border:1px solid #eef2f6;border-radius:4px}
+.schedule-summary-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.schedule-summary-title{font-size:12px;font-weight:600;color:#374151}
+.schedule-summary-clear{font-size:12px;color:#5bc0eb;background:none;border:none;cursor:pointer;padding:0}
+.schedule-summary-clear:hover{text-decoration:underline}
+.schedule-summary-item{font-size:12px;color:#6b7280;padding:3px 0}
+.wizard-placeholder{padding:48px 24px;text-align:center;color:#9ca3af;font-size:13px;border:1px dashed #e5e7eb;border-radius:4px;background:#fafbfc}
+
 .type-seg{display:flex;gap:0;border:1px solid #d1d9e6;border-radius:4px;overflow:hidden;margin-bottom:20px;flex-wrap:wrap}
 .type-seg-btn{padding:8px 16px;font-size:12px;font-weight:500;border:none;background:#fff;color:#6b7280;cursor:pointer;border-right:1px solid #d1d9e6;transition:all .15s}
 .type-seg-btn:last-child{border-right:none}
@@ -912,69 +1000,566 @@ tr:hover td{background:#f9fafb}
           </div>
         </template>
 
-        <!-- ═══ ADS (no Creative tab) ═══ -->
+        <!-- ═══ ADS ═══ -->
         <template v-if="page==='ads'">
-          <div class="bread">Home <span>></span> Ads</div>
-          <div class="page-head">
-            <h1 class="page-title">Ads</h1>
-          </div>
-          <div class="filter-bar">
-            <button class="btn-filter">+ Filter</button>
-            <div class="date-range">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
-              2026-07-03 ~ 2026-07-09
+          <!-- List view -->
+          <template v-if="adsView==='list'">
+            <div class="bread">Home <span>></span> Ads</div>
+            <div class="page-head">
+              <h1 class="page-title">Ads</h1>
             </div>
-          </div>
-          <div class="card">
-            <div class="card-tabs">
-              <div class="card-tab" :class="{active:adsTab==='campaign'}" @click="adsTab='campaign'">Campaign</div>
-              <div class="card-tab" :class="{active:adsTab==='adgroup'}" @click="adsTab='adgroup'">Ad Group</div>
-            </div>
-            <div class="toolbar">
-              <div class="toolbar-left">
-                <button class="btn btn-primary">New</button>
-                <button class="btn btn-default" disabled>Edit ▾</button>
-              </div>
-              <div class="toolbar-right">
-                <label class="chk-label"><input type="checkbox" checked> Show Metrics</label>
-                <button class="btn btn-default btn-sm">Custom Columns</button>
-                <button class="icon-btn" title="Refresh">↻</button>
+            <div class="filter-bar">
+              <button class="btn-filter">+ Filter</button>
+              <div class="date-range">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                2026-07-03 ~ 2026-07-09
               </div>
             </div>
-            <div class="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th><input type="checkbox"></th>
-                    <th></th>
-                    <th>{{ adsTab==='campaign' ? 'Campaign Name' : 'Ad Group Name' }}</th>
-                    <th>ID</th>
-                    <th>Status</th>
-                    <th>Updated Time</th>
-                    <th>Created Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="row in adsData" :key="row.id">
-                    <td><input type="checkbox"></td>
-                    <td><label class="switch"><input type="checkbox" :checked="row.active"><span class="switch-slider"></span></label></td>
-                    <td>{{ row.name }}</td>
-                    <td>{{ row.id }}</td>
-                    <td><span class="status-dot" :class="row.active?'active':'paused'"></span>{{ row.active?'Active':'Paused' }}</td>
-                    <td>{{ row.updated }}</td>
-                    <td>{{ row.created }}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div class="card">
+              <div class="card-tabs">
+                <div class="card-tab" :class="{active:adsTab==='campaign'}" @click="adsTab='campaign'">Campaign</div>
+                <div class="card-tab" :class="{active:adsTab==='adgroup'}" @click="adsTab='adgroup'">Ad Group</div>
+              </div>
+              <div class="toolbar">
+                <div class="toolbar-left">
+                  <button class="btn btn-primary" @click="openAdsWizard">New</button>
+                  <button class="btn btn-default" disabled>Edit ▾</button>
+                </div>
+                <div class="toolbar-right">
+                  <label class="chk-label"><input type="checkbox" checked> Show Metrics</label>
+                  <button class="btn btn-default btn-sm">Custom Columns</button>
+                  <button class="icon-btn" title="Refresh">↻</button>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th><input type="checkbox"></th>
+                      <th></th>
+                      <th>{{ adsTab==='campaign' ? 'Campaign Name' : 'Ad Group Name' }}</th>
+                      <th>ID</th>
+                      <th>Status</th>
+                      <th>Updated Time</th>
+                      <th>Created Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="row in adsData" :key="row.id">
+                      <td><input type="checkbox"></td>
+                      <td><label class="switch"><input type="checkbox" :checked="row.active"><span class="switch-slider"></span></label></td>
+                      <td>{{ row.name }}</td>
+                      <td>{{ row.id }}</td>
+                      <td><span class="status-dot" :class="row.active?'active':'paused'"></span>{{ row.active?'Active':'Paused' }}</td>
+                      <td>{{ row.updated }}</td>
+                      <td>{{ row.created }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="pagination">
+                Total {{ adsData.length }}
+                <button class="page-btn">‹</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">›</button>
+                <select class="page-size"><option>10 / page</option></select>
+              </div>
             </div>
-            <div class="pagination">
-              Total {{ adsData.length }}
-              <button class="page-btn">‹</button>
-              <button class="page-btn active">1</button>
-              <button class="page-btn">›</button>
-              <select class="page-size"><option>10 / page</option></select>
+          </template>
+
+          <!-- Creation wizard -->
+          <template v-if="adsView==='wizard'">
+            <div class="ads-wizard">
+              <div class="ads-wizard-top">
+                <button type="button" class="ads-wizard-close" @click="closeAdsWizard" title="Close">&times;</button>
+                <span class="ads-wizard-top-title">New</span>
+              </div>
+              <div class="ads-wizard-main">
+                <div class="ads-wizard-steps">
+                  <div class="ads-wizard-step" :class="{active:adsWizardStep===1,done:adsWizardStep>1}" @click="goAdsWizardStep(1)">
+                    <div class="ads-wizard-step-icon">{{ adsWizardStep > 1 ? '✓' : '1' }}</div>
+                    <div class="ads-wizard-step-label">Campaign</div>
+                  </div>
+                  <div class="ads-wizard-step" :class="{active:adsWizardStep===2,done:adsWizardStep>2}" @click="goAdsWizardStep(2)">
+                    <div class="ads-wizard-step-icon">{{ adsWizardStep > 2 ? '✓' : '2' }}</div>
+                    <div class="ads-wizard-step-label">Ad Group</div>
+                  </div>
+                  <div class="ads-wizard-step" :class="{active:adsWizardStep===3,done:adsWizardStep>3}" @click="goAdsWizardStep(3)">
+                    <div class="ads-wizard-step-icon">3</div>
+                    <div class="ads-wizard-step-label">Creative</div>
+                  </div>
+                </div>
+
+                <div class="ads-wizard-body">
+                  <!-- Step 1: Campaign -->
+                  <template v-if="adsWizardStep===1">
+                    <div class="ads-wizard-head">
+                      <div>
+                        <h2>Campaign</h2>
+                        <p>Keep both creation, historical data, and template entries according to the current 1:1 clone logic.</p>
+                      </div>
+                      <div class="ads-wizard-actions">
+                        <button type="button" class="btn btn-default" @click="closeAdsWizard">Back to List</button>
+                        <button type="button" class="btn btn-primary" @click="adsWizardNext">Next Step</button>
+                      </div>
+                    </div>
+                    <div class="creation-mode-seg">
+                      <button type="button" class="creation-mode-btn" :class="{active:adsCampaignForm.mode==='new'}" @click="setCampaignMode('new')">New</button>
+                      <button type="button" class="creation-mode-btn" :class="{active:adsCampaignForm.mode==='existing'}" @click="setCampaignMode('existing')">Select Existing</button>
+                    </div>
+
+                    <template v-if="adsCampaignForm.mode==='existing'">
+                      <div class="wizard-tab-bar">
+                        <div class="wizard-tab active">History Data</div>
+                      </div>
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">History Data</div>
+                        <select class="form-select" v-model="adsCampaignForm.historyId" @change="applyCampaignHistory">
+                          <option value="">Please enter History Data name</option>
+                          <option v-for="h in campaignHistoryData" :key="h.id" :value="h.id">{{ h.name }}</option>
+                        </select>
+                      </div>
+                    </template>
+
+                    <div class="wizard-section" v-if="adsCampaignForm.mode==='new'">
+                      <div class="wizard-section-title">Objective</div>
+                      <div class="objective-seg">
+                        <button type="button" class="objective-btn" :class="{active:adsCampaignForm.objective==='app'}" @click="setCampaignObjective('app')">APP Promote</button>
+                        <button type="button" class="objective-btn" :class="{active:adsCampaignForm.objective==='web'}" @click="setCampaignObjective('web')">Web Promote</button>
+                      </div>
+                    </div>
+
+                    <div class="wizard-section" v-if="adsCampaignForm.mode==='new'">
+                      <div class="wizard-section-title">Campaign Settings</div>
+                      <div class="form-group" style="margin-bottom:16px">
+                        <label class="form-label">Campaign Name</label>
+                        <input class="form-input" v-model="adsCampaignForm.name" placeholder="Campaign name">
+                      </div>
+                      <div class="wizard-field-row">
+                        <span class="wizard-field-label">Enable Budget</span>
+                        <label class="switch"><input type="checkbox" v-model="adsCampaignForm.enableBudget"><span class="switch-slider"></span></label>
+                      </div>
+                    </div>
+                  </template>
+
+                  <!-- Step 2: Ad Group -->
+                  <template v-if="adsWizardStep===2">
+                    <div class="ads-wizard-head">
+                      <div>
+                        <h2>Ad Group</h2>
+                        <p>Keep both creation, historical data, and template entries according to the current 1:1 clone logic.</p>
+                      </div>
+                      <div class="ads-wizard-actions">
+                        <button type="button" class="btn btn-default" @click="closeAdsWizard">Back to List</button>
+                        <button type="button" class="btn btn-primary" @click="adsWizardNext">Next Step</button>
+                      </div>
+                    </div>
+                    <div class="creation-mode-seg">
+                      <button type="button" class="creation-mode-btn" :class="{active:adsAdGroupForm.mode==='new'}" @click="setAdGroupMode('new')">New</button>
+                      <button type="button" class="creation-mode-btn" :class="{active:adsAdGroupForm.mode==='existing'}" @click="setAdGroupMode('existing')">Select Existing</button>
+                    </div>
+
+                    <template v-if="adsAdGroupForm.mode==='existing'">
+                      <div class="wizard-tab-bar">
+                        <div class="wizard-tab active">History Data</div>
+                      </div>
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">History Data</div>
+                        <select class="form-select" v-model="adsAdGroupForm.historyId">
+                          <option value="">Please enter History Data name</option>
+                          <option v-for="h in adGroupHistoryData" :key="h.id" :value="h.id">{{ h.name }}</option>
+                        </select>
+                      </div>
+                    </template>
+
+                    <template v-else>
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">Ad Group Settings</div>
+                        <div class="form-group">
+                          <label class="form-label">Ad Group Name</label>
+                          <input class="form-input" v-model="adsAdGroupForm.name" placeholder="Ad Group name">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                          <label class="form-label">{{ adsCampaignForm.objective === 'web' ? 'Web Promote' : 'APP Promote' }}</label>
+                          <select class="form-select" v-model="adsAdGroupForm.appId">
+                            <option value="">Select app</option>
+                            <option v-for="app in myApps" :key="app.id" :value="app.id">{{ app.name }} ({{ app.os }})</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">Target</div>
+                        <div class="target-row">
+                          <div class="target-row-label">Audience Type</div>
+                          <div class="objective-seg">
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.audienceType==='install'}" @click="adsAdGroupForm.audienceType='install'">Install</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.audienceType==='retargeting'}" @click="adsAdGroupForm.audienceType='retargeting'">Retargeting</button>
+                          </div>
+                        </div>
+                        <div class="target-row">
+                          <div class="target-row-label">Billing Method</div>
+                          <div class="objective-seg">
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.billingMethod==='cpm'}" @click="adsAdGroupForm.billingMethod='cpm'">CPM</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.billingMethod==='cps'}" @click="adsAdGroupForm.billingMethod='cps'">CPS</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.billingMethod==='cpc'}" @click="adsAdGroupForm.billingMethod='cpc'">CPC</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.billingMethod==='cpi'}" @click="adsAdGroupForm.billingMethod='cpi'">CPI</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.billingMethod==='cpa'}" @click="adsAdGroupForm.billingMethod='cpa'">CPA</button>
+                          </div>
+                        </div>
+                        <div class="target-row">
+                          <div class="target-row-label">Bid Method</div>
+                          <div class="objective-seg">
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.bidMethod==='cpi'}" @click="adsAdGroupForm.bidMethod='cpi'">CPI</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.bidMethod==='cpa'}" @click="adsAdGroupForm.bidMethod='cpa'">CPA</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.bidMethod==='roas0'}" @click="adsAdGroupForm.bidMethod='roas0'">ROAS0</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.bidMethod==='roas7'}" @click="adsAdGroupForm.bidMethod='roas7'">ROAS7</button>
+                          </div>
+                        </div>
+                        <div class="target-row">
+                          <div class="target-row-label">Price</div>
+                          <div class="input-suffix-wrap">
+                            <input class="form-input" v-model="adsAdGroupForm.price" type="number" min="0" step="0.01" placeholder="0.00">
+                            <span class="input-suffix-tag">USD</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">Audience</div>
+                        <div class="form-group">
+                          <label class="form-label">Country</label>
+                          <input class="form-input" v-model="adsAdGroupForm.country" placeholder="Please enter Country name">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">City</label>
+                          <input class="form-input" v-model="adsAdGroupForm.city" placeholder="Please enter City name">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Language</label>
+                          <input class="form-input" v-model="adsAdGroupForm.language" placeholder="Please enter Language name">
+                        </div>
+                        <div class="audience-toggle-row">
+                          <span class="audience-toggle-label">Audience</span>
+                          <label class="switch"><input type="checkbox" v-model="adsAdGroupForm.audienceEnabled"><span class="switch-slider"></span></label>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Device</label>
+                          <div v-for="(row, idx) in adsAdGroupForm.deviceRows" :key="row.id" class="audience-device-row">
+                            <div class="search-select" :class="{open: deviceOsOpenIndex===idx}">
+                              <div class="search-select-input-wrap">
+                                <svg class="search-select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                                <input
+                                  class="search-select-input"
+                                  type="text"
+                                  :value="deviceOsOpenIndex===idx ? row.osQuery : row.os"
+                                  placeholder="Search OS"
+                                  @focus="openDeviceOsSelect(idx)"
+                                  @input="onDeviceOsQuery(idx, $event)"
+                                >
+                              </div>
+                              <div v-if="deviceOsOpenIndex===idx" class="search-select-panel">
+                                <div
+                                  v-for="opt in filteredDeviceOsOptions(idx)"
+                                  :key="opt"
+                                  class="search-select-option"
+                                  :class="{active: opt===row.os}"
+                                  @mousedown.prevent="selectDeviceOs(idx, opt)"
+                                >{{ opt }}</div>
+                              </div>
+                            </div>
+                            <select class="form-select" v-model="row.osVersion">
+                              <option v-for="v in getDeviceRowVersions(row.os)" :key="v" :value="v">{{ v }}</option>
+                            </select>
+                            <select class="form-select" v-model="row.deviceBrand">
+                              <option v-for="b in getDeviceRowBrands(row.os)" :key="b" :value="b">{{ b }}</option>
+                            </select>
+                          </div>
+                          <button type="button" class="device-row-add" @click="addDeviceRow">+ Add Device</button>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                          <label class="form-label">Traffic</label>
+                          <select class="form-select" v-model="adsAdGroupForm.traffic">
+                            <option v-for="t in adsTrafficOptions" :key="t" :value="t">{{ t }}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">Budget & Schedule</div>
+                        <div class="form-group">
+                          <label class="form-label">Ad Group Total Budget</label>
+                          <div class="input-suffix-wrap">
+                            <input class="form-input" v-model="adsAdGroupForm.totalBudget" type="number" min="0" step="0.01" placeholder="0.00">
+                            <span class="input-suffix-tag">USD</span>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Ad Group Daily Budget</label>
+                          <div class="input-suffix-wrap">
+                            <input class="form-input" v-model="adsAdGroupForm.dailyBudget" type="number" min="0" step="0.01" placeholder="0.00">
+                            <span class="input-suffix-tag">USD</span>
+                          </div>
+                        </div>
+                        <div class="target-row">
+                          <div class="target-row-label">Delivery Time</div>
+                          <div class="objective-seg">
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.deliveryTime==='continuous'}" @click="adsAdGroupForm.deliveryTime='continuous'">Continuous</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.deliveryTime==='range'}" @click="adsAdGroupForm.deliveryTime='range'">Time Range</button>
+                          </div>
+                        </div>
+                        <div v-if="adsAdGroupForm.deliveryTime==='range'" class="schedule-date-row">
+                          <div class="schedule-date-field">
+                            <label class="form-label">Start Time</label>
+                            <input class="form-input" type="date" v-model="adsAdGroupForm.startTime">
+                            <svg class="schedule-date-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                          </div>
+                          <div class="schedule-date-field">
+                            <label class="form-label">End Time</label>
+                            <input class="form-input" type="date" v-model="adsAdGroupForm.endTime">
+                            <svg class="schedule-date-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+                          </div>
+                        </div>
+                        <div class="target-row">
+                          <div class="target-row-label">Time Slot</div>
+                          <div class="objective-seg">
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.timeSlotMode==='allDay'}" @click="adsAdGroupForm.timeSlotMode='allDay'">All Day</button>
+                            <button type="button" class="objective-btn" :class="{active:adsAdGroupForm.timeSlotMode==='parted'}" @click="adsAdGroupForm.timeSlotMode='parted'">Parted</button>
+                          </div>
+                        </div>
+                        <template v-if="adsAdGroupForm.timeSlotMode==='parted'">
+                          <div class="form-group">
+                            <label class="form-label">Time Zone</label>
+                            <select class="form-select" v-model="adsAdGroupForm.timeSlotTimezone">
+                              <option v-for="tz in adsTimeSlotTimezones" :key="tz" :value="tz">{{ tz }}</option>
+                            </select>
+                          </div>
+                          <div class="schedule-grid-wrap">
+                            <table class="schedule-grid">
+                              <thead>
+                                <tr class="schedule-grid-range">
+                                  <th></th>
+                                  <th colspan="12">00:00 – 12:00</th>
+                                  <th colspan="12">12:00 – 24:00</th>
+                                </tr>
+                                <tr class="schedule-grid-hour">
+                                  <th></th>
+                                  <th v-for="h in adsScheduleHours" :key="'h'+h">{{ h }}</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="(day, dayIdx) in adsScheduleDays" :key="day">
+                                  <td class="schedule-grid-day">{{ day }}</td>
+                                  <td
+                                    v-for="h in adsScheduleHours"
+                                    :key="day+'-'+h"
+                                    class="schedule-grid-cell"
+                                    :class="{selected:isTimeSlotSelected(dayIdx, h)}"
+                                    @click="toggleTimeSlot(dayIdx, h)"
+                                  ></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div v-if="selectedTimeSlotSummary.length" class="schedule-summary">
+                            <div class="schedule-summary-head">
+                              <span class="schedule-summary-title">Selected</span>
+                              <button type="button" class="schedule-summary-clear" @click="clearTimeSlots">Clear Selected</button>
+                            </div>
+                            <div v-for="item in selectedTimeSlotSummary" :key="item" class="schedule-summary-item">{{ item }}</div>
+                          </div>
+                        </template>
+                      </div>
+
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">Tracking Links</div>
+                        <div class="form-group">
+                          <label class="form-label">Impression URL</label>
+                          <input class="form-input" v-model="adsAdGroupForm.impressionUrl" placeholder="https://">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Click Through URL</label>
+                          <input class="form-input" v-model="adsAdGroupForm.clickThroughUrl" placeholder="https://">
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                          <label class="form-label">Click Track URL</label>
+                          <input class="form-input" v-model="adsAdGroupForm.clickTrackUrl" placeholder="https://">
+                        </div>
+                      </div>
+                    </template>
+                  </template>
+
+                  <!-- Step 3: Creative -->
+                  <template v-if="adsWizardStep===3">
+                    <div class="ads-wizard-head">
+                      <div>
+                        <h2>Creative</h2>
+                        <p>Keep both creation, historical data, and template entries according to the current 1:1 clone logic.</p>
+                      </div>
+                      <div class="ads-wizard-actions">
+                        <button type="button" class="btn btn-default" @click="closeAdsWizard">Back to List</button>
+                        <button type="button" class="btn btn-primary" @click="saveAdsWizard">Save</button>
+                      </div>
+                    </div>
+
+                    <div class="creation-mode-seg">
+                      <button type="button" class="creation-mode-btn" :class="{active:adsCreativeForm.mode==='new'}" @click="setCreativeMode('new')">New</button>
+                      <button type="button" class="creation-mode-btn" :class="{active:adsCreativeForm.mode==='existing'}" @click="setCreativeMode('existing')">Select Existing</button>
+                    </div>
+
+                    <div class="creation-mode-seg" style="max-width:420px">
+                      <button type="button" class="creation-mode-btn" :class="{active:adsCreativeForm.entryType==='creative'}" @click="setCreativeEntryType('creative')">Creative</button>
+                      <button type="button" class="creation-mode-btn" :class="{active:adsCreativeForm.entryType==='group'}" @click="setCreativeEntryType('group')">Creative Group</button>
+                    </div>
+
+                    <template v-if="adsCreativeForm.mode==='existing'">
+                      <div class="wizard-tab-bar">
+                        <div class="wizard-tab active">History Data</div>
+                      </div>
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">History Data</div>
+                        <select class="form-select" v-model="adsCreativeForm.historyId">
+                          <option value="">Please enter History Data name</option>
+                          <option v-for="h in adsCreativeHistoryOptions" :key="h.id" :value="h.id">{{ h.name }}</option>
+                        </select>
+                      </div>
+                    </template>
+
+                    <template v-else-if="adsCreativeForm.entryType==='creative'">
+                      <div class="wizard-section" style="border:none;padding:0;background:transparent">
+                        <div class="wizard-section-title" style="margin-bottom:16px">Creative</div>
+                        <div class="asset-form-layout ads-wizard-creative-layout">
+                          <div class="form-card">
+                            <div class="type-seg">
+                              <button v-for="t in creativeTypes" :key="t" type="button" class="type-seg-btn" :class="{active:assetForm.type===t}" @click="assetForm.type=t">{{ t }}</button>
+                            </div>
+                            <div class="upload-zone" :class="{dragover:dragOver}" @click="triggerAdsAssetUpload" @dragover.prevent="dragOver=true" @dragleave="dragOver=false" @drop.prevent="onAssetDrop">
+                              <p>Drag &amp; Drop or Click to Upload</p>
+                              <span>Support image or video, limit 1 per time</span>
+                              <div class="upload-preview" v-if="assetForm.preview">
+                                <img v-if="assetForm.previewType==='image'" :src="assetForm.preview" alt="">
+                                <video v-else :src="assetForm.preview" controls></video>
+                              </div>
+                            </div>
+                            <input ref="adsAssetFile" type="file" accept="image/*,video/*" style="display:none" @change="onAssetFile">
+                            <div class="form-group">
+                              <label class="form-label">Title</label>
+                              <input class="form-input" v-model="assetForm.title" placeholder="Your next install starts here">
+                            </div>
+                            <div class="form-group">
+                              <label class="form-label">Description</label>
+                              <textarea class="form-textarea" v-model="assetForm.description" placeholder="Build performant mobile growth loops..."></textarea>
+                            </div>
+                            <div class="form-group" style="margin-bottom:0">
+                              <label class="form-label">Native CTA Text</label>
+                              <input class="form-input" v-model="assetForm.cta" placeholder="Install">
+                            </div>
+                          </div>
+                          <div class="phone-wrap">
+                            <div class="phone">
+                              <div class="phone-screen">
+                                <div class="phone-status"><span>9:41</span><span>5G</span></div>
+                                <div class="phone-content">
+                                  <div class="phone-header">For You</div>
+                                  <div class="ad-card">
+                                    <div class="ad-card-head">
+                                      <div class="ad-icon">A</div>
+                                      <div><div class="ad-sponsored">Sponsored</div><div style="font-size:10px;color:#9ca3af">AD</div></div>
+                                    </div>
+                                    <div class="ad-media">
+                                      <template v-if="assetForm.preview">
+                                        <img v-if="assetForm.previewType==='image'" :src="assetForm.preview" alt="">
+                                        <video v-else-if="assetForm.previewType==='video'" :src="assetForm.preview" autoplay muted loop></video>
+                                      </template>
+                                      <template v-else>{{ assetForm.type }} Ad</template>
+                                    </div>
+                                    <div class="ad-body">
+                                      <div class="ad-title">{{ assetForm.title || 'Your next install starts here' }}</div>
+                                      <div class="ad-desc">{{ assetForm.description || 'Build performant mobile growth loops with native, banner and video creatives.' }}</div>
+                                      <button type="button" class="ad-cta">{{ assetForm.cta || 'Install' }}</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </template>
+
+                    <template v-else>
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">Creative Group</div>
+                        <div class="form-group">
+                          <label class="form-label">Creative Group Name <span style="color:#ef4444">*</span></label>
+                          <input class="form-input" v-model="groupModal.name" placeholder="e.g. S1S2nativevideo">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Creative Type</label>
+                          <div class="type-check-group">
+                            <label v-for="t in creativeTypes" :key="t" class="type-check">
+                              <input type="checkbox" :checked="groupModal.creativeTypes.includes(t)" @change="toggleGroupCreativeType(t)">
+                              <span>{{ t }}</span>
+                            </label>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Creatives</label>
+                          <div class="group-asset-toolbar">
+                            <button class="btn btn-primary btn-sm" type="button" @click="openBatchUpload">Upload</button>
+                            <button class="btn btn-primary btn-sm" type="button" @click="openPickCreative()">Add Existing Creative</button>
+                            <button class="btn btn-danger-outline btn-sm" type="button" :disabled="!selectedGroupMaterials.length" @click="removeGroupMaterials">Delete Selected</button>
+                          </div>
+                          <div class="group-asset-table">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th><input type="checkbox" :checked="allGroupMaterialsSelected" @change="toggleAllGroupMaterials"></th>
+                                  <th>Creative ID</th>
+                                  <th>Asset Name</th>
+                                  <th>Type</th>
+                                  <th>Preview</th>
+                                  <th>Resolution</th>
+                                  <th>Source</th>
+                                  <th>Upload Time</th>
+                                  <th>Status</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr v-for="m in groupMaterials" :key="m.uid">
+                                  <td><input type="checkbox" :value="m.uid" v-model="selectedGroupMaterials"></td>
+                                  <td>{{ m.creativeId || '—' }}</td>
+                                  <td>{{ m.name }}</td>
+                                  <td><span class="tag-type">{{ m.type }}</span></td>
+                                  <td>
+                                    <div class="preview-thumb">
+                                      <img v-if="m.preview && m.previewType==='image'" :src="m.preview" alt="">
+                                      <video v-else-if="m.preview && m.previewType==='video'" :src="m.preview" muted></video>
+                                      <span v-else>{{ m.type.slice(0,3) }}</span>
+                                    </div>
+                                  </td>
+                                  <td>{{ m.resolution || '—' }}</td>
+                                  <td>{{ m.source === 'existing' ? 'Existing' : 'Upload' }}</td>
+                                  <td>{{ m.uploadedAt }}</td>
+                                  <td><span class="status-dot active"></span>{{ m.status }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div v-if="!groupMaterials.length" class="empty-table">No creatives yet. Upload or select from Creatives.</div>
+                          </div>
+                          <p class="form-hint" v-if="!groupMaterials.length">Add at least one creative by uploading or selecting from Creatives.</p>
+                        </div>
+                        <div class="form-group" style="margin-bottom:0">
+                          <label class="form-label">Country</label>
+                          <input class="form-input" v-model="groupModal.country" placeholder="ALL">
+                        </div>
+                      </div>
+                    </template>
+                  </template>
+                </div>
+              </div>
             </div>
-          </div>
+          </template>
         </template>
 
         <!-- ═══ MANAGE CREATIVE (interactive) ═══ -->
@@ -1220,7 +1805,7 @@ tr:hover td{background:#f9fafb}
                         <div class="ad-body">
                           <div class="ad-title">{{ assetForm.title || 'Your next install starts here' }}</div>
                           <div class="ad-desc">{{ assetForm.description || 'Build performant mobile growth loops with native, banner and video creatives.' }}</div>
-                          <button class="ad-cta">Install</button>
+                          <button class="ad-cta">{{ assetForm.cta || 'Install' }}</button>
                         </div>
                       </div>
                     </div>
@@ -2005,12 +2590,55 @@ tr:hover td{background:#f9fafb}
 </div>
 
 <script>
-const { createApp, ref, computed, reactive } = Vue;
+const { createApp, ref, computed, reactive, onMounted, onUnmounted } = Vue;
 
 createApp({
   setup() {
     const page = ref('dashboard-overview');
     const adsTab = ref('campaign');
+    const adsView = ref('list');
+    const adsWizardStep = ref(1);
+    const adsCampaignForm = reactive({
+      mode: 'new',
+      historyId: '',
+      objective: 'app',
+      name: '',
+      enableBudget: false
+    });
+    const adsAdGroupForm = reactive({
+      mode: 'new',
+      historyId: '',
+      name: '',
+      appId: '',
+      audienceType: 'install',
+      billingMethod: 'cpm',
+      bidMethod: 'cpi',
+      price: '',
+      country: '',
+      city: '',
+      language: '',
+      audienceEnabled: false,
+      deviceRows: [],
+      traffic: 'All Network',
+      totalBudget: '',
+      dailyBudget: '',
+      deliveryTime: 'range',
+      startTime: '',
+      endTime: '',
+      timeSlotMode: 'parted',
+      timeSlotTimezone: '+08:00',
+      timeSlots: {},
+      impressionUrl: '',
+      clickThroughUrl: '',
+      clickTrackUrl: ''
+    });
+    const deviceOsOpenIndex = ref(-1);
+    const adsAssetFile = ref(null);
+    const adsCreativeForm = reactive({
+      mode: 'new',
+      entryType: 'creative',
+      historyId: ''
+    });
     const mcTab = ref('creatives');
     const mcView = ref('list');
     const navGroupsOpen = reactive({ dashboard: true, reports: true });
@@ -2685,6 +3313,373 @@ createApp({
       { id: '10018', name: 'Brand Awareness EU', active: false, updated: '2026-07-05 11:30', created: '2026-05-20 16:45' },
     ];
 
+    const campaignHistoryData = [
+      { id: 'h-c1', name: 'APP Promote20260615091000', objective: 'app' },
+      { id: 'h-c2', name: 'Web Promote20260520164500', objective: 'web' },
+      { id: 'h-c3', name: 'Summer Promo US (Clone)', objective: 'app' },
+    ];
+
+    const adGroupHistoryData = [
+      { id: 'h-g1', name: 'US_Android_20260620', campaignId: '10021' },
+      { id: 'h-g2', name: 'EU_iOS_20260522', campaignId: '10018' },
+      { id: 'h-g3', name: 'APAC_Rewarded_20260701', campaignId: '10021' },
+    ];
+
+    const creativeHistoryData = [
+      { id: 'h-cr1', name: 'Summer Banner v2' },
+      { id: 'h-cr2', name: 'Native Video Ad' },
+      { id: 'h-cr3', name: 'Q3 Playable EndCard' },
+    ];
+
+    const creativeGroupHistoryData = [
+      { id: 'h-cg1', name: 'S1S2nativevideo' },
+      { id: 'h-cg2', name: 'Q3_Playable_Set' },
+      { id: 'h-cg3', name: 'US_Android_Banner_Set' },
+    ];
+
+    const adsCreativeHistoryOptions = computed(() =>
+      adsCreativeForm.entryType === 'group' ? creativeGroupHistoryData : creativeHistoryData
+    );
+
+    const adsDeviceOsOptions = ['All OS', 'Android', 'iOS', '其他/Amazon'];
+    const adsDeviceOsVersionMap = {
+      'All OS': ['All Versions'],
+      Android: ['Android 0', 'Android 10', 'Android 11', 'Android 12', 'Android 13', 'Android 14'],
+      iOS: ['iOS 15', 'iOS 16', 'iOS 17', 'iOS 18'],
+      '其他/Amazon': ['Fire OS 7', 'Fire OS 8']
+    };
+    const adsDeviceBrandMap = {
+      'All OS': ['All'],
+      Android: ['All', 'samsung', 'google', 'huawei', 'xiaomi', 'oppo', 'vivo'],
+      iOS: ['All', 'apple'],
+      '其他/Amazon': ['All', 'amazon']
+    };
+    const adsTrafficOptions = ['All Network', 'WiFi Only', 'Cellular Only'];
+    const adsScheduleDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const adsScheduleHours = Array.from({ length: 24 }, (_, i) => i);
+    const adsTimeSlotTimezones = ['+08:00', '+00:00', '-05:00', '-08:00', '+09:00'];
+
+    const selectedTimeSlotSummary = computed(() => {
+      const slots = adsAdGroupForm.timeSlots;
+      const pad = (n) => String(n).padStart(2, '0');
+      const result = [];
+      adsScheduleDays.forEach((day, dayIdx) => {
+        const hours = adsScheduleHours.filter(h => slots[`${dayIdx}-${h}`]);
+        if (!hours.length) return;
+        let start = hours[0];
+        let prev = hours[0];
+        for (let i = 1; i <= hours.length; i++) {
+          if (i < hours.length && hours[i] === prev + 1) {
+            prev = hours[i];
+          } else {
+            result.push(`${day}${pad(start)}:00-${pad(prev + 1)}:00`);
+            if (i < hours.length) {
+              start = hours[i];
+              prev = hours[i];
+            }
+          }
+        }
+      });
+      return result;
+    });
+
+    function timeSlotKey(dayIdx, hour) {
+      return `${dayIdx}-${hour}`;
+    }
+
+    function isTimeSlotSelected(dayIdx, hour) {
+      return !!adsAdGroupForm.timeSlots[timeSlotKey(dayIdx, hour)];
+    }
+
+    function toggleTimeSlot(dayIdx, hour) {
+      const key = timeSlotKey(dayIdx, hour);
+      if (adsAdGroupForm.timeSlots[key]) delete adsAdGroupForm.timeSlots[key];
+      else adsAdGroupForm.timeSlots[key] = true;
+    }
+
+    function clearTimeSlots() {
+      adsAdGroupForm.timeSlots = {};
+    }
+
+    function defaultTimeSlots() {
+      return { '0-4': true, '1-5': true };
+    }
+
+    function createDeviceRow(overrides = {}) {
+      return {
+        id: overrides.id ?? Date.now() + Math.random(),
+        os: overrides.os ?? 'Android',
+        osVersion: overrides.osVersion ?? 'Android 0',
+        deviceBrand: overrides.deviceBrand ?? 'apple',
+        osQuery: ''
+      };
+    }
+
+    function getDeviceRowVersions(os) {
+      return adsDeviceOsVersionMap[os] || adsDeviceOsVersionMap['All OS'];
+    }
+
+    function getDeviceRowBrands(os) {
+      return adsDeviceBrandMap[os] || adsDeviceBrandMap['All OS'];
+    }
+
+    function filteredDeviceOsOptions(idx) {
+      const row = adsAdGroupForm.deviceRows[idx];
+      if (!row) return adsDeviceOsOptions;
+      const q = (row.osQuery || '').toLowerCase();
+      return adsDeviceOsOptions.filter(o => !q || o.toLowerCase().includes(q));
+    }
+
+    function openDeviceOsSelect(idx) {
+      deviceOsOpenIndex.value = idx;
+      const row = adsAdGroupForm.deviceRows[idx];
+      if (row) row.osQuery = row.os || '';
+    }
+
+    function onDeviceOsQuery(idx, e) {
+      const row = adsAdGroupForm.deviceRows[idx];
+      if (!row) return;
+      row.osQuery = e.target.value;
+      deviceOsOpenIndex.value = idx;
+    }
+
+    function selectDeviceOs(idx, os) {
+      const row = adsAdGroupForm.deviceRows[idx];
+      if (!row) return;
+      row.os = os;
+      row.osQuery = '';
+      const versions = getDeviceRowVersions(os);
+      row.osVersion = versions.includes(row.osVersion) ? row.osVersion : versions[0];
+      const brands = getDeviceRowBrands(os);
+      row.deviceBrand = brands.includes(row.deviceBrand) ? row.deviceBrand : brands[0];
+      deviceOsOpenIndex.value = -1;
+    }
+
+    function addDeviceRow() {
+      adsAdGroupForm.deviceRows.push(createDeviceRow({ os: '', osVersion: '', deviceBrand: '' }));
+    }
+
+    function closeDeviceOsSelect() {
+      deviceOsOpenIndex.value = -1;
+    }
+
+    function generateCampaignName(objective) {
+      const prefix = objective === 'web' ? 'Web Promote' : 'APP Promote';
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      return prefix + stamp;
+    }
+
+    function resetAdsCampaignForm() {
+      adsCampaignForm.mode = 'new';
+      adsCampaignForm.historyId = '';
+      adsCampaignForm.objective = 'app';
+      adsCampaignForm.name = generateCampaignName('app');
+      adsCampaignForm.enableBudget = false;
+    }
+
+    function generateAdGroupName() {
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const stamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+      return 'Ad Group' + stamp;
+    }
+
+    function resetAdsAdGroupForm() {
+      adsAdGroupForm.mode = 'new';
+      adsAdGroupForm.historyId = '';
+      adsAdGroupForm.name = generateAdGroupName();
+      adsAdGroupForm.appId = '';
+      adsAdGroupForm.audienceType = 'install';
+      adsAdGroupForm.billingMethod = 'cpm';
+      adsAdGroupForm.bidMethod = 'cpi';
+      adsAdGroupForm.price = '';
+      adsAdGroupForm.country = '';
+      adsAdGroupForm.city = '';
+      adsAdGroupForm.language = '';
+      adsAdGroupForm.audienceEnabled = false;
+      adsAdGroupForm.deviceRows = [createDeviceRow()];
+      adsAdGroupForm.traffic = 'All Network';
+      adsAdGroupForm.totalBudget = '';
+      adsAdGroupForm.dailyBudget = '';
+      adsAdGroupForm.deliveryTime = 'range';
+      adsAdGroupForm.startTime = '';
+      adsAdGroupForm.endTime = '';
+      adsAdGroupForm.timeSlotMode = 'parted';
+      adsAdGroupForm.timeSlotTimezone = '+08:00';
+      adsAdGroupForm.timeSlots = defaultTimeSlots();
+      adsAdGroupForm.impressionUrl = '';
+      adsAdGroupForm.clickThroughUrl = '';
+      adsAdGroupForm.clickTrackUrl = '';
+      deviceOsOpenIndex.value = -1;
+    }
+
+    function setAdGroupMode(mode) {
+      adsAdGroupForm.mode = mode;
+      if (mode === 'new') {
+        adsAdGroupForm.historyId = '';
+        if (!adsAdGroupForm.name) adsAdGroupForm.name = generateAdGroupName();
+      } else {
+        adsAdGroupForm.historyId = '';
+      }
+    }
+
+    function setCampaignObjective(objective) {
+      adsCampaignForm.objective = objective;
+      if (adsCampaignForm.mode === 'new') {
+        adsCampaignForm.name = generateCampaignName(objective);
+      }
+    }
+
+    function setCampaignMode(mode) {
+      adsCampaignForm.mode = mode;
+      if (mode === 'new') {
+        adsCampaignForm.historyId = '';
+        adsCampaignForm.name = generateCampaignName(adsCampaignForm.objective);
+        adsCampaignForm.enableBudget = false;
+      } else {
+        adsCampaignForm.historyId = '';
+      }
+    }
+
+    function applyCampaignHistory() {
+      const h = campaignHistoryData.find(x => x.id === adsCampaignForm.historyId);
+      if (!h) return;
+      adsCampaignForm.objective = h.objective;
+      adsCampaignForm.name = h.name;
+    }
+
+    function openAdsWizard() {
+      adsWizardStep.value = 1;
+      resetAdsCampaignForm();
+      resetAdsAdGroupForm();
+      resetAdsCreativeForm();
+      adsView.value = 'wizard';
+    }
+
+    function closeAdsWizard() {
+      adsView.value = 'list';
+      adsWizardStep.value = 1;
+    }
+
+    function adsWizardNext() {
+      if (adsWizardStep.value < 3) adsWizardStep.value += 1;
+    }
+
+    function goAdsWizardStep(step) {
+      if (step >= 1 && step <= 3) adsWizardStep.value = step;
+    }
+
+    function finishAdsWizard() {
+      saveAdsWizard();
+    }
+
+    function resetAdsWizardAssetForm() {
+      Object.assign(assetForm, { id: null, type: 'Banner', title: '', description: '', cta: 'Install', preview: null, previewType: null, name: '' });
+    }
+
+    function resetAdsWizardGroupForm() {
+      groupModal.editing = null;
+      groupModal.name = '';
+      groupModal.adUnit = '';
+      groupModal.country = 'ALL';
+      groupModal.creativeTypes = ['Banner'];
+      groupMaterials.value = [];
+      selectedGroupMaterials.value = [];
+    }
+
+    function resetAdsCreativeForm() {
+      adsCreativeForm.mode = 'new';
+      adsCreativeForm.entryType = 'creative';
+      adsCreativeForm.historyId = '';
+      resetAdsWizardAssetForm();
+      resetAdsWizardGroupForm();
+    }
+
+    function setCreativeMode(mode) {
+      adsCreativeForm.mode = mode;
+      adsCreativeForm.historyId = '';
+    }
+
+    function setCreativeEntryType(type) {
+      adsCreativeForm.entryType = type;
+      adsCreativeForm.historyId = '';
+    }
+
+    function triggerAdsAssetUpload() {
+      adsAssetFile.value?.click();
+    }
+
+    function saveAdsWizard() {
+      if (adsCreativeForm.mode === 'existing') {
+        if (!adsCreativeForm.historyId) {
+          showToast('Please select history data');
+          return;
+        }
+        const label = adsCreativeForm.entryType === 'group' ? 'Creative group' : 'Creative';
+        showToast(label + ' linked from history');
+        closeAdsWizard();
+        return;
+      }
+      if (adsCreativeForm.entryType === 'group') {
+        saveGroupFromWizard();
+        return;
+      }
+      saveAssetFromWizard();
+    }
+
+    function saveAssetFromWizard() {
+      const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+      const id = String(Math.floor(10000 + Math.random() * 90000));
+      assets.value.unshift({
+        id,
+        name: assetForm.title || 'New ' + assetForm.type,
+        type: assetForm.type,
+        campaignName: adsCampaignForm.name || 'New Campaign',
+        campaignId: '10021',
+        adGroupName: adsAdGroupForm.name || 'New Ad Group',
+        adGroupId: '5021',
+        active: true,
+        updated: now,
+        created: now,
+        schedule: 'Always',
+        title: assetForm.title,
+        description: assetForm.description,
+        cta: assetForm.cta || 'Install',
+        preview: assetForm.preview,
+        previewType: assetForm.previewType
+      });
+      showToast('Creative saved');
+      closeAdsWizard();
+    }
+
+    function saveGroupFromWizard() {
+      if (!groupModal.name.trim()) { showToast('Please enter a creative group name'); return; }
+      if (!groupModal.creativeTypes.length) { showToast('Please select at least one creative type'); return; }
+      if (!groupMaterials.value.length) { showToast('Please add at least one creative'); return; }
+
+      const types = [...groupModal.creativeTypes];
+      const campaignInfo = deriveGroupCampaignInfo();
+      const materials = groupMaterials.value.map(m => ({ ...m }));
+      const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+
+      groups.value.unshift({
+        id: Math.floor(1000000 + Math.random() * 9000000),
+        name: groupModal.name,
+        creativeTypes: [...groupModal.creativeTypes],
+        types,
+        adTypes: 'Banner, Display Interstitial, Native Video, Rewarded Video, Splash AD',
+        country: groupModal.country,
+        adUnit: groupModal.adUnit || 'Unit-' + Math.floor(10000 + Math.random() * 90000),
+        created: now,
+        materials,
+        ...campaignInfo
+      });
+      showToast('Creative group saved');
+      closeAdsWizard();
+    }
+
     const creativeTypes = ['Banner', 'Native Image', 'Video', 'Video EndCard', 'Playable'];
 
     const assets = ref([
@@ -2708,7 +3703,7 @@ createApp({
       });
     });
 
-    const assetForm = reactive({ id: null, type: 'Banner', title: '', description: '', preview: null, previewType: null, name: '' });
+    const assetForm = reactive({ id: null, type: 'Banner', title: '', description: '', cta: 'Install', preview: null, previewType: null, name: '' });
 
     const applyToGroupForm = reactive({ enabled: 'no', name: '', adUnit: '', selected: [] });
 
@@ -2826,9 +3821,9 @@ createApp({
     function openAssetForm(asset) {
       resetApplyToGroupForm();
       if (asset) {
-        Object.assign(assetForm, { id: asset.id, type: asset.type, title: asset.title, description: asset.description, preview: asset.preview, previewType: asset.previewType, name: asset.name });
+        Object.assign(assetForm, { id: asset.id, type: asset.type, title: asset.title, description: asset.description, cta: asset.cta || 'Install', preview: asset.preview, previewType: asset.previewType, name: asset.name });
       } else {
-        Object.assign(assetForm, { id: null, type: 'Banner', title: '', description: '', preview: null, previewType: null, name: '' });
+        Object.assign(assetForm, { id: null, type: 'Banner', title: '', description: '', cta: 'Install', preview: null, previewType: null, name: '' });
       }
       mcView.value = 'asset-form';
     }
@@ -2859,7 +3854,7 @@ createApp({
       if (assetForm.id) {
         const a = assets.value.find(x => x.id === assetForm.id);
         if (a) {
-          Object.assign(a, { type: assetForm.type, title: assetForm.title, description: assetForm.description, preview: assetForm.preview, previewType: assetForm.previewType, updated: now });
+          Object.assign(a, { type: assetForm.type, title: assetForm.title, description: assetForm.description, cta: assetForm.cta || 'Install', preview: assetForm.preview, previewType: assetForm.previewType, updated: now });
           savedAsset = a;
         }
         showToast('Asset updated');
@@ -2869,7 +3864,7 @@ createApp({
           id, name: assetForm.title || 'New ' + assetForm.type, type: assetForm.type,
           campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021',
           active: true, updated: now, created: now, schedule: 'Always',
-          title: assetForm.title, description: assetForm.description,
+          title: assetForm.title, description: assetForm.description, cta: assetForm.cta || 'Install',
           preview: assetForm.preview, previewType: assetForm.previewType
         };
         assets.value.unshift(savedAsset);
@@ -3160,8 +4155,16 @@ createApp({
 
     function filterGroups() { showToast('Found ' + filteredGroups.value.length + ' groups'); }
 
+    function onDocumentClick(e) {
+      if (deviceOsOpenIndex.value < 0) return;
+      if (!e.target.closest('.search-select')) closeDeviceOsSelect();
+    }
+
+    onMounted(() => document.addEventListener('click', onDocumentClick));
+    onUnmounted(() => document.removeEventListener('click', onDocumentClick));
+
     return {
-      page, dashboard, adsTab, mcTab, mcView, navGroupsOpen, isNavGroupActive, toggleNavGroup,
+      page, dashboard, adsTab, adsView, adsWizardStep, mcTab, mcView, navGroupsOpen, isNavGroupActive, toggleNavGroup,
       riskApps, riskFilter, riskAlertFilter, filteredRiskCampaigns, filteredRiskAlerts,
       refreshRiskDashboard, goRiskTarget, viewRiskAlert, muteRiskAlert, onHealthTagClick,
       overviewApps, overviewFilter, overviewView, overviewKpis, overviewColumns, overviewTableData,
@@ -3175,7 +4178,18 @@ createApp({
       creativeMonitorFilter, creativeMonitorDimensions, creativeMonitorSelectedMetrics,
       creativeMonitorTableColumns, creativeMonitorDisplayData, creativeMonitorSort,
       searchCreativeMonitor, sortCreativeMonitor,
-      navItems, adsData, creativeTypes, assets, groups,
+      navItems, adsData, adsCampaignForm, adsAdGroupForm, adsCreativeForm,
+      campaignHistoryData, adGroupHistoryData, creativeHistoryData, creativeGroupHistoryData, adsCreativeHistoryOptions,
+      adsTrafficOptions,
+      adsScheduleDays, adsScheduleHours, adsTimeSlotTimezones, selectedTimeSlotSummary,
+      deviceOsOpenIndex, adsAssetFile,
+      getDeviceRowVersions, getDeviceRowBrands, filteredDeviceOsOptions,
+      isTimeSlotSelected, toggleTimeSlot, clearTimeSlots,
+      openDeviceOsSelect, onDeviceOsQuery, selectDeviceOs, addDeviceRow, closeDeviceOsSelect,
+      openAdsWizard, closeAdsWizard, adsWizardNext, goAdsWizardStep, saveAdsWizard, finishAdsWizard,
+      setCampaignMode, setAdGroupMode, setCreativeMode, setCreativeEntryType, triggerAdsAssetUpload,
+      setCampaignObjective, applyCampaignHistory,
+      creativeTypes, assets, groups,
       groupFilter, filteredGroups, assetForm, applyToGroupForm, filteredApplyGroups, allApplyGroupsSelected,
       groupModal, pickCreativeModal, batchUploadModal,
       groupMaterials, selectedGroupMaterials, allGroupMaterialsSelected, pickableCreatives,
