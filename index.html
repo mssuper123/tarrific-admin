@@ -524,6 +524,12 @@ tr:hover td{background:#f9fafb}
 .app-name-cell{display:flex;align-items:center;gap:10px;font-weight:600;color:#111827}
 .app-icon{width:32px;height:32px;border-radius:6px;background:linear-gradient(135deg,#ff6b6b,#ffd93d,#6bcb77,#4d96ff);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;overflow:hidden}
 .app-icon img{width:100%;height:100%;object-fit:cover}
+.app-icon-picker{width:80px;height:80px;border:1px dashed #d1d9e6;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fafbfc;overflow:hidden;transition:border-color .15s,background .15s}
+.app-icon-picker:hover{border-color:#5bc0eb;background:#eff8fd}
+.app-icon-picker input{display:none}
+.app-icon-plus{font-size:32px;color:#9ca3af;font-weight:300;line-height:1;user-select:none}
+.app-icon-picker img{width:100%;height:100%;object-fit:cover}
+.app-icon-picker .app-icon-emoji{font-size:36px;line-height:1}
 .status-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:500}
 .status-badge.active{background:#eff8fd;color:#0891b2}
 .status-badge.paused{background:#f3f4f6;color:#6b7280}
@@ -1580,11 +1586,6 @@ tr:hover td{background:#f9fafb}
               <template v-if="mcTab==='group'">
                 <div class="mc-filters">
                   <input class="mc-input" v-model="groupFilter.name" placeholder="- Creative Group Name -">
-                  <select class="mc-select" v-model="groupFilter.method">
-                    <option value="">- Combination Method -</option>
-                    <option value="programmatic">Programmatic Creative</option>
-                    <option value="manual">Manual Combination</option>
-                  </select>
                   <input class="mc-input" v-model="groupFilter.adUnit" placeholder="- Ad Unit Name -">
                   <div class="mc-actions">
                     <button class="btn btn-primary" @click="openGroupModal()">New Creative Group</button>
@@ -1601,9 +1602,7 @@ tr:hover td{background:#f9fafb}
                         <th>Campaign ID</th>
                         <th>Ad Group Name</th>
                         <th>Ad Group ID</th>
-                        <th>Combination Method</th>
                         <th>Creative Type</th>
-                        <th>Deliverable Ad Types</th>
                         <th>Country</th>
                         <th>Ad Unit</th>
                         <th>Created Time</th>
@@ -1619,9 +1618,7 @@ tr:hover td{background:#f9fafb}
                         <td>{{ g.campaignId }}</td>
                         <td>{{ g.adGroupName }}</td>
                         <td>{{ g.adGroupId }}</td>
-                        <td>{{ g.method }}</td>
                         <td><span v-for="(t,i) in g.types" :key="i" class="tag-type" style="margin-right:4px">{{ t }}</span></td>
-                        <td style="max-width:200px;font-size:11px;line-height:1.6">{{ g.adTypes }}</td>
                         <td>{{ g.country }}</td>
                         <td>{{ g.adUnit }}</td>
                         <td>{{ g.created }}</td>
@@ -1631,7 +1628,7 @@ tr:hover td{background:#f9fafb}
                           <button class="btn-link danger" @click="deleteGroup(g.id)">Delete</button>
                         </td>
                       </tr>
-                      <tr v-if="!filteredGroups.length"><td colspan="14" style="text-align:center;padding:40px;color:#9ca3af">No creative groups found</td></tr>
+                      <tr v-if="!filteredGroups.length"><td colspan="12" style="text-align:center;padding:40px;color:#9ca3af">No creative groups found</td></tr>
                     </tbody>
                   </table>
                 </div>
@@ -2118,7 +2115,10 @@ tr:hover td{background:#f9fafb}
                     </td>
                     <td>
                       <div class="app-name-cell">
-                        <div class="app-icon"><span>{{ app.icon || app.name.charAt(0) }}</span></div>
+                        <div class="app-icon">
+                          <img v-if="isAppIconImage(app.icon)" :src="app.icon" alt="">
+                          <span v-else>{{ app.icon || app.name.charAt(0) }}</span>
+                        </div>
                         {{ app.name }}
                       </div>
                     </td>
@@ -2505,6 +2505,15 @@ tr:hover td{background:#f9fafb}
       </div>
       <div class="modal-body">
         <div class="form-group">
+          <label class="form-label">Icon</label>
+          <label class="app-icon-picker">
+            <input type="file" accept="image/*" @change="onAppIconFile">
+            <img v-if="isAppIconImage(appModal.icon)" :src="appModal.icon" alt="">
+            <span v-else-if="appModal.icon" class="app-icon-emoji">{{ appModal.icon }}</span>
+            <span v-else class="app-icon-plus">+</span>
+          </label>
+        </div>
+        <div class="form-group">
           <label class="form-label">App Name <span style="color:#ef4444">*</span></label>
           <input class="form-input" v-model="appModal.name" placeholder="e.g. Test">
         </div>
@@ -2518,6 +2527,10 @@ tr:hover td{background:#f9fafb}
         <div class="form-group">
           <label class="form-label">App ID (Bundle ID) <span style="color:#ef4444">*</span></label>
           <input class="form-input" v-model="appModal.appId" placeholder="e.g. com.example.app">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Preview Link</label>
+          <input class="form-input" v-model="appModal.previewLink" placeholder="https://">
         </div>
         <div class="form-group">
           <label class="form-label">Timezone</label>
@@ -2542,9 +2555,7 @@ tr:hover td{background:#f9fafb}
       <div class="modal-body">
         <p style="font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:20px">We will send an invitation email to the invited user(s). Once the invitation is accepted, you will see the new member(s) here. You can add multiple users by separating the emails with a comma.</p>
         <div class="form-group"><label class="form-label form-required">Email addresses</label><input class="form-input" v-model="inviteModal.emails" placeholder="Enter email addresses"></div>
-        <div class="form-group"><label class="form-label">Access level</label><select class="form-input" v-model="inviteModal.accessLevel"><option value="Read-only">Read-only</option><option value="Admin">Admin</option></select></div>
-        <div class="form-group"><label class="form-label">Access expiration</label><select class="form-input" v-model="inviteModal.expiration"><option value="Never">Never</option><option value="30 days">30 days</option><option value="90 days">90 days</option></select></div>
-        <div class="form-group"><label class="form-label">App access</label><select class="form-input" v-model="inviteModal.appAccess"><option value="All apps">All apps</option><option value="Selected apps">Selected apps</option></select></div>
+        <div class="form-group"><label class="form-label form-required">Password</label><input class="form-input" type="password" v-model="inviteModal.password" placeholder="Enter password"></div>
       </div>
       <div class="modal-foot"><button class="btn btn-default" @click="inviteModal.show=false">Cancel</button><button class="btn btn-primary" @click="inviteUser">Invite</button></div>
     </div>
@@ -2850,14 +2861,14 @@ createApp({
     const overviewTableData = ref([]);
 
     const myApps = ref([
-      { id: 1, name: 'Test', os: 'iOS', appId: 'com.test', timezone: 'UTC+0', active: true, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '🍎' },
-      { id: 2, name: 'Summer Game', os: 'Android', appId: 'com.global.pnck', timezone: 'UTC+8', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 0, icon: '🎮' },
-      { id: 3, name: 'NashFlow', os: 'iOS', appId: 'com.nashflow.app', timezone: 'UTC+0', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '📱' },
+      { id: 1, name: 'Test', os: 'iOS', appId: 'com.test', timezone: 'UTC+0', active: true, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '🍎', previewLink: '' },
+      { id: 2, name: 'Summer Game', os: 'Android', appId: 'com.global.pnck', timezone: 'UTC+8', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 0, icon: '🎮', previewLink: '' },
+      { id: 3, name: 'NashFlow', os: 'iOS', appId: 'com.nashflow.app', timezone: 'UTC+0', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '📱', previewLink: '' },
     ]);
     const appFilter = reactive({ name: '', platform: '', status: '' });
     const selectedAppsList = ref([]);
     const appSort = reactive({ key: '', dir: 'asc' });
-    const appModal = reactive({ show: false, editing: null, name: '', os: 'iOS', appId: '', timezone: 'UTC+0' });
+    const appModal = reactive({ show: false, editing: null, name: '', os: 'iOS', appId: '', timezone: 'UTC+0', icon: '', previewLink: '' });
 
     const filteredAppsList = computed(() => {
       let list = [...myApps.value];
@@ -2882,6 +2893,20 @@ createApp({
       selectedAppsList.value = e.target.checked ? filteredAppsList.value.map(a => a.id) : [];
     }
 
+    function isAppIconImage(icon) {
+      if (!icon) return false;
+      return icon.startsWith('http') || icon.startsWith('data:') || icon.startsWith('/');
+    }
+
+    function onAppIconFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => { appModal.icon = ev.target.result; };
+      reader.readAsDataURL(file);
+      e.target.value = '';
+    }
+
     function openAppModal(app) {
       if (app) {
         appModal.editing = app.id;
@@ -2889,27 +2914,33 @@ createApp({
         appModal.os = app.os;
         appModal.appId = app.appId;
         appModal.timezone = app.timezone;
+        appModal.icon = app.icon || '';
+        appModal.previewLink = app.previewLink || '';
       } else {
         appModal.editing = null;
         appModal.name = '';
         appModal.os = 'iOS';
         appModal.appId = '';
         appModal.timezone = 'UTC+0';
+        appModal.icon = '';
+        appModal.previewLink = '';
       }
       appModal.show = true;
     }
 
     function saveApp() {
       if (!appModal.name.trim() || !appModal.appId.trim()) { showToast('Please fill required fields'); return; }
+      const icon = appModal.icon.trim() || (appModal.os === 'iOS' ? '🍎' : '🤖');
+      const previewLink = appModal.previewLink.trim();
       if (appModal.editing) {
         const app = myApps.value.find(a => a.id === appModal.editing);
-        if (app) Object.assign(app, { name: appModal.name, os: appModal.os, appId: appModal.appId, timezone: appModal.timezone });
+        if (app) Object.assign(app, { name: appModal.name, os: appModal.os, appId: appModal.appId, timezone: appModal.timezone, icon, previewLink });
         showToast('App updated');
       } else {
         myApps.value.unshift({
           id: Date.now(), name: appModal.name, os: appModal.os, appId: appModal.appId, timezone: appModal.timezone,
           active: true, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 0,
-          icon: appModal.os === 'iOS' ? '🍎' : '🤖',
+          icon, previewLink,
         });
         showToast('App created');
       }
@@ -2985,7 +3016,7 @@ createApp({
       return true;
     }));
 
-    const inviteModal = reactive({ show: false, emails: '', accessLevel: 'Read-only', expiration: 'Never', appAccess: 'All apps' });
+    const inviteModal = reactive({ show: false, emails: '', password: '' });
     const billing = reactive({ balance: 0, addedFunds: 0, adCredit: 0, heldForSpend: 0, paymentMethod: null, receiptEmails: true, billingAddress: null });
     const billingActivities = ref([]);
     const billingAddressText = computed(() => {
@@ -3010,13 +3041,15 @@ createApp({
     }
     function inviteUser() {
       if (!inviteModal.emails.trim()) { showToast('Please enter email addresses'); return; }
+      if (!inviteModal.password.trim()) { showToast('Please enter password'); return; }
       inviteModal.emails.split(',').map(e => e.trim()).filter(Boolean).forEach(email => {
         if (!members.value.find(m => m.email === email)) {
-          members.value.push({ email, lastSignedIn: '—', accessLevel: inviteModal.accessLevel, expiration: inviteModal.expiration, appAccess: inviteModal.appAccess });
+          members.value.push({ email, lastSignedIn: '—', accessLevel: 'Read-only', expiration: 'Never', appAccess: 'All apps' });
         }
       });
       inviteModal.show = false;
       inviteModal.emails = '';
+      inviteModal.password = '';
       showToast('Invitation sent');
     }
     function saveCard() {
@@ -3692,12 +3725,10 @@ createApp({
       { id: 976385, name: 'Q3_Playable_Set', method: 'Manual Combination', types: ['Playable', 'Video EndCard'], adTypes: 'Rewarded Video, Interstitial', country: 'US', adUnit: '1231111', adName: '11asdf', storeId: 'com.global.pnck', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', created: '2026-07-01 09:15', materials: [] },
     ]);
 
-    const groupFilter = reactive({ name: '', method: '', adUnit: '' });
+    const groupFilter = reactive({ name: '', adUnit: '' });
     const filteredGroups = computed(() => {
       return groups.value.filter(g => {
         if (groupFilter.name && !g.name.toLowerCase().includes(groupFilter.name.toLowerCase())) return false;
-        if (groupFilter.method === 'programmatic' && g.method !== 'Programmatic Creative') return false;
-        if (groupFilter.method === 'manual' && g.method !== 'Manual Combination') return false;
         if (groupFilter.adUnit && !g.adUnit.toLowerCase().includes(groupFilter.adUnit.toLowerCase())) return false;
         return true;
       });
@@ -4169,7 +4200,7 @@ createApp({
       refreshRiskDashboard, goRiskTarget, viewRiskAlert, muteRiskAlert, onHealthTagClick,
       overviewApps, overviewFilter, overviewView, overviewKpis, overviewColumns, overviewTableData,
       myApps, appFilter, filteredAppsList, selectedAppsList, allAppsSelected, appModal,
-      openAppModal, saveApp, onAppToggle, sortApps, toggleAllAppsList,
+      openAppModal, saveApp, isAppIconImage, onAppIconFile, onAppToggle, sortApps, toggleAllAppsList,
       reportSearch, downloadReports, filteredDownloadReports,
       adMonitorFilter, adMonitorDimensions, adMonitorSelectedMetrics, adMonitorTableColumns,
       adMonitorDisplayData, adMonitorSort, columnsModal, filteredSelectedColumnGroups, filteredUnselectedColumnGroups,
