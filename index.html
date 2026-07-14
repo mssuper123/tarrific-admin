@@ -309,6 +309,7 @@ tr:hover td{background:#f9fafb}
 .dash-grid{display:grid;gap:16px;margin-bottom:16px}
 .dash-kpi-row{grid-template-columns:repeat(4,1fr)}
 .dash-main-row{grid-template-columns:1.4fr 1fr}
+.dash-main-row.equal{grid-template-columns:1fr 1fr}
 .dash-card{background:#fff;border-radius:4px;box-shadow:0 1px 3px rgba(0,0,0,.06);padding:20px}
 .dash-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .dash-card-title{font-size:14px;font-weight:700;color:#111827}
@@ -378,6 +379,27 @@ tr:hover td{background:#f9fafb}
 .dash-table th{text-align:left;padding:8px 10px;background:#fafbfc;color:#6b7280;font-weight:600;border-bottom:1px solid #e8ecf1}
 .dash-table td{padding:10px;border-bottom:1px solid #f3f4f6;color:#374151;vertical-align:middle}
 .dash-table tr:last-child td{border-bottom:none}
+.dash-refreshed{font-size:11px;color:#9ca3af;margin-right:8px}
+.alert-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.alert-filter-btn{padding:4px 10px;border:1px solid #e5e7eb;border-radius:999px;background:#fff;font-size:11px;color:#6b7280;cursor:pointer}
+.alert-filter-btn.active{background:#eff8fd;border-color:#5bc0eb;color:#5bc0eb;font-weight:600}
+.alert-actions{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+.alert-item .btn-link{font-size:11px}
+.review-queue-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.review-stat{background:#fafbfc;border:1px solid #f0f2f5;border-radius:4px;padding:12px;text-align:center}
+.review-stat-val{font-size:20px;font-weight:700;color:#111827}
+.review-stat-label{font-size:11px;color:#9ca3af;margin-top:4px}
+.review-stat.pending .review-stat-val{color:#d97706}
+.review-stat.rejected .review-stat-val{color:#dc2626}
+.review-stat.approved .review-stat-val{color:#059669}
+.review-list{display:flex;flex-direction:column;gap:8px}
+.review-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;background:#fafbfc;border:1px solid #f0f2f5;border-radius:4px}
+.review-item-name{font-size:12px;font-weight:600;color:#111827}
+.review-item-meta{font-size:11px;color:#9ca3af;margin-top:2px}
+.goal-stack{display:flex;flex-direction:column;gap:2px}
+.goal-type{font-size:11px;color:#9ca3af}
+.health-tag{cursor:pointer}
+.health-tag:hover{opacity:.85}
 
 /* Overview Dashboard */
 .overview-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
@@ -659,7 +681,32 @@ tr:hover td{background:#f9fafb}
               <h1 class="page-title">Risk Control Dashboard</h1>
               <p style="font-size:12px;color:#9ca3af;margin-top:4px">Account health, budget pacing &amp; delivery risk overview</p>
             </div>
-            <button class="btn btn-default btn-sm" @click="showToast('Dashboard refreshed')">↻ Refresh</button>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="dash-refreshed" v-if="dashboard.lastRefreshed">Updated {{ dashboard.lastRefreshed }}</span>
+              <button class="btn btn-default btn-sm" @click="refreshRiskDashboard">↻ Refresh</button>
+            </div>
+          </div>
+
+          <div class="overview-toolbar">
+            <div class="overview-select app-select">
+              <span class="app-icon">🍎</span>
+              <select v-model="riskFilter.app" style="border:none;outline:none;background:transparent;font-size:13px;color:#374151;flex:1;cursor:pointer">
+                <option v-for="a in riskApps" :key="a" :value="a">{{ a }}</option>
+              </select>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
+            <div class="overview-select date-range">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+              <input type="text" v-model="riskFilter.dateRange" style="border:none;outline:none;font-size:13px;background:transparent;width:200px">
+            </div>
+            <div class="overview-select">
+              <select v-model="riskFilter.timezone" style="border:none;outline:none;background:transparent;font-size:13px;color:#374151;cursor:pointer">
+                <option>UTC+0</option>
+                <option>UTC+8</option>
+                <option>UTC-5</option>
+              </select>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+            </div>
           </div>
 
           <!-- Health Hero -->
@@ -679,7 +726,7 @@ tr:hover td{background:#f9fafb}
               <h2>Account Health: {{ dashboard.healthLabel }}</h2>
               <p>{{ dashboard.healthSummary }}</p>
               <div class="health-tags">
-                <span v-for="tag in dashboard.healthTags" :key="tag.label" class="health-tag" :class="tag.level">
+                <span v-for="tag in dashboard.healthTags" :key="tag.label" class="health-tag" :class="tag.level" @click="onHealthTagClick(tag)">
                   <span class="health-tag-dot"></span>{{ tag.label }}
                 </span>
               </div>
@@ -695,7 +742,7 @@ tr:hover td{background:#f9fafb}
             </div>
           </div>
 
-          <!-- Budget + Health Metrics -->
+          <!-- Budget + Delivery Health -->
           <div class="dash-grid dash-main-row">
             <div class="dash-card">
               <div class="dash-card-head">
@@ -727,7 +774,7 @@ tr:hover td{background:#f9fafb}
               <div class="dash-card-head">
                 <div>
                   <div class="dash-card-title">Delivery Health</div>
-                  <div class="dash-card-sub">Programmatic delivery quality</div>
+                  <div class="dash-card-sub">Advertiser goal &amp; delivery quality</div>
                 </div>
               </div>
               <div class="health-metric-list">
@@ -745,58 +792,121 @@ tr:hover td{background:#f9fafb}
             </div>
           </div>
 
-          <!-- Campaign Budget + Alerts -->
-          <div class="dash-grid dash-main-row" style="margin-bottom:16px">
-            <div class="dash-card">
-              <div class="dash-card-head">
-                <div>
-                  <div class="dash-card-title">Campaign Budget Status</div>
-                  <div class="dash-card-sub">Daily budget utilization by campaign</div>
-                </div>
+          <!-- Campaign Budget Status (full width) -->
+          <div class="dash-card" style="margin-bottom:16px">
+            <div class="dash-card-head">
+              <div>
+                <div class="dash-card-title">Campaign Budget Status</div>
+                <div class="dash-card-sub">Daily budget &amp; goal attainment by campaign</div>
               </div>
+            </div>
+            <div class="table-wrap">
               <table class="dash-table">
                 <thead>
                   <tr>
                     <th>Campaign</th>
+                    <th>Status</th>
                     <th>Daily Budget</th>
                     <th>Spent Today</th>
                     <th>Progress</th>
                     <th>Pacing</th>
+                    <th>Goal</th>
+                    <th>Actual</th>
+                    <th>Goal Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="c in dashboard.campaignBudgets" :key="c.name">
+                  <tr v-for="c in filteredRiskCampaigns" :key="c.name">
                     <td style="font-weight:600">{{ c.name }}</td>
+                    <td><span class="status-pill" :class="c.statusClass">{{ c.status }}</span></td>
                     <td>${{ c.dailyBudget.toLocaleString() }}</td>
                     <td>${{ c.spent.toLocaleString() }}</td>
-                    <td style="min-width:140px">
+                    <td style="min-width:120px">
                       <div class="progress-track" style="height:6px">
                         <div class="progress-fill" :class="c.pct > 100 ? 'red' : c.pct > 85 ? 'orange' : 'blue'" :style="{width: Math.min(c.pct, 100) + '%'}"></div>
                       </div>
                       <span style="font-size:10px;color:#9ca3af">{{ c.pct }}%</span>
                     </td>
                     <td><span class="status-pill" :class="c.pacingStatus">{{ c.pacingLabel }}</span></td>
+                    <td>
+                      <div class="goal-stack">
+                        <span>{{ c.goalValue }}</span>
+                        <span class="goal-type">{{ c.goalType }}</span>
+                      </div>
+                    </td>
+                    <td>{{ c.actualValue }}</td>
+                    <td><span class="status-pill" :class="c.goalStatus">{{ c.goalLabel }}</span></td>
+                  </tr>
+                  <tr v-if="!filteredRiskCampaigns.length">
+                    <td colspan="9" style="text-align:center;padding:28px;color:#9ca3af">No campaigns for selected app</td>
                   </tr>
                 </tbody>
               </table>
             </div>
+          </div>
 
+          <!-- Creative Review + Risk Alerts -->
+          <div class="dash-grid dash-main-row equal" style="margin-bottom:16px">
             <div class="dash-card">
               <div class="dash-card-head">
                 <div>
+                  <div class="dash-card-title">Creative Review Queue</div>
+                  <div class="dash-card-sub">Pending policy review &amp; rejections</div>
+                </div>
+                <button class="btn btn-default btn-sm" @click="goRiskTarget('manage-creative')">Manage Creative</button>
+              </div>
+              <div class="review-queue-stats">
+                <div class="review-stat pending">
+                  <div class="review-stat-val">{{ dashboard.creativeReview.pending }}</div>
+                  <div class="review-stat-label">Pending</div>
+                </div>
+                <div class="review-stat rejected">
+                  <div class="review-stat-val">{{ dashboard.creativeReview.rejected }}</div>
+                  <div class="review-stat-label">Rejected</div>
+                </div>
+                <div class="review-stat approved">
+                  <div class="review-stat-val">{{ dashboard.creativeReview.approved }}</div>
+                  <div class="review-stat-label">Approved</div>
+                </div>
+              </div>
+              <div class="review-list">
+                <div v-for="item in dashboard.creativeReview.recent" :key="item.name" class="review-item">
+                  <div>
+                    <div class="review-item-name">{{ item.name }}</div>
+                    <div class="review-item-meta">{{ item.type }} · {{ item.time }}</div>
+                  </div>
+                  <span class="status-pill" :class="item.statusClass">{{ item.status }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="dash-card" id="risk-alerts-section">
+              <div class="dash-card-head">
+                <div>
                   <div class="dash-card-title">Risk Alerts</div>
-                  <div class="dash-card-sub">{{ dashboard.alerts.length }} items need attention</div>
+                  <div class="dash-card-sub">{{ filteredRiskAlerts.length }} items need attention</div>
+                </div>
+                <div class="alert-toolbar">
+                  <button type="button" class="alert-filter-btn" :class="{active:riskAlertFilter==='all'}" @click="riskAlertFilter='all'">All</button>
+                  <button type="button" class="alert-filter-btn" :class="{active:riskAlertFilter==='bad'}" @click="riskAlertFilter='bad'">Critical</button>
+                  <button type="button" class="alert-filter-btn" :class="{active:riskAlertFilter==='warn'}" @click="riskAlertFilter='warn'">Warning</button>
+                  <button type="button" class="alert-filter-btn" :class="{active:riskAlertFilter==='info'}" @click="riskAlertFilter='info'">Info</button>
                 </div>
               </div>
               <div class="alert-list">
-                <div v-for="(a,i) in dashboard.alerts" :key="i" class="alert-item" :class="a.level">
+                <div v-for="a in filteredRiskAlerts" :key="a.id" class="alert-item" :class="a.level">
                   <div class="alert-icon">{{ a.level === 'bad' ? '!' : a.level === 'warn' ? '⚠' : 'i' }}</div>
                   <div class="alert-body">
                     <div class="alert-title">{{ a.title }}</div>
                     <div class="alert-desc">{{ a.desc }}</div>
                   </div>
-                  <div class="alert-time">{{ a.time }}</div>
+                  <div class="alert-actions">
+                    <div class="alert-time">{{ a.time }}</div>
+                    <button class="btn-link" type="button" @click="viewRiskAlert(a)">View</button>
+                    <button class="btn-link" type="button" style="color:#9ca3af" @click="muteRiskAlert(a)">Mute 24h</button>
+                  </div>
                 </div>
+                <div v-if="!filteredRiskAlerts.length" style="padding:28px;text-align:center;color:#9ca3af;font-size:13px">No alerts for this filter</div>
               </div>
             </div>
           </div>
@@ -1928,21 +2038,30 @@ createApp({
     const toast = reactive({ show: false, text: '' });
     let toastTimer = null;
 
+    const riskApps = ['All Apps', 'Test', 'Summer Game', 'NashFlow'];
+    const riskFilter = reactive({
+      app: 'All Apps',
+      dateRange: 'Jul 12, 2026 - Jul 12, 2026',
+      timezone: 'UTC+0'
+    });
+    const riskAlertFilter = ref('all');
+
     const dashboard = reactive({
+      lastRefreshed: '',
       healthScore: 78,
       healthLabel: 'Good',
-      healthSummary: 'Account is operating normally with minor budget pacing warnings on 1 campaign. Creative approval rate and traffic quality are within acceptable thresholds.',
+      healthSummary: 'Account is operating normally with minor budget pacing warnings on 1 campaign. 2 campaigns are off goal; creative review queue has pending items.',
       healthTags: [
-        { label: 'Account Active', level: 'good' },
-        { label: 'Payment OK', level: 'good' },
-        { label: 'Policy Compliant', level: 'good' },
-        { label: 'Budget Pacing Warning', level: 'warn' },
+        { label: 'Account Active', level: 'good', anchor: 'kpi' },
+        { label: 'Payment OK', level: 'good', anchor: 'billing' },
+        { label: 'Goal Drift', level: 'warn', anchor: 'campaigns' },
+        { label: 'Budget Pacing Warning', level: 'warn', anchor: 'alerts' },
       ],
       kpis: [
         { label: 'Available Balance', value: '$124,580', foot: 'Auto-recharge enabled at $50K', trend: '' },
-        { label: 'Monthly Budget Used', value: '67%', foot: '$335,200 / $500,000 cap', trend: '' },
-        { label: 'Campaigns at Risk', value: '3', foot: '2 over-pacing · 1 low delivery', trend: 'warn' },
-        { label: 'Creative Pass Rate', value: '94.2%', foot: '↑ 1.8% vs last week', trend: 'up' },
+        { label: 'Campaigns Off Goal', value: '2', foot: '1 CPI · 1 ROAS below target', trend: 'warn' },
+        { label: 'Creatives Pending Review', value: '3', foot: '2 rejected this week', trend: 'warn' },
+        { label: 'Burn Days Left', value: '6.8', foot: 'At current daily burn ~$18.4K', trend: '' },
       ],
       monthlySpent: 335200,
       monthlyCap: 500000,
@@ -1960,25 +2079,92 @@ createApp({
         { label: 'Sun', pct: 48, targetPct: 50 },
       ],
       deliveryMetrics: [
-        { name: 'Win Rate', value: '34.2%', desc: 'Bid win / total bids', status: 'good', statusLabel: 'Healthy' },
-        { name: 'Creative Rejection', value: '5.8%', desc: 'Rejected / submitted', status: 'warn', statusLabel: 'Watch' },
-        { name: 'Invalid Traffic (IVT)', value: '1.2%', desc: 'Fraud & invalid impressions', status: 'good', statusLabel: 'Low' },
-        { name: 'Bid Floor Hit Rate', value: '8.4%', desc: 'Bids below floor', status: 'good', statusLabel: 'Normal' },
+        { name: 'Goal Attainment Rate', value: '50%', desc: 'Campaigns on track vs all live', status: 'warn', statusLabel: 'Watch' },
+        { name: 'eCPI Spike', value: '+18%', desc: 'vs prior 7-day average', status: 'warn', statusLabel: 'Watch' },
         { name: 'Under-delivery', value: '2 camps', desc: 'Below 80% daily goal', status: 'warn', statusLabel: 'Action' },
+        { name: 'Creative Rejected', value: '5.8%', desc: 'Rejected / submitted', status: 'warn', statusLabel: 'Watch' },
+        { name: 'Pending Review', value: '3', desc: 'Creatives awaiting policy review', status: 'warn', statusLabel: 'Action' },
       ],
       campaignBudgets: [
-        { name: 'Summer Promo US', dailyBudget: 8000, spent: 6240, pct: 78, pacingStatus: 'good', pacingLabel: 'On Pace' },
-        { name: 'Brand Awareness EU', dailyBudget: 5000, spent: 5600, pct: 112, pacingStatus: 'bad', pacingLabel: 'Over Budget' },
-        { name: 'Retargeting APAC', dailyBudget: 3000, spent: 2580, pct: 86, pacingStatus: 'warn', pacingLabel: 'Near Cap' },
-        { name: 'App Install LATAM', dailyBudget: 4000, spent: 2100, pct: 53, pacingStatus: 'warn', pacingLabel: 'Under Pace' },
+        { name: 'Summer Promo US', app: 'Test', status: 'Live', statusClass: 'good', dailyBudget: 8000, spent: 6240, pct: 78, pacingStatus: 'good', pacingLabel: 'On Pace', goalType: 'CPI', goalValue: '$2.50', actualValue: '$2.35 eCPI', goalStatus: 'good', goalLabel: 'On Track' },
+        { name: 'Brand Awareness EU', app: 'Summer Game', status: 'Out of Budget', statusClass: 'bad', dailyBudget: 5000, spent: 5600, pct: 112, pacingStatus: 'bad', pacingLabel: 'Over Budget', goalType: 'ROAS', goalValue: '120% D0', actualValue: '86% D0 ROAS', goalStatus: 'bad', goalLabel: 'Off Track' },
+        { name: 'Retargeting APAC', app: 'NashFlow', status: 'Live', statusClass: 'good', dailyBudget: 3000, spent: 2580, pct: 86, pacingStatus: 'warn', pacingLabel: 'Near Cap', goalType: 'CPI', goalValue: '$1.80', actualValue: '$2.12 eCPI', goalStatus: 'bad', goalLabel: 'Off Track' },
+        { name: 'App Install LATAM', app: 'Test', status: 'Live', statusClass: 'good', dailyBudget: 4000, spent: 2100, pct: 53, pacingStatus: 'warn', pacingLabel: 'Under Pace', goalType: 'CPP', goalValue: '$8.00', actualValue: '$7.40 CPP', goalStatus: 'good', goalLabel: 'On Track' },
       ],
+      creativeReview: {
+        pending: 3,
+        rejected: 2,
+        approved: 47,
+        recent: [
+          { name: 'Playable Q3', type: 'Playable', status: 'Pending', statusClass: 'warn', time: '2h ago' },
+          { name: 'Banner EU v3', type: 'Banner', status: 'Rejected', statusClass: 'bad', time: '4h ago' },
+          { name: 'Native Video Ad', type: 'Video', status: 'Pending', statusClass: 'warn', time: '5h ago' },
+        ]
+      },
       alerts: [
-        { level: 'bad', title: 'Daily budget exceeded', desc: 'Brand Awareness EU spent $5,600 against $5,000 daily cap (+12%). Delivery may be throttled.', time: '2h ago' },
-        { level: 'warn', title: 'Creative rejected', desc: '2 creatives pending policy review — "Playable Q3" and "Banner EU v3".', time: '4h ago' },
-        { level: 'warn', title: 'Under-delivery detected', desc: 'App Install LATAM at 53% of daily budget with 6h remaining. Check bids & targeting.', time: '6h ago' },
-        { level: 'info', title: 'Balance threshold notice', desc: 'Available balance will reach auto-recharge threshold ($50K) in ~3 days at current burn rate.', time: '1d ago' },
+        { id: 'a1', level: 'bad', title: 'Daily budget exceeded', desc: 'Brand Awareness EU spent $5,600 against $5,000 daily cap (+12%). Delivery may be throttled.', time: '2h ago', target: 'ads', muted: false },
+        { id: 'a2', level: 'warn', title: 'Campaign off goal (ROAS)', desc: 'Brand Awareness EU D0 ROAS at 86% vs 120% goal. Check creatives & bids.', time: '3h ago', target: 'ads', muted: false },
+        { id: 'a3', level: 'warn', title: 'Creative rejected', desc: '2 creatives pending policy review — "Playable Q3" and "Banner EU v3".', time: '4h ago', target: 'manage-creative', muted: false },
+        { id: 'a4', level: 'warn', title: 'Under-delivery detected', desc: 'App Install LATAM at 53% of daily budget with 6h remaining. Check bids & targeting.', time: '6h ago', target: 'ads', muted: false },
+        { id: 'a5', level: 'warn', title: 'eCPI spike', desc: 'Retargeting APAC eCPI rose +18% vs last 7 days ($2.12 vs goal $1.80).', time: '8h ago', target: 'reports-ad-monitor', muted: false },
+        { id: 'a6', level: 'info', title: 'Balance threshold notice', desc: 'Available balance will reach auto-recharge threshold ($50K) in ~3 days at current burn rate.', time: '1d ago', target: 'account-settings', muted: false },
       ],
     });
+
+    const filteredRiskCampaigns = computed(() => {
+      if (riskFilter.app === 'All Apps') return dashboard.campaignBudgets;
+      return dashboard.campaignBudgets.filter(c => c.app === riskFilter.app);
+    });
+
+    const filteredRiskAlerts = computed(() => {
+      return dashboard.alerts.filter(a => {
+        if (a.muted) return false;
+        if (riskAlertFilter.value === 'all') return true;
+        return a.level === riskAlertFilter.value;
+      });
+    });
+
+    function refreshRiskDashboard() {
+      const now = new Date();
+      dashboard.lastRefreshed = now.toTimeString().slice(0, 8);
+      showToast('Dashboard refreshed');
+    }
+
+    function goRiskTarget(target) {
+      if (target === 'account-settings') {
+        openAccountSettings('billing');
+        return;
+      }
+      if (target === 'manage-creative') {
+        page.value = 'manage-creative';
+        mcTab.value = 'creatives';
+        return;
+      }
+      page.value = target;
+    }
+
+    function viewRiskAlert(a) {
+      goRiskTarget(a.target);
+      showToast('Opened: ' + a.title);
+    }
+
+    function muteRiskAlert(a) {
+      a.muted = true;
+      showToast('Alert muted for 24h');
+    }
+
+    function onHealthTagClick(tag) {
+      if (tag.anchor === 'alerts') {
+        riskAlertFilter.value = 'all';
+        document.getElementById('risk-alerts-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else if (tag.anchor === 'billing') {
+        goRiskTarget('account-settings');
+      } else if (tag.anchor === 'campaigns') {
+        showToast('Review Campaign Budget Status below');
+      } else {
+        showToast(tag.label);
+      }
+    }
 
     const navItems = [
       {
@@ -3001,6 +3187,8 @@ createApp({
 
     return {
       page, dashboard, adsTab, mcTab, mcView, navGroupsOpen, isNavGroupActive, toggleNavGroup,
+      riskApps, riskFilter, riskAlertFilter, filteredRiskCampaigns, filteredRiskAlerts,
+      refreshRiskDashboard, goRiskTarget, viewRiskAlert, muteRiskAlert, onHealthTagClick,
       overviewApps, overviewFilter, overviewView, overviewKpis, overviewColumns, overviewTableData,
       myApps, appFilter, filteredAppsList, selectedAppsList, allAppsSelected, appModal,
       openAppModal, saveApp, onAppToggle, sortApps, toggleAllAppsList,
