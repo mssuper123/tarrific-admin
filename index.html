@@ -2028,9 +2028,9 @@ createApp({
       { key: 'ecpm', label: 'eCPM', value: '$0' },
       { key: 'ctr', label: 'CTR', value: '0%' },
       { key: 'ecpc', label: 'eCPC', value: '$0' },
-      { key: 'd0', label: 'D0', value: '0%' },
-      { key: 'd7', label: 'D7', value: '0%' },
-      { key: 'd30', label: 'D30', value: '0%' },
+      { key: 'd0Au', label: 'D0 AU', value: '0' },
+      { key: 'd7Au', label: 'D7 AU', value: '0' },
+      { key: 'd30Au', label: 'D30 AU', value: '0' },
     ];
     const overviewColumns = [
       { key: 'spend', label: 'Spend' },
@@ -2043,9 +2043,9 @@ createApp({
       { key: 'ecpm', label: 'eCPM' },
       { key: 'ctr', label: 'CTR' },
       { key: 'ecpc', label: 'eCPC' },
-      { key: 'd0', label: 'D0' },
-      { key: 'd7', label: 'D7' },
-      { key: 'd30', label: 'D30' },
+      { key: 'd0Au', label: 'D0 AU' },
+      { key: 'd7Au', label: 'D7 AU' },
+      { key: 'd30Au', label: 'D30 AU' },
     ];
     const overviewTableData = ref([]);
 
@@ -2270,11 +2270,15 @@ createApp({
     const columnCatalog = [
       { id: 'basic', label: 'Basic', columns: [
         mkCol('impressions', 'Impressions'), mkCol('clicks', 'Clicks'), mkCol('ctr', 'CTR'),
-        mkCol('installs', 'Installs'), mkCol('cpi', 'CPI'), mkCol('ir', 'IR'),
-        mkCol('spend', 'Spend'), mkCol('revenue', 'Revenue'), mkCol('roi', 'ROI'), mkCol('cpm', 'CPM'),
+        mkCol('installs', 'Installs'), mkCol('cpi', 'CPI'), mkCol('ecpi', 'eCPI'),
+        mkCol('ir', 'IR'), mkCol('spend', 'Spend'), mkCol('revenue', 'Revenue'), mkCol('roi', 'ROI'),
+        mkCol('cpm', 'CPM'), mkCol('ecpm', 'eCPM'), mkCol('ecpc', 'eCPC'),
       ]},
       { id: 'campaign-goals', label: 'Campaign goals', columns: [
         mkCol('cppGoal', 'CPP goal'), mkCol('cpeGoal', 'CPE goal'), mkCol('roasGoal', 'ROAS goal'),
+      ]},
+      { id: 'active-users', label: 'Active users', columns: [
+        mkCol('d0Au', 'D0 AU'), mkCol('d7Au', 'D7 AU'), mkCol('d30Au', 'D30 AU'),
       ]},
       { id: 'retention', label: 'Retention', columns: dayCols('d', 'retention', retentionDays, 'Retention') },
       { id: 'iaa', label: 'IAA revenue', columns: [
