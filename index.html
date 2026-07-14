@@ -184,6 +184,40 @@ tr:hover td{background:#f9fafb}
 .group-asset-table table{font-size:12px}
 .group-asset-table th{padding:8px 10px}
 .group-asset-table td{padding:8px 10px}
+.type-check-group{display:flex;flex-wrap:wrap;gap:14px 20px;padding:4px 0}
+.type-check{display:flex;align-items:center;gap:8px;font-size:13px;color:#374151;cursor:pointer;user-select:none}
+.type-check input{width:15px;height:15px;accent-color:#5bc0eb;cursor:pointer}
+.batch-upload-modal{background:#fff;border-radius:6px;width:100%;max-width:860px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.batch-upload-head{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:#5bc0eb;color:#fff}
+.batch-upload-head h3{font-size:15px;font-weight:600;color:#fff;margin:0}
+.batch-upload-head .modal-close{color:#fff;opacity:.9;font-size:22px}
+.batch-upload-head .modal-close:hover{opacity:1}
+.batch-upload-body{padding:20px;overflow-y:auto;flex:1}
+.batch-dropzone{border:1px dashed #d1d5db;border-radius:4px;padding:48px 20px;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;background:#fafbfc}
+.batch-dropzone:hover,.batch-dropzone.dragover{border-color:#5bc0eb;background:#eff8fd}
+.batch-dropzone-icon{width:56px;height:56px;margin:0 auto 12px;color:#9ca3af}
+.batch-dropzone-text{font-size:13px;color:#9ca3af}
+.batch-progress-row{display:flex;align-items:center;gap:12px;margin:18px 0 8px}
+.batch-progress-label{font-size:13px;color:#374151;white-space:nowrap}
+.batch-progress-track{flex:1;height:18px;background:#e8ecf1;border-radius:2px;overflow:hidden;position:relative}
+.batch-progress-fill{height:100%;background:#5bc0eb;transition:width .2s;border-radius:2px}
+.batch-progress-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#6b7280;font-weight:500}
+.batch-section-title{font-size:13px;color:#374151;margin:16px 0 10px;font-weight:500}
+.batch-table-wrap{border:1px solid #e8ecf1;border-radius:4px;overflow:hidden;min-height:200px}
+.batch-table-wrap table{width:100%;border-collapse:collapse;font-size:12px}
+.batch-table-wrap th{background:#f3f4f8;padding:10px 14px;text-align:left;font-weight:600;color:#6b7280;border-bottom:1px solid #e8ecf1}
+.batch-table-wrap td{padding:10px 14px;border-bottom:1px solid #f3f4f6;color:#374151}
+.batch-empty{padding:48px 20px;text-align:center;color:#9ca3af}
+.batch-empty-icon{width:72px;height:56px;margin:0 auto 10px;opacity:.6}
+.batch-empty-text{font-size:13px}
+.batch-pagination{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 0 0;font-size:12px;color:#6b7280}
+.batch-pagination .page-btn{min-width:28px;height:28px;border:1px solid #e5e7eb;background:#fff;border-radius:4px;cursor:pointer;font-size:12px}
+.batch-pagination .page-btn.active{background:#5bc0eb;color:#fff;border-color:#5bc0eb}
+.batch-pagination select,.batch-pagination input{border:1px solid #e5e7eb;border-radius:4px;padding:4px 8px;font-size:12px;height:28px}
+.batch-upload-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 20px;border-top:1px solid #f0f2f5}
+.btn-batch-submit{background:#5bc0eb;color:#fff;border:none;border-radius:4px;padding:8px 20px;font-size:13px;font-weight:500;cursor:pointer}
+.btn-batch-submit:hover{background:#3aadde}
+.btn-batch-submit:disabled{opacity:.5;cursor:not-allowed}
 .preview-thumb{width:48px;height:36px;border-radius:3px;background:#eff8fd;display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:10px;color:#5bc0eb}
 .preview-thumb img,.preview-thumb video{width:100%;height:100%;object-fit:cover}
 .empty-table{padding:36px;text-align:center;color:#9ca3af;font-size:13px}
@@ -1013,7 +1047,7 @@ tr:hover td{background:#f9fafb}
                   <textarea class="form-textarea" v-model="assetForm.description" placeholder="Build performant mobile growth loops..."></textarea>
                 </div>
                 <div class="apply-group-section">
-                  <div class="apply-group-title">Apply materials to existing Creative Group</div>
+                  <div class="apply-group-title">Apply creatives to existing Creative Group</div>
                   <div class="radio-row">
                     <label><input type="radio" v-model="applyToGroupForm.enabled" value="yes"> Yes</label>
                     <label><input type="radio" v-model="applyToGroupForm.enabled" value="no"> No</label>
@@ -1539,18 +1573,20 @@ tr:hover td{background:#f9fafb}
         </div>
         <div class="form-group">
           <label class="form-label">Creative Type</label>
-          <div class="type-seg" style="margin-bottom:0">
-            <button v-for="t in creativeTypes" :key="t" type="button" class="type-seg-btn" :class="{active:groupModal.creativeTypes.includes(t)}" @click="toggleGroupCreativeType(t)">{{ t }}</button>
+          <div class="type-check-group">
+            <label v-for="t in creativeTypes" :key="t" class="type-check">
+              <input type="checkbox" :checked="groupModal.creativeTypes.includes(t)" @change="toggleGroupCreativeType(t)">
+              <span>{{ t }}</span>
+            </label>
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Materials</label>
+          <label class="form-label">Creatives</label>
           <div class="group-asset-toolbar">
-            <button class="btn btn-primary btn-sm" @click="$refs.groupUpload.click()">Upload</button>
+            <button class="btn btn-primary btn-sm" type="button" @click="openBatchUpload">Upload</button>
             <button class="btn btn-primary btn-sm" @click="openPickCreative()">Add Existing Creative</button>
             <button class="btn btn-danger-outline btn-sm" :disabled="!selectedGroupMaterials.length" @click="removeGroupMaterials">Delete Selected</button>
           </div>
-          <input ref="groupUpload" type="file" accept="image/*,video/*,.html,.zip" style="display:none" @change="onGroupUpload">
           <div class="group-asset-table">
             <table>
               <thead>
@@ -1586,9 +1622,9 @@ tr:hover td{background:#f9fafb}
                 </tr>
               </tbody>
             </table>
-            <div v-if="!groupMaterials.length" class="empty-table">No materials yet. Upload or select from Creatives.</div>
+            <div v-if="!groupMaterials.length" class="empty-table">No creatives yet. Upload or select from Creatives.</div>
           </div>
-          <p class="form-hint" v-if="!groupMaterials.length">Add at least one material by uploading or selecting from Creatives.</p>
+          <p class="form-hint" v-if="!groupMaterials.length">Add at least one creative by uploading or selecting from Creatives.</p>
         </div>
         <div class="form-group">
           <label class="form-label">Country</label>
@@ -1598,6 +1634,88 @@ tr:hover td{background:#f9fafb}
       <div class="modal-foot">
         <button class="btn btn-default" @click="groupModal.show=false">Cancel</button>
         <button class="btn btn-primary" @click="saveGroup">Save Creative Group</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Batch Upload Modal -->
+  <div class="modal-overlay" v-if="batchUploadModal.show" @click.self="closeBatchUpload" style="z-index:120">
+    <div class="batch-upload-modal">
+      <div class="batch-upload-head">
+        <h3>Upload Images or Videos</h3>
+        <button class="modal-close" type="button" @click="closeBatchUpload">&times;</button>
+      </div>
+      <div class="batch-upload-body">
+        <div
+          class="batch-dropzone"
+          :class="{dragover: batchUploadModal.dragOver}"
+          @click="$refs.batchUploadInput.click()"
+          @dragover.prevent="batchUploadModal.dragOver=true"
+          @dragleave.prevent="batchUploadModal.dragOver=false"
+          @drop.prevent="onBatchDrop"
+        >
+          <svg class="batch-dropzone-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M48 40c6.6 0 12-5.4 12-12 0-6.2-4.7-11.3-10.7-11.9C47.8 9.4 41.4 4 33.5 4c-8.6 0-15.7 6.3-17 14.5C10.5 19.2 6 24.3 6 30.5 6 37.4 11.6 43 18.5 43H26"/>
+            <path d="M32 58V28M32 28l-8 8M32 28l8 8"/>
+          </svg>
+          <div class="batch-dropzone-text">Drag files here or click to upload</div>
+        </div>
+        <input ref="batchUploadInput" type="file" multiple accept="image/*,video/*,.html,.zip" style="display:none" @change="onBatchFileSelect">
+
+        <div class="batch-progress-row">
+          <span class="batch-progress-label">Upload Progress:</span>
+          <div class="batch-progress-track">
+            <div class="batch-progress-fill" :style="{width: batchUploadModal.progress + '%'}"></div>
+            <div class="batch-progress-pct">{{ batchUploadModal.progress }}%</div>
+          </div>
+        </div>
+
+        <div class="batch-section-title">Uploaded Creatives</div>
+        <div class="batch-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Creative Name</th>
+                <th>Type</th>
+                <th>Resolution / Size</th>
+                <th>Upload Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in paginatedBatchItems" :key="item.uid">
+                <td>{{ item.name }}</td>
+                <td>{{ item.type }}</td>
+                <td>{{ item.resolution || '—' }}</td>
+                <td>{{ item.uploadedAt }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div v-if="!batchUploadModal.items.length" class="batch-empty">
+            <svg class="batch-empty-icon" viewBox="0 0 80 60" fill="none">
+              <rect x="18" y="8" width="44" height="36" rx="3" stroke="#d1d5db" stroke-width="2" fill="#f9fafb"/>
+              <path d="M28 20h24M28 28h16" stroke="#d1d5db" stroke-width="2" stroke-linecap="round"/>
+              <path d="M52 40l8-6 8 10H44l4-6 4 2z" fill="#5bc0eb" opacity=".45"/>
+            </svg>
+            <div class="batch-empty-text">No data</div>
+          </div>
+        </div>
+        <div class="batch-pagination">
+          <span>Total {{ batchUploadModal.items.length }}</span>
+          <button class="page-btn" type="button" :disabled="batchUploadModal.page<=1" @click="batchUploadModal.page--">‹</button>
+          <button class="page-btn active" type="button">{{ batchUploadModal.page }}</button>
+          <button class="page-btn" type="button" :disabled="batchUploadModal.page>=batchTotalPages" @click="batchUploadModal.page++">›</button>
+          <span>Go to</span>
+          <input type="number" min="1" :max="batchTotalPages" style="width:48px" :value="batchUploadModal.page" @change="goBatchPage($event)">
+          <select v-model.number="batchUploadModal.pageSize" @change="batchUploadModal.page=1">
+            <option :value="10">10 / page</option>
+            <option :value="20">20 / page</option>
+            <option :value="50">50 / page</option>
+          </select>
+        </div>
+      </div>
+      <div class="batch-upload-foot">
+        <button class="btn btn-default" type="button" @click="closeBatchUpload">Cancel</button>
+        <button class="btn-batch-submit" type="button" :disabled="!batchUploadModal.items.length || batchUploadModal.uploading" @click="submitBatchUpload">Submit</button>
       </div>
     </div>
   </div>
@@ -2445,10 +2563,26 @@ createApp({
 
     const pickCreativeModal = reactive({ show: false, search: '', selected: [] });
 
+    const batchUploadModal = reactive({
+      show: false,
+      dragOver: false,
+      progress: 0,
+      uploading: false,
+      items: [],
+      page: 1,
+      pageSize: 10
+    });
+
     let materialUid = 0;
     function nextMaterialUid() { return 'm' + (++materialUid); }
 
     const allGroupMaterialsSelected = computed(() => groupMaterials.value.length && selectedGroupMaterials.value.length === groupMaterials.value.length);
+
+    const batchTotalPages = computed(() => Math.max(1, Math.ceil(batchUploadModal.items.length / batchUploadModal.pageSize)));
+    const paginatedBatchItems = computed(() => {
+      const start = (batchUploadModal.page - 1) * batchUploadModal.pageSize;
+      return batchUploadModal.items.slice(start, start + batchUploadModal.pageSize);
+    });
 
     const pickableCreatives = computed(() => {
       const q = pickCreativeModal.search.trim().toLowerCase();
@@ -2619,38 +2753,115 @@ createApp({
       return '—';
     }
 
-    function addUploadedMaterial(file) {
+    function openBatchUpload() {
       if (!groupModal.creativeTypes.length) {
         showToast('Please select at least one creative type');
         return;
       }
-      const materialType = inferMaterialType(file);
-      if (!materialType) return;
-      const isVideo = file.type.startsWith('video/');
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
-        groupMaterials.value.push({
-          uid: nextMaterialUid(),
-          source: 'upload',
-          creativeId: null,
-          name: file.name.replace(/\.[^.]+$/, ''),
-          type: materialType,
-          preview: e.target.result,
-          previewType: isVideo ? 'video' : 'image',
-          resolution: guessResolution(file),
-          extension: file.name.split('.').pop(),
-          uploadedAt: now,
-          status: 'Active'
-        });
-      };
-      reader.readAsDataURL(file);
+      batchUploadModal.show = true;
+      batchUploadModal.dragOver = false;
+      batchUploadModal.progress = 0;
+      batchUploadModal.uploading = false;
+      batchUploadModal.items = [];
+      batchUploadModal.page = 1;
     }
 
-    function onGroupUpload(e) {
-      const file = e.target.files[0];
-      if (file) addUploadedMaterial(file);
+    function closeBatchUpload() {
+      batchUploadModal.show = false;
+      batchUploadModal.dragOver = false;
+      batchUploadModal.uploading = false;
+      batchUploadModal.progress = 0;
+      batchUploadModal.items = [];
+    }
+
+    function goBatchPage(e) {
+      const p = parseInt(e.target.value, 10);
+      if (!isNaN(p) && p >= 1 && p <= batchTotalPages.value) batchUploadModal.page = p;
+      e.target.value = batchUploadModal.page;
+    }
+
+    function inferBatchType(file) {
+      if (file.type.startsWith('video/')) return 'Video';
+      if (/\.(html|zip)$/i.test(file.name)) return 'Playable';
+      if (file.type.startsWith('image/')) {
+        if (groupModal.creativeTypes.includes('Native Image')) return 'Native Image';
+        if (groupModal.creativeTypes.includes('Banner')) return 'Banner';
+        return 'Image';
+      }
+      return file.name.split('.').pop()?.toUpperCase() || 'File';
+    }
+
+    function processBatchFiles(fileList) {
+      const files = Array.from(fileList || []);
+      if (!files.length) return;
+      batchUploadModal.uploading = true;
+      batchUploadModal.progress = 0;
+      let done = 0;
+      files.forEach((file) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const now = new Date().toISOString().slice(0, 16).replace('T', ' ');
+          const isVideo = file.type.startsWith('video/');
+          batchUploadModal.items.push({
+            uid: nextMaterialUid(),
+            source: 'upload',
+            creativeId: null,
+            name: file.name.replace(/\.[^.]+$/, ''),
+            type: inferBatchType(file),
+            preview: e.target.result,
+            previewType: isVideo ? 'video' : (file.type.startsWith('image/') ? 'image' : null),
+            resolution: guessResolution(file),
+            extension: file.name.split('.').pop(),
+            uploadedAt: now,
+            status: 'Active',
+            file
+          });
+          done++;
+          batchUploadModal.progress = Math.round((done / files.length) * 100);
+          if (done === files.length) batchUploadModal.uploading = false;
+        };
+        reader.onerror = () => {
+          done++;
+          batchUploadModal.progress = Math.round((done / files.length) * 100);
+          if (done === files.length) batchUploadModal.uploading = false;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function onBatchFileSelect(e) {
+      processBatchFiles(e.target.files);
       e.target.value = '';
+    }
+
+    function onBatchDrop(e) {
+      batchUploadModal.dragOver = false;
+      processBatchFiles(e.dataTransfer.files);
+    }
+
+    function submitBatchUpload() {
+      if (!batchUploadModal.items.length) return;
+      batchUploadModal.items.forEach(item => {
+        const materialType = groupModal.creativeTypes.includes(item.type)
+          ? item.type
+          : (inferMaterialType({ type: item.previewType === 'video' ? 'video/' : 'image/', name: item.name }) || groupModal.creativeTypes[0]);
+        groupMaterials.value.push({
+          uid: item.uid,
+          source: 'upload',
+          creativeId: null,
+          name: item.name,
+          type: materialType,
+          preview: item.preview,
+          previewType: item.previewType,
+          resolution: item.resolution,
+          extension: item.extension,
+          uploadedAt: item.uploadedAt,
+          status: 'Active'
+        });
+      });
+      const count = batchUploadModal.items.length;
+      closeBatchUpload();
+      showToast('Uploaded ' + count + ' creative(s)');
     }
 
     function openPickCreative() {
@@ -2734,7 +2945,7 @@ createApp({
     function saveGroup() {
       if (!groupModal.name.trim()) { showToast('Please enter a creative group name'); return; }
       if (!groupModal.creativeTypes.length) { showToast('Please select at least one creative type'); return; }
-      if (!groupMaterials.value.length) { showToast('Please add at least one material'); return; }
+      if (!groupMaterials.value.length) { showToast('Please add at least one creative'); return; }
 
       const types = [...groupModal.creativeTypes];
       const campaignInfo = deriveGroupCampaignInfo();
@@ -2799,8 +3010,9 @@ createApp({
       searchCreativeMonitor, sortCreativeMonitor,
       navItems, adsData, creativeTypes, assets, groups,
       groupFilter, filteredGroups, assetForm, applyToGroupForm, filteredApplyGroups, allApplyGroupsSelected,
-      groupModal, pickCreativeModal,
+      groupModal, pickCreativeModal, batchUploadModal,
       groupMaterials, selectedGroupMaterials, allGroupMaterialsSelected, pickableCreatives,
+      paginatedBatchItems, batchTotalPages,
       selectedAssets, selectedGroups, allAssetsSelected, allGroupsSelected,
       dragOver, showMetrics, toast,
       userMenuOpen, settingsTab, settingsNavItems, previousPage,
@@ -2810,7 +3022,8 @@ createApp({
       openAccountSettings, saveAccountInfo, inviteUser, saveCard, saveBillingInfo,
       showToast, toggleAllAssets, toggleAllGroups, openAssetForm, editSelectedAsset,
       onAssetFile, onAssetDrop, saveAsset, searchApplyGroups, toggleAllApplyGroups, openGroupModal,
-      onGroupUpload, openPickCreative, togglePickCreative, confirmPickCreatives, toggleGroupCreativeType,
+      openBatchUpload, closeBatchUpload, onBatchFileSelect, onBatchDrop, submitBatchUpload, goBatchPage,
+      openPickCreative, togglePickCreative, confirmPickCreatives, toggleGroupCreativeType,
       toggleAllGroupMaterials, removeGroupMaterials, saveGroup, deleteGroup, deleteGroups, copyGroup, filterGroups, deleteReport
     };
   }
