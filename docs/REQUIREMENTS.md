@@ -1,6 +1,6 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.4  
+> **版本：** v1.5  
 > **更新日期：** 2026-07-14  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
@@ -12,6 +12,7 @@
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|----------|
+| v1.5 | 2026-07-14 | Creative Group 列表精简列；Members Invite 改为 Password；My Apps 新增 Icon / Preview Link |
 | v1.4 | 2026-07-14 | Ads 三步新建向导（Campaign / Ad Group / Creative）完整原型说明 |
 | v1.3 | 2026-07-14 | Ad Monitoring 移除素材筛选项/维度；报表 IR→IVR；两报表分工说明补全 |
 | v1.2 | 2026-07-14 | 按 Risk 文档格式重写全模块；Overview AU / 报表 eCPI·eCPM·eCPC；Creative Group 多选框与批量上传 |
@@ -517,7 +518,7 @@ Tab：Campaign | Ad Group
 ```
 Tab：Creative Group | Creatives
     ↓
-筛选（Name / Combination Method / Ad Unit）+ New Creative Group
+筛选（Name / Ad Unit）+ New Creative Group
     ↓
 列表表 + 分页
     ↓
@@ -531,7 +532,6 @@ Tab：Creative Group | Creatives
 | 字段 | 控件 | 说明 |
 |------|------|------|
 | Creative Group Name | 文本 | 模糊匹配名称 |
-| Combination Method | 下拉 | 空 / Programmatic Creative / Manual Combination |
 | Ad Unit Name | 文本 | 模糊匹配 Ad Unit |
 
 输入后列表实时过滤（`filteredGroups`）。
@@ -545,9 +545,7 @@ Tab：Creative Group | Creatives
 | Creative Group Name | 名称 |
 | Campaign Name / ID | 关联 Campaign |
 | Ad Group Name / ID | 关联 Ad Group |
-| Combination Method | Programmatic / Manual |
 | Creative Type | 多类型标签 |
-| Deliverable Ad Types | 可投广告类型 |
 | Country | 国家，默认 ALL |
 | Ad Unit | Ad Unit |
 | Created Time | 创建时间 |
@@ -625,7 +623,7 @@ Cancel / Submit
 ### 5.9 原型边界
 
 - 上传为本地 FileReader 预览，无真实 OSS  
-- Combination Method 与投放实配逻辑未接后端  
+- 列表不再展示 Combination Method / Deliverable Ad Types（Mock 数据仍保留 `method` / `adTypes` 字段供后续扩展）  
 
 ---
 
@@ -967,7 +965,18 @@ New / Edit App 弹窗
 | 行开关 | Active / Paused，Toast |
 | Edit | 回填编辑 |
 
-**弹窗字段：** App Name* · Platform*（iOS/Android）· App ID* · Timezone  
+**弹窗字段（自上而下）：**
+
+| 字段 | 必填 | 控件 | 说明 |
+|------|------|------|------|
+| Icon | 否 | 方形上传区 | 置于表单最上方；虚线方框内 **+**；点击上传图片；有图时预览；未上传时保存默认 emoji（iOS 🍎 / Android 🤖） |
+| App Name | 是 | 文本 | |
+| Platform | 是 | 下拉 | iOS / Android |
+| App ID (Bundle ID) | 是 | 文本 | |
+| Preview Link | 否 | 文本 | App 预览链接，placeholder `https://` |
+| Timezone | 否 | 下拉 | UTC+0 / UTC+8 / UTC-5 |
+
+**列表 Icon 展示：** 图片 URL / data URL 显示缩略图；否则显示 emoji 或名称首字母。
 
 **新建默认：** Active=true；Spend/CVR/CPI=`--`；Linked Ad Units=0  
 
@@ -1049,14 +1058,14 @@ Invite 弹窗
 
 ### 13.5 Invite 弹窗
 
-| 字段 | 选项 |
-|------|------|
-| Email addresses* | 逗号分隔多邮箱 |
-| Access level | Read-only / Admin |
-| Access expiration | Never / 30 days / 90 days |
-| App access | All apps / Selected apps |
+| 字段 | 必填 | 控件 | 说明 |
+|------|------|------|------|
+| Email addresses | 是 | 文本 | 逗号分隔多邮箱 |
+| Password | 是 | 密码 | 子账号初始密码 |
 
 底部：Cancel / Invite  
+
+> 弹窗内不再配置 Access level / Access expiration / App access；邀请成功后成员列表仍展示 Access level 等列（新建成员原型默认 Read-only · Never · All apps）。完整权限模型待后端对接。
 
 ---
 
@@ -1227,9 +1236,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.4） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.5） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.4*
+*文档结束 · v1.5*
