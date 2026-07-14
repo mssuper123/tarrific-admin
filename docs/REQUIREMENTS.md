@@ -586,17 +586,26 @@ Search
 > **入口：** Reports → Ad Monitoring Report  
 > **页面标识：** `reports-ad-monitor`  
 > **对标：** AppLovin 明细报表 + Columns 配置  
+> **粒度：** Campaign / Ad Group（**不含素材维度**；素材下钻见 Creative Monitoring）
 
 ### 9.1 模块定位
 
-按多维条件查询广告层级投放效果，自定义维度与指标列，支持导出。
+按多维条件查询 **广告计划 / 广告组** 层级投放效果，自定义维度与指标列，支持导出。
+
+与 Creative Monitoring 的分工：
+
+| | Ad Monitoring | Creative Monitoring |
+|--|---------------|---------------------|
+| 分析粒度 | Campaign / Ad Group | Creative / Creative Group |
+| 素材筛选项 | 无 | 有 |
+| 素材维度 | 无 | 有 |
 
 ### 9.2 页面结构
 
 ```
-查询条件网格（12 字段）
+查询条件（Timezone / Date / Campaign / Ad Group / Region）
     ↓
-Data Dimensions（checkbox）
+Data Dimensions（时间 + Campaign + Ad Group + Country）
     ↓
 Data Indicators 摘要 + Configure Columns
     ↓
@@ -613,24 +622,25 @@ Search Data / Export Data
 | 2 | Date Range | 文本 |
 | 3–4 | Campaign Name / ID | 文本 |
 | 5–6 | Ad Group Name / ID | 文本 |
-| 7–8 | Creative Name / ID | 文本 |
-| 9–10 | Creative Group Name / ID | 文本 |
-| 11 | Creative Type | 下拉 |
-| 12 | Delivery Region | 文本 |
+| 7 | Delivery Region | 文本 |
 
-### 9.4 Data Dimensions（默认）
+> **已从本页移除（归 Creative Monitoring）：** Creative Name / ID、Creative Group Name / ID、Creative Type。
 
-默认勾选：Day · Campaign Name · Ad Group Name  
+### 9.4 Data Dimensions
 
-可选：Hour / Week / Month / Campaign ID / Ad Group ID / Creative Group Name|ID / Creative Name|ID / Creative Type / Country · Region  
+**默认勾选：** Day · Campaign Name · Ad Group Name  
+
+**可选：** Hour / Week / Month / Campaign ID / Ad Group ID / Country · Region  
+
+> **已从本页移除：** Creative Group Name/ID、Creative Name/ID、Creative Type。
 
 ### 9.5 Data Indicators
 
 通过 **Configure Columns** 配置。默认选中：
 
-`Impressions, Clicks, CTR, Installs, CPI, IR, Spend, Revenue, ROI, CPM, D0 total rev, D0 total ROAS`
+`Impressions, Clicks, CTR, Installs, CPI, IVR, Spend, Revenue, ROI, CPM, D0 total rev, D0 total ROAS`
 
-完整字段库见 [附录 A](#附录-a报表指标字段库)。
+完整字段库见 [附录 A](#附录-a报表指标字段库)（两报表指标库共用）。
 
 > 已明确 **移除**：Advanced Options、CSV Batch Block Traffic。
 
@@ -652,19 +662,33 @@ Search Data / Export Data
 
 > **入口：** Reports → Creative Monitoring Report  
 > **页面标识：** `reports-creative-monitor`  
+> **粒度：** Creative / Creative Group（素材监控专用）
 
 ### 10.1 模块定位
 
-与广告报表结构一致，默认以**素材维度**为主分析。
+按 **素材 / 素材组** 维度分析投放效果；保留完整素材筛选项与维度。
 
-### 10.2 与广告报表差异
+### 10.2 筛选
 
-| 项 | Ad Monitoring | Creative Monitoring |
-|----|---------------|---------------------|
-| 查询条件 / 指标库 / 操作 | 相同 | 相同 |
-| Dimensions 默认 | Day · Campaign · Ad Group | Day · Ad Group · Creative Name · Creative ID |
+在 Ad Monitoring 条件基础上，**额外包含**：
 
-其余规则同 §9。
+| 字段 | 控件 |
+|------|------|
+| Creative Name / ID | 文本 |
+| Creative Group Name / ID | 文本 |
+| Creative Type | 下拉 |
+
+以及 Campaign / Ad Group / Delivery Region / Timezone / Date Range。
+
+### 10.3 Data Dimensions
+
+**默认勾选：** Day · Ad Group Name · Creative Name · Creative ID  
+
+**完整可选：** 时间维度 · Campaign Name/ID · Ad Group Name/ID · Creative Group Name/ID · Creative Name/ID · Creative Type · Country / Region  
+
+### 10.4 指标与操作
+
+Data Indicators 字段库、Configure Columns、Search / Export 与 §9 相同。
 
 ---
 
@@ -881,7 +905,7 @@ Add Card / Add Billing Information 弹窗
 
 #### A.1 Basic
 
-Impressions, Clicks, CTR, Installs, CPI, **eCPI**, IR, Spend, Revenue, ROI, CPM, **eCPM**, **eCPC**
+Impressions, Clicks, CTR, Installs, CPI, **eCPI**, IVR, Spend, Revenue, ROI, CPM, **eCPM**, **eCPC**
 
 #### A.2 Campaign goals
 

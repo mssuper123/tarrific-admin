@@ -1319,20 +1319,6 @@ tr:hover td{background:#f9fafb}
               <div class="monitor-filter-grid">
                 <input class="form-input" v-model="adMonitorFilter.adGroupName" placeholder="Ad Group Name">
                 <input class="form-input" v-model="adMonitorFilter.adGroupId" placeholder="Ad Group ID">
-                <input class="form-input" v-model="adMonitorFilter.creativeName" placeholder="Creative Name">
-                <input class="form-input" v-model="adMonitorFilter.creativeId" placeholder="Creative ID">
-              </div>
-              <div class="monitor-filter-grid">
-                <input class="form-input" v-model="adMonitorFilter.creativeGroupName" placeholder="Creative Group Name">
-                <input class="form-input" v-model="adMonitorFilter.creativeGroupId" placeholder="Creative Group ID">
-                <select class="form-select" v-model="adMonitorFilter.creativeType">
-                  <option value="">Creative Type</option>
-                  <option>Banner</option>
-                  <option>Native Image</option>
-                  <option>Video</option>
-                  <option>Video EndCard</option>
-                  <option>Playable</option>
-                </select>
                 <input class="form-input" v-model="adMonitorFilter.region" placeholder="Delivery Region">
               </div>
               <div class="monitor-filter-actions">
@@ -2425,8 +2411,7 @@ createApp({
       timezone: 'UTC + 8 (Shanghai, Hong Kong, Kuala Lumpur)',
       dateRange: '2026-07-08 - 2026-07-10',
       campaignName: '', campaignId: '', adGroupName: '', adGroupId: '',
-      creativeName: '', creativeId: '', creativeGroupName: '', creativeGroupId: '',
-      creativeType: '', region: ''
+      region: ''
     });
     const adMonitorSort = reactive({ key: '', dir: 'asc' });
 
@@ -2439,11 +2424,6 @@ createApp({
       { key: 'campaignId', label: 'Campaign ID', selected: false },
       { key: 'adGroupName', label: 'Ad Group Name', selected: true },
       { key: 'adGroupId', label: 'Ad Group ID', selected: false },
-      { key: 'creativeGroupName', label: 'Creative Group Name', selected: false },
-      { key: 'creativeGroupId', label: 'Creative Group ID', selected: false },
-      { key: 'creativeName', label: 'Creative Name', selected: false },
-      { key: 'creativeId', label: 'Creative ID', selected: false },
-      { key: 'creativeType', label: 'Creative Type', selected: false },
       { key: 'country', label: 'Country / Region', selected: false },
     ]);
 
@@ -2457,7 +2437,7 @@ createApp({
       { id: 'basic', label: 'Basic', columns: [
         mkCol('impressions', 'Impressions'), mkCol('clicks', 'Clicks'), mkCol('ctr', 'CTR'),
         mkCol('installs', 'Installs'), mkCol('cpi', 'CPI'), mkCol('ecpi', 'eCPI'),
-        mkCol('ir', 'IR'), mkCol('spend', 'Spend'), mkCol('revenue', 'Revenue'), mkCol('roi', 'ROI'),
+        mkCol('ivr', 'IVR'), mkCol('spend', 'Spend'), mkCol('revenue', 'Revenue'), mkCol('roi', 'ROI'),
         mkCol('cpm', 'CPM'), mkCol('ecpm', 'eCPM'), mkCol('ecpc', 'eCPC'),
       ]},
       { id: 'campaign-goals', label: 'Campaign goals', columns: [
@@ -2497,7 +2477,7 @@ createApp({
     ];
 
     const defaultMetricKeys = [
-      'impressions', 'clicks', 'ctr', 'installs', 'cpi', 'ir', 'spend', 'revenue', 'roi', 'cpm',
+      'impressions', 'clicks', 'ctr', 'installs', 'cpi', 'ivr', 'spend', 'revenue', 'roi', 'cpm',
       'd0TotalRev', 'd0TotalRoas',
     ];
     const adMonitorSelectedMetrics = ref([...defaultMetricKeys]);
@@ -2589,9 +2569,9 @@ createApp({
     });
 
     const adMonitorRawData = ref([
-      { day: '2026-07-08', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '125,430', clicks: '3,842', ctr: '3.06%', installs: '892', cpi: '$2.15', ir: '23.2%', spend: '$528.40', revenue: '$612.50', roi: '116%', cpm: '$4.21', d0TotalRev: '$580.20', d0TotalRoas: '110%' },
-      { day: '2026-07-09', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '118,220', clicks: '3,510', ctr: '2.97%', installs: '810', cpi: '$2.08', ir: '23.1%', spend: '$478.80', revenue: '$545.30', roi: '114%', cpm: '$4.05', d0TotalRev: '$512.40', d0TotalRoas: '107%' },
-      { day: '2026-07-10', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', creativeGroupName: 'Q3_Playable_Set', creativeGroupId: '976385', creativeId: '8641', creativeName: 'Native Video Ad', creativeType: 'Video', impressions: '98,650', clicks: '2,940', ctr: '2.98%', installs: '654', cpi: '$1.95', ir: '22.2%', spend: '$382.60', revenue: '$420.80', roi: '110%', cpm: '$3.88', d0TotalRev: '$398.50', d0TotalRoas: '104%' },
+      { day: '2026-07-08', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', impressions: '125,430', clicks: '3,842', ctr: '3.06%', installs: '892', cpi: '$2.15', ivr: '23.2%', spend: '$528.40', revenue: '$612.50', roi: '116%', cpm: '$4.21', d0TotalRev: '$580.20', d0TotalRoas: '110%' },
+      { day: '2026-07-09', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', impressions: '118,220', clicks: '3,510', ctr: '2.97%', installs: '810', cpi: '$2.08', ivr: '23.1%', spend: '$478.80', revenue: '$545.30', roi: '114%', cpm: '$4.05', d0TotalRev: '$512.40', d0TotalRoas: '107%' },
+      { day: '2026-07-10', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', impressions: '98,650', clicks: '2,940', ctr: '2.98%', installs: '654', cpi: '$1.95', ivr: '22.2%', spend: '$382.60', revenue: '$420.80', roi: '110%', cpm: '$3.88', d0TotalRev: '$398.50', d0TotalRoas: '104%' },
     ]);
 
     const adMonitorDisplayData = computed(() => {
@@ -2602,11 +2582,6 @@ createApp({
       if (f.campaignId) data = data.filter(r => r.campaignId.includes(f.campaignId));
       if (f.adGroupName) data = data.filter(r => r.adGroupName.toLowerCase().includes(f.adGroupName.toLowerCase()));
       if (f.adGroupId) data = data.filter(r => r.adGroupId.includes(f.adGroupId));
-      if (f.creativeName) data = data.filter(r => r.creativeName.toLowerCase().includes(f.creativeName.toLowerCase()));
-      if (f.creativeId) data = data.filter(r => r.creativeId.includes(f.creativeId));
-      if (f.creativeGroupName) data = data.filter(r => r.creativeGroupName.toLowerCase().includes(f.creativeGroupName.toLowerCase()));
-      if (f.creativeGroupId) data = data.filter(r => r.creativeGroupId.includes(f.creativeGroupId));
-      if (f.creativeType) data = data.filter(r => r.creativeType === f.creativeType);
       if (adMonitorSort.key) {
         data.sort((a, b) => {
           const av = a[adMonitorSort.key] || '';
@@ -2666,9 +2641,9 @@ createApp({
     });
 
     const creativeMonitorRawData = ref([
-      { day: '2026-07-08', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '86,240', clicks: '2,618', ctr: '3.04%', installs: '612', cpi: '$1.98', ir: '23.4%', spend: '$337.80', revenue: '$392.40', roi: '116%', cpm: '$3.92', d0TotalRev: '$370.10', d0TotalRoas: '110%' },
-      { day: '2026-07-09', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '79,110', clicks: '2,402', ctr: '3.04%', installs: '558', cpi: '$1.89', ir: '23.2%', spend: '$298.90', revenue: '$338.20', roi: '113%', cpm: '$3.78', d0TotalRev: '$318.50', d0TotalRoas: '107%' },
-      { day: '2026-07-10', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', creativeGroupName: 'Q3_Playable_Set', creativeGroupId: '976385', creativeId: '8641', creativeName: 'Native Video Ad', creativeType: 'Video', impressions: '64,520', clicks: '1,890', ctr: '2.93%', installs: '421', cpi: '$2.05', ir: '22.3%', spend: '$267.70', revenue: '$295.60', roi: '110%', cpm: '$4.15', d0TotalRev: '$278.30', d0TotalRoas: '104%' },
+      { day: '2026-07-08', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '86,240', clicks: '2,618', ctr: '3.04%', installs: '612', cpi: '$1.98', ivr: '23.4%', spend: '$337.80', revenue: '$392.40', roi: '116%', cpm: '$3.92', d0TotalRev: '$370.10', d0TotalRoas: '110%' },
+      { day: '2026-07-09', campaignName: 'Summer Promo US', campaignId: '10021', adGroupName: 'US_Android', adGroupId: '5021', creativeGroupName: 'S1S2nativevideo', creativeGroupId: '1448904', creativeId: '35480', creativeName: 'Summer Banner v2', creativeType: 'Banner', impressions: '79,110', clicks: '2,402', ctr: '3.04%', installs: '558', cpi: '$1.89', ivr: '23.2%', spend: '$298.90', revenue: '$338.20', roi: '113%', cpm: '$3.78', d0TotalRev: '$318.50', d0TotalRoas: '107%' },
+      { day: '2026-07-10', campaignName: 'Brand Awareness EU', campaignId: '10018', adGroupName: 'EU_iOS', adGroupId: '5018', creativeGroupName: 'Q3_Playable_Set', creativeGroupId: '976385', creativeId: '8641', creativeName: 'Native Video Ad', creativeType: 'Video', impressions: '64,520', clicks: '1,890', ctr: '2.93%', installs: '421', cpi: '$2.05', ivr: '22.3%', spend: '$267.70', revenue: '$295.60', roi: '110%', cpm: '$4.15', d0TotalRev: '$278.30', d0TotalRoas: '104%' },
     ]);
 
     const creativeMonitorDisplayData = computed(() => {
