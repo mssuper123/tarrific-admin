@@ -1,12 +1,21 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.2  
+> **版本：** v1.3  
 > **更新日期：** 2026-07-14  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
 > **适用对象：** 产品、设计、前端、后端、测试、运营
 
 > **相关专项文档：** [Risk Control 说明文档](./RISK_CONTROL.md)（风控看板完整口径）
+
+### 更新记录
+
+| 版本 | 日期 | 变更摘要 |
+|------|------|----------|
+| v1.3 | 2026-07-14 | Ad Monitoring 移除素材筛选项/维度；报表 IR→IVR；两报表分工说明补全 |
+| v1.2 | 2026-07-14 | 按 Risk 文档格式重写全模块；Overview AU / 报表 eCPI·eCPM·eCPC；Creative Group 多选框与批量上传 |
+| v1.1 | 2026-07-13 | 按模块细化筛选、列表、操作 |
+| v1.0 | 2026-07-13 | 初版模块总览 |
 
 ---
 
@@ -27,6 +36,8 @@
 13. [Account Settings · Members](#13-account-settings--members)
 14. [Account Settings · Payment & Billing](#14-account-settings--payment--billing)
 15. [附录](#15-附录)
+    - [附录 A：报表指标字段库](#附录-a报表指标字段库)
+    - [附录 F：广告报表 vs 素材报表对照](#附录-f广告报表-vs-素材报表对照)
 
 ---
 
@@ -648,6 +659,10 @@ Search Data / Export Data
 
 列 = 已选 Dimensions + 已选 Indicators；列头可排序；分页 50 / page；空态 No data。
 
+**Mock 示例维度列：** Day, Campaign Name, Ad Group Name  
+
+**Mock 示例指标列：** Impressions, Clicks, CTR, Installs, CPI, IVR, Spend, Revenue, ROI, CPM, D0 total rev, D0 total ROAS  
+
 ### 9.7 操作
 
 | 操作 | 说明 |
@@ -666,29 +681,56 @@ Search Data / Export Data
 
 ### 10.1 模块定位
 
-按 **素材 / 素材组** 维度分析投放效果；保留完整素材筛选项与维度。
+按 **素材 / 素材组** 维度分析投放效果；保留完整素材筛选项与维度，与 Ad Monitoring 形成互补。
 
-### 10.2 筛选
+### 10.2 页面结构
 
-在 Ad Monitoring 条件基础上，**额外包含**：
+```
+查询条件（Timezone / Date / Campaign / Ad Group / Creative / Creative Group / Type / Region）
+    ↓
+Data Dimensions（时间 + Campaign + Ad Group + Creative + Creative Group + Country）
+    ↓
+Data Indicators 摘要 + Configure Columns
+    ↓
+Search Data / Export Data
+    ↓
+结果表（可排序）+ 分页
+```
 
-| 字段 | 控件 |
-|------|------|
-| Creative Name / ID | 文本 |
-| Creative Group Name / ID | 文本 |
-| Creative Type | 下拉 |
+### 10.3 筛选（查询条件，共 12 项）
 
-以及 Campaign / Ad Group / Delivery Region / Timezone / Date Range。
+| # | 字段 | 控件 |
+|---|------|------|
+| 1 | Timezone | 下拉 |
+| 2 | Date Range | 文本 |
+| 3–4 | Campaign Name / ID | 文本 |
+| 5–6 | Ad Group Name / ID | 文本 |
+| 7–8 | Creative Name / ID | 文本 |
+| 9–10 | Creative Group Name / ID | 文本 |
+| 11 | Creative Type | 下拉（Banner / Native Image / Video / Video EndCard / Playable） |
+| 12 | Delivery Region | 文本 |
 
-### 10.3 Data Dimensions
+### 10.4 Data Dimensions
 
 **默认勾选：** Day · Ad Group Name · Creative Name · Creative ID  
 
-**完整可选：** 时间维度 · Campaign Name/ID · Ad Group Name/ID · Creative Group Name/ID · Creative Name/ID · Creative Type · Country / Region  
+**完整可选：** Hour / Week / Month · Campaign Name/ID · Ad Group Name/ID · Creative Group Name/ID · Creative Name/ID · Creative Type · Country / Region  
 
-### 10.4 指标与操作
+### 10.5 Data Indicators
 
-Data Indicators 字段库、Configure Columns、Search / Export 与 §9 相同。
+与 §9 共用字段库与默认列；默认选中：
+
+`Impressions, Clicks, CTR, Installs, CPI, IVR, Spend, Revenue, ROI, CPM, D0 total rev, D0 total ROAS`
+
+### 10.6 结果列表
+
+**Mock 示例维度列：** Day, Ad Group Name, Creative Name, Creative ID  
+
+**Mock 示例指标列：** 同 §9.6  
+
+### 10.7 操作
+
+Search Data / Export Data / Configure Columns — 与 §9.7 相同。
 
 ---
 
@@ -905,7 +947,9 @@ Add Card / Add Billing Information 弹窗
 
 #### A.1 Basic
 
-Impressions, Clicks, CTR, Installs, CPI, **eCPI**, IVR, Spend, Revenue, ROI, CPM, **eCPM**, **eCPC**
+Impressions, Clicks, CTR, Installs, CPI, **eCPI**, **IVR**, Spend, Revenue, ROI, CPM, **eCPM**, **eCPC**
+
+> **IVR**（Install Conversion Rate / 安装转化率）：原 IR 字段，两报表默认指标列均使用 IVR 命名。
 
 #### A.2 Campaign goals
 
@@ -964,9 +1008,26 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 |------|----------|--------------|---------|
 | Spend / Revenue / ROI | ✓ | —（间接看预算） | ✓ Basic |
 | eCPI / eCPM / eCPC | ✓ | eCPI Spike / Campaign Actual | ✓ Basic |
+| IVR | — | — | ✓ Basic（默认列） |
 | D0/D7/D30 AU | ✓ | — | ✓ Active users |
 | CPI / CPM | —（看板用 e*） | Goal 可用 CPI | ✓ 并存 |
 | Goal / Pacing / Review | — | ✓ 主战场 | — |
+
+---
+
+### 附录 F：广告报表 vs 素材报表对照
+
+| 对比项 | Ad Monitoring | Creative Monitoring |
+|--------|---------------|---------------------|
+| page 标识 | `reports-ad-monitor` | `reports-creative-monitor` |
+| 分析粒度 | Campaign / Ad Group | Creative / Creative Group |
+| 查询条件数 | 7 | 12 |
+| 含素材筛选项 | 否 | 是（Creative / Group / Type） |
+| 含素材维度 | 否 | 是 |
+| Dimensions 默认 | Day · Campaign Name · Ad Group Name | Day · Ad Group Name · Creative Name · Creative ID |
+| 指标库 / 默认列 | 共用 | 共用 |
+| 默认指标含 IVR | 是 | 是 |
+| 典型下钻路径 | 看 Campaign 花费与目标 | 看单条 Creative 效果 |
 
 ---
 
@@ -990,9 +1051,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.3） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.2*
+*文档结束 · v1.3*

@@ -1,9 +1,12 @@
 # Risk Control Dashboard 说明文档
 
+> **版本：** v1.1  
+> **更新日期：** 2026-07-14  
 > **入口：** 左侧导航 Dashboard → Risk Control  
 > **页面标识：** `dashboard-risk`  
 > **对标：** AppLovin（AXON Ads Manager）广告主日常盯盘逻辑  
-> **适用对象：** 产品、运营、投放、测试
+> **适用对象：** 产品、运营、投放、测试  
+> **关联文档：** [全模块需求文档](./REQUIREMENTS.md)
 
 ---
 
@@ -308,7 +311,9 @@ Risk Control 展示的效果类字段与 Overview / Reports 保持一致：
 - **ROAS / D0 ROAS**  
 - **CPP**（若 Goal 为 CPP）  
 
-不在此页堆完整报表指标；下钻请用 Ad Monitoring Report。
+报表侧默认指标含 **IVR**（安装转化率），Risk 页不单独展示 IVR。
+
+不在此页堆完整报表指标；下钻请用 Ad Monitoring Report（Campaign/Ad Group）或 Creative Monitoring Report（素材）。
 
 ---
 
@@ -336,4 +341,4 @@ Risk Control 展示的效果类字段与 Overview / Reports 保持一致：
 
 ---
 
-*文档版本：对应 Risk Control Phase 1 实现（`index.html` `dashboard-risk`）*
+*文档结束 · v1.1*
