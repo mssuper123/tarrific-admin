@@ -1,6 +1,6 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.3  
+> **版本：** v1.4  
 > **更新日期：** 2026-07-14  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
@@ -12,6 +12,7 @@
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|----------|
+| v1.4 | 2026-07-14 | Ads 三步新建向导（Campaign / Ad Group / Creative）完整原型说明 |
 | v1.3 | 2026-07-14 | Ad Monitoring 移除素材筛选项/维度；报表 IR→IVR；两报表分工说明补全 |
 | v1.2 | 2026-07-14 | 按 Risk 文档格式重写全模块；Overview AU / 报表 eCPI·eCPM·eCPC；Creative Group 多选框与批量上传 |
 | v1.1 | 2026-07-13 | 按模块细化筛选、列表、操作 |
@@ -52,7 +53,7 @@
 tarrific.tv DSP 管理后台，面向广告主及代理商运营，提供：
 
 1. 投放效果与风险监控（Dashboard）  
-2. Campaign / Ad Group 管理（Ads）  
+2. Campaign / Ad Group 管理（Ads）— 列表 + 三步新建向导  
 3. 素材组与素材管理（Manage Creative）  
 4. 明细报表与离线下载（Reports）  
 5. App 资产与账户成员 / 计费（My Apps、Account Settings）
@@ -82,7 +83,7 @@ tarrific.tv DSP 管理后台，面向广告主及代理商运营，提供：
 |------|--------|-----------|------|
 | Dashboard | Overview | `dashboard-overview` | ✓ |
 | Dashboard | Risk Control | `dashboard-risk` | |
-| Ads | — | `ads` | |
+| Ads | — | `ads`（列表 `adsView=list`；新建 `adsView=wizard`） | |
 | Manage Creative | — | `manage-creative` | |
 | Reports | Download Reports | `reports-download` | |
 | Reports | Ad Monitoring Report | `reports-ad-monitor` | |
@@ -260,15 +261,18 @@ Creative Review Queue  |  Risk Alerts（过滤 + View / Mute）
 
 > **入口：** Ads  
 > **页面标识：** `ads`  
-> **面包屑：** Home > Ads  
-> **对标：** AppLovin Campaign / Ad Group 列表  
+> **视图状态：** `adsView` = `list` | `wizard`  
+> **面包屑：** Home > Ads（列表）；新建向导为全屏覆盖层（× New）  
+> **对标：** AppLovin Campaign / Ad Group 列表 + 创建向导  
 > **适用对象：** 投放运营
 
 ### 4.1 模块定位
 
-管理 Campaign 与 Ad Group 的启用状态，查看基础信息与时间戳；支持新建 / 编辑入口（部分能力原型占位）。
+管理 Campaign 与 Ad Group 的启用状态、基础信息与时间戳；支持 **三步新建向导**（Campaign → Ad Group → Creative），每步均支持 **New** 与 **Select Existing（History Data）** 两种创建模式，遵循当前 1:1 clone 逻辑说明文案。
 
 ### 4.2 页面结构
+
+**列表视图（`adsView=list`）**
 
 ```
 筛选栏（+ Filter / Date Range）
@@ -280,7 +284,28 @@ Tab：Campaign | Ad Group
 列表表 + 分页
 ```
 
-### 4.3 筛选
+**新建向导（`adsView=wizard`）**
+
+```
+顶部：× New
+    ↓
+左侧步骤条（可点击跳转）：1 Campaign → 2 Ad Group → 3 Creative
+    ↓
+右侧内容区：当前步骤表单
+    ↓
+右上：Back to List | Next Step（Step 1–2）/ Save（Step 3）
+```
+
+| 状态字段 | 说明 |
+|----------|------|
+| `adsWizardStep` | `1` Campaign · `2` Ad Group · `3` Creative |
+| `adsCampaignForm` | Step 1 表单 |
+| `adsAdGroupForm` | Step 2 表单 |
+| `adsCreativeForm` | Step 3 模式与创意类型 |
+
+### 4.3 列表页
+
+#### 4.3.1 筛选
 
 | 字段 | 说明 |
 |------|------|
@@ -294,7 +319,7 @@ Tab：Campaign | Ad Group
 | Campaign | Campaign Name |
 | Ad Group | Ad Group Name |
 
-### 4.4 列表
+#### 4.3.2 列表列
 
 | 列 | 说明 |
 |----|------|
@@ -308,20 +333,171 @@ Tab：Campaign | Ad Group
 
 **分页：** 10 / page  
 
-### 4.5 操作
+#### 4.3.3 列表操作
 
 | 位置 | 操作 | 说明 |
 |------|------|------|
-| 工具栏 | New | 新建（原型占位） |
-| 工具栏 | Edit ▾ | 需勾选一条，否则 disabled |
+| 工具栏 | **New** | 打开三步新建向导（`openAdsWizard`） |
+| 工具栏 | Edit ▾ | 需勾选一条，否则 disabled（占位） |
 | 工具栏 | Show Metrics | 显示指标列（占位） |
 | 工具栏 | Custom Columns | 自定义列（占位） |
 | 工具栏 | ↻ Refresh | 刷新列表 |
 | 行级 | 开关 | 切换 Active / Paused |
 
-### 4.6 原型边界
+---
 
-New / Edit / Metrics / Custom Columns 多为占位，未接完整表单与 API。
+### 4.4 Step 1 — Campaign
+
+**公共：** 模式切换 **New** | **Select Existing**；副文案：*Keep both creation, historical data, and template entries according to the current 1:1 clone logic.*
+
+#### 4.4.1 New
+
+| 区块 | 字段 | 控件 | 说明 |
+|------|------|------|------|
+| Objective | APP Promote / Web Promote | 分段按钮 | 切换时自动生成 Campaign Name 前缀 |
+| Campaign Settings | Campaign Name | 文本 | 默认 `APP Promote` / `Web Promote` + 时间戳 |
+| Campaign Settings | Enable Budget | 开关 | 默认 Off |
+
+#### 4.4.2 Select Existing
+
+| 区块 | 字段 | 控件 | 说明 |
+|------|------|------|------|
+| History Data | 历史 Campaign | 下拉 | Tab「History Data」；placeholder *Please enter History Data name* |
+| — | Objective / Campaign Settings | — | **不展示**（名称由历史数据带出，`applyCampaignHistory` 回填 objective） |
+
+**底部操作：** Back to List · **Next Step**
+
+---
+
+### 4.5 Step 2 — Ad Group
+
+**公共：** 模式切换 **New** | **Select Existing**
+
+#### 4.5.1 Select Existing
+
+| 字段 | 控件 |
+|------|------|
+| History Data | 下拉（历史 Ad Group 名称） |
+
+#### 4.5.2 New — Ad Group Settings
+
+| 字段 | 控件 | 说明 |
+|------|------|------|
+| Ad Group Name | 文本 | 默认 `Ad Group` + 时间戳 |
+| APP Promote / Web Promote | 下拉 | 标签随 Step 1 Objective 变化；选项来自 **My Apps** |
+
+#### 4.5.3 New — Target
+
+| 字段 | 选项 |
+|------|------|
+| Audience Type | Install · Retargeting |
+| Billing Method | CPM · CPS · CPC · CPI · CPA |
+| Bid Method | CPI · CPA · ROAS0 · ROAS7 |
+| Price | 数字 + **USD** 后缀 |
+
+#### 4.5.4 New — Audience
+
+| 字段 | 控件 | 说明 |
+|------|------|------|
+| Country | 文本 | *Please enter Country name* |
+| City | 文本 | *Please enter City name* |
+| Language | 文本 | *Please enter Language name* |
+| Audience | 开关 | 受众扩展开关 |
+| Device | 三列 | **OS（可搜索）** · OS Version · Device Brand；支持 **+ Add Device** 多行 |
+| Traffic | 下拉 | All Network · WiFi Only · Cellular Only |
+
+**Device — OS 可选项：** All OS · Android · iOS · 其他/Amazon（搜索过滤）
+
+#### 4.5.5 New — Budget & Schedule
+
+| 字段 | 控件 |
+|------|------|
+| Ad Group Total Budget | 数字 + USD |
+| Ad Group Daily Budget | 数字 + USD |
+| Delivery Time | Continuous · **Time Range**（显示 Start / End 日期） |
+| Time Slot | All Day · **Parted**（时区 + 7×24 网格 + Selected 摘要 + Clear Selected） |
+
+**Time Slot 网格：** 行 = Mon–Sun；列 = 0–23；点击选中；摘要格式如 `Monday04:00-05:00`
+
+#### 4.5.6 New — Tracking Links
+
+| 字段 |
+|------|
+| Impression URL |
+| Click Through URL |
+| Click Track URL |
+
+**底部操作：** Back to List · **Next Step**
+
+---
+
+### 4.6 Step 3 — Creative
+
+**公共：**
+
+1. 模式 **New** | **Select Existing**
+2. 创意类型 **Creative** | **Creative Group**（两种模式均可用）
+
+#### 4.6.1 Select Existing
+
+| 字段 | 控件 | 说明 |
+|------|------|------|
+| History Data | 下拉 | Tab「History Data」 |
+| 选项来源 | — | 选 **Creative** → `creativeHistoryData`；选 **Creative Group** → `creativeGroupHistoryData` |
+
+#### 4.6.2 New + Creative
+
+与 Manage Creative → Creatives 新建页一致（不含「Apply to Creative Group」区块）：
+
+| 区块 | 说明 |
+|------|------|
+| Creative Type | Banner · Native Image · Video · Video EndCard · Playable |
+| Upload | 拖拽/点击；单文件 image/video |
+| Title / Description | 文本 |
+| Native CTA Text | 文本；右侧手机预览同步 CTA |
+| 预览 | 右侧 For You 卡片 mock |
+
+#### 4.6.3 New + Creative Group
+
+与 Manage Creative → **New Creative Group** 弹窗字段一致（内嵌于向导，非弹窗）：
+
+| 字段 | 说明 |
+|------|------|
+| Creative Group Name * | 必填 |
+| Creative Type | 多选 checkbox |
+| Creatives | Upload · Add Existing Creative · Delete Selected；素材表格 |
+| Country | 默认 ALL |
+
+**底部操作：** Back to List · **Save**
+
+| Save 行为 | 说明 |
+|-----------|------|
+| Creative（New） | 写入 `assets`，Toast，关闭向导 |
+| Creative Group（New） | 写入 `groups`，Toast，关闭向导 |
+| Select Existing | 校验已选 History Data，Toast，关闭向导 |
+
+---
+
+### 4.7 向导通用交互
+
+| 交互 | 说明 |
+|------|------|
+| 步骤条点击 | `goAdsWizardStep(1\|2\|3)` 任意步骤可跳转 |
+| 步骤完成态 | 当前步骤之后的步骤号显示 ✓ |
+| × / Back to List | `closeAdsWizard`，回到列表并重置步骤 |
+| 打开向导 | `openAdsWizard` 重置 Campaign / Ad Group / Creative 表单 |
+
+---
+
+### 4.8 原型边界
+
+| 已实现（原型） | 待迭代 |
+|----------------|--------|
+| 三步向导 UI 与 Mock 表单 | Edit 批量编辑 |
+| History Data 下拉（Mock） | 真实历史/模板 API |
+| Step 3 写入本地 Mock 数据 | 服务端持久化与校验 |
+| 时区/排期/设备网格交互 | 复杂定向规则引擎 |
+| Show Metrics / Custom Columns | 列表指标列与 API |
 
 ---
 
@@ -1051,9 +1227,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.3） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.4） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.3*
+*文档结束 · v1.4*
