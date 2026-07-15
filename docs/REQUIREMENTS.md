@@ -1,6 +1,6 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.6  
+> **版本：** v1.7  
 > **更新日期：** 2026-07-15  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
@@ -12,6 +12,7 @@
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|----------|
+| v1.7 | 2026-07-15 | Ads Campaign / Ad Group 列表列对齐 AppLovin（含 Show Metrics 指标列） |
 | v1.6 | 2026-07-15 | Ad Group 向导 Step 2 仅新建；Ad / Creative Monitoring 移除 Week 维度 |
 | v1.5 | 2026-07-14 | Creative Group 列表精简列；Members Invite 改为 Password；My Apps 新增 Icon / Preview Link |
 | v1.4 | 2026-07-14 | Ads 三步新建向导（Campaign / Ad Group / Creative）完整原型说明 |
@@ -304,6 +305,8 @@ Tab：Campaign | Ad Group
 | `adsCampaignForm` | Step 1 表单 |
 | `adsAdGroupForm` | Step 2 表单 |
 | `adsCreativeForm` | Step 3 模式与创意类型 |
+| `adsCampaignData` / `adsAdGroupData` | 列表 Mock 数据（Campaign / Ad Group 分表） |
+| `adsShowMetrics` | 列表是否显示指标列，默认 `true` |
 
 ### 4.3 列表页
 
@@ -316,22 +319,41 @@ Tab：Campaign | Ad Group
 
 **Tab：**
 
-| Tab | Name 列标题 |
-|-----|-------------|
-| Campaign | Campaign Name |
-| Ad Group | Ad Group Name |
+| Tab | 数据源 | 固定列摘要 |
+|-----|--------|------------|
+| Campaign | `adsCampaignData` | Name · ID · Status · Budget · Created/Updated · Objective |
+| Ad Group | `adsAdGroupData` | Name · ID · Campaign · Region · Status · Schedule · Bid · Campaign Budget |
+
+**状态：** `adsShowMetrics`（默认 `true`）控制 Spend / Impressions 等指标列显隐。
 
 #### 4.3.2 列表列
 
+**Campaign Tab**
+
 | 列 | 说明 |
 |----|------|
-| 勾选框 | 批量选择 |
-| 开关 | Active / Paused |
-| Name | Campaign 或 Ad Group 名称 |
-| ID | 唯一标识 |
-| Status | Active（绿点）/ Paused（灰点） |
-| Updated Time | 最后更新 |
-| Created Time | 创建时间 |
+| 勾选框 / 开关 | 批量选择；Active / Paused |
+| Campaign Name / Campaign ID | 名称与 ID |
+| Status | Active / Paused |
+| Budget | 如 `0 USD` |
+| Created Time / Updated Time | `YYYY-MM-DD HH:MM:SS` |
+| Objective | APP Promote / Web Promote |
+| Show Metrics 展开 | Spend · Impressions · Clicks · Installs · CTR · CVR · CPC · CPM |
+
+**Ad Group Tab**
+
+| 列 | 说明 |
+|----|------|
+| 勾选框 / 开关 | 批量选择；Active / Paused |
+| Ad Group Name / Ad Group ID | 名称与 ID |
+| Campaign Name / Campaign ID | 所属 Campaign |
+| Region | 投放区域，无则 `-` |
+| Status | Active / Paused |
+| Updated Time / Created Time | 时间戳 |
+| Schedule | 如 Continuous |
+| Bid | 如 `CPI: 1 USD` |
+| Campaign Budget | Campaign 层预算 |
+| Show Metrics 展开 | Ad Group Budget · Spend · Impressions · Clicks · Installs · CTR · CVR · CPC · CPM |
 
 **分页：** 10 / page  
 
@@ -341,7 +363,7 @@ Tab：Campaign | Ad Group
 |------|------|------|
 | 工具栏 | **New** | 打开三步新建向导（`openAdsWizard`） |
 | 工具栏 | Edit ▾ | 需勾选一条，否则 disabled（占位） |
-| 工具栏 | Show Metrics | 显示指标列（占位） |
+| 工具栏 | Show Metrics | 勾选后展开指标列（Campaign 8 列 / Ad Group 9 列，见 §4.3.2） |
 | 工具栏 | Custom Columns | 自定义列（占位） |
 | 工具栏 | ↻ Refresh | 刷新列表 |
 | 行级 | 开关 | 切换 Active / Paused |
@@ -493,7 +515,7 @@ Tab：Campaign | Ad Group
 | History Data 下拉（Mock） | 真实历史/模板 API |
 | Step 3 写入本地 Mock 数据 | 服务端持久化与校验 |
 | 时区/排期/设备网格交互 | 复杂定向规则引擎 |
-| Show Metrics / Custom Columns | 列表指标列与 API |
+| Show Metrics 指标列切换（Mock） | Custom Columns · 真实指标 API |
 
 ---
 
@@ -1231,9 +1253,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.6） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.7） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.6*
+*文档结束 · v1.7*

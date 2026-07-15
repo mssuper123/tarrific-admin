@@ -1032,7 +1032,7 @@ tr:hover td{background:#f9fafb}
                   <button class="btn btn-default" disabled>Edit ▾</button>
                 </div>
                 <div class="toolbar-right">
-                  <label class="chk-label"><input type="checkbox" checked> Show Metrics</label>
+                  <label class="chk-label"><input type="checkbox" v-model="adsShowMetrics"> Show Metrics</label>
                   <button class="btn btn-default btn-sm">Custom Columns</button>
                   <button class="icon-btn" title="Refresh">↻</button>
                 </div>
@@ -1040,31 +1040,111 @@ tr:hover td{background:#f9fafb}
               <div class="table-wrap">
                 <table>
                   <thead>
-                    <tr>
+                    <tr v-if="adsTab==='campaign'">
                       <th><input type="checkbox"></th>
                       <th></th>
-                      <th>{{ adsTab==='campaign' ? 'Campaign Name' : 'Ad Group Name' }}</th>
-                      <th>ID</th>
+                      <th>Campaign Name</th>
+                      <th>Campaign ID</th>
+                      <th>Status</th>
+                      <th>Budget</th>
+                      <th>Created Time</th>
+                      <th>Updated Time</th>
+                      <th>Objective</th>
+                      <template v-if="adsShowMetrics">
+                        <th>Spend</th>
+                        <th>Impressions</th>
+                        <th>Clicks</th>
+                        <th>Installs</th>
+                        <th>CTR</th>
+                        <th>CVR</th>
+                        <th>CPC</th>
+                        <th>CPM</th>
+                      </template>
+                    </tr>
+                    <tr v-else>
+                      <th><input type="checkbox"></th>
+                      <th></th>
+                      <th>Ad Group Name</th>
+                      <th>Ad Group ID</th>
+                      <th>Campaign Name</th>
+                      <th>Campaign ID</th>
+                      <th>Region</th>
                       <th>Status</th>
                       <th>Updated Time</th>
                       <th>Created Time</th>
+                      <th>Schedule</th>
+                      <th>Bid</th>
+                      <th>Campaign Budget</th>
+                      <template v-if="adsShowMetrics">
+                        <th>Ad Group Budget</th>
+                        <th>Spend</th>
+                        <th>Impressions</th>
+                        <th>Clicks</th>
+                        <th>Installs</th>
+                        <th>CTR</th>
+                        <th>CVR</th>
+                        <th>CPC</th>
+                        <th>CPM</th>
+                      </template>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="row in adsData" :key="row.id">
-                      <td><input type="checkbox"></td>
-                      <td><label class="switch"><input type="checkbox" :checked="row.active"><span class="switch-slider"></span></label></td>
-                      <td>{{ row.name }}</td>
-                      <td>{{ row.id }}</td>
-                      <td><span class="status-dot" :class="row.active?'active':'paused'"></span>{{ row.active?'Active':'Paused' }}</td>
-                      <td>{{ row.updated }}</td>
-                      <td>{{ row.created }}</td>
-                    </tr>
+                    <template v-if="adsTab==='campaign'">
+                      <tr v-for="row in adsCampaignData" :key="row.id">
+                        <td><input type="checkbox"></td>
+                        <td><label class="switch"><input type="checkbox" v-model="row.active"><span class="switch-slider"></span></label></td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.id }}</td>
+                        <td><span class="status-dot" :class="row.active?'active':'paused'"></span>{{ row.active ? 'Active' : 'Paused' }}</td>
+                        <td>{{ row.budget }}</td>
+                        <td>{{ row.created }}</td>
+                        <td>{{ row.updated }}</td>
+                        <td>{{ row.objective }}</td>
+                        <template v-if="adsShowMetrics">
+                          <td>{{ row.spend || '—' }}</td>
+                          <td>{{ row.impressions }}</td>
+                          <td>{{ row.clicks }}</td>
+                          <td>{{ row.installs }}</td>
+                          <td>{{ row.ctr || '—' }}</td>
+                          <td>{{ row.cvr || '—' }}</td>
+                          <td>{{ row.cpc || '—' }}</td>
+                          <td>{{ row.cpm || '—' }}</td>
+                        </template>
+                      </tr>
+                    </template>
+                    <template v-else>
+                      <tr v-for="row in adsAdGroupData" :key="row.id">
+                        <td><input type="checkbox"></td>
+                        <td><label class="switch"><input type="checkbox" v-model="row.active"><span class="switch-slider"></span></label></td>
+                        <td>{{ row.name }}</td>
+                        <td>{{ row.id }}</td>
+                        <td>{{ row.campaignName }}</td>
+                        <td>{{ row.campaignId }}</td>
+                        <td>{{ row.region }}</td>
+                        <td><span class="status-dot" :class="row.active?'active':'paused'"></span>{{ row.active ? 'Active' : 'Paused' }}</td>
+                        <td>{{ row.updated }}</td>
+                        <td>{{ row.created }}</td>
+                        <td>{{ row.schedule }}</td>
+                        <td>{{ row.bid }}</td>
+                        <td>{{ row.campaignBudget }}</td>
+                        <template v-if="adsShowMetrics">
+                          <td>{{ row.adGroupBudget }}</td>
+                          <td>{{ row.spend || '—' }}</td>
+                          <td>{{ row.impressions }}</td>
+                          <td>{{ row.clicks }}</td>
+                          <td>{{ row.installs }}</td>
+                          <td>{{ row.ctr || '—' }}</td>
+                          <td>{{ row.cvr || '—' }}</td>
+                          <td>{{ row.cpc || '—' }}</td>
+                          <td>{{ row.cpm || '—' }}</td>
+                        </template>
+                      </tr>
+                    </template>
                   </tbody>
                 </table>
               </div>
               <div class="pagination">
-                Total {{ adsData.length }}
+                Total {{ adsTab==='campaign' ? adsCampaignData.length : adsAdGroupData.length }}
                 <button class="page-btn">‹</button>
                 <button class="page-btn active">1</button>
                 <button class="page-btn">›</button>
@@ -2589,6 +2669,7 @@ createApp({
     const page = ref('dashboard-overview');
     const adsTab = ref('campaign');
     const adsView = ref('list');
+    const adsShowMetrics = ref(true);
     const adsWizardStep = ref(1);
     const adsCampaignForm = reactive({
       mode: 'new',
@@ -3318,10 +3399,33 @@ createApp({
       else { creativeMonitorSort.key = key; creativeMonitorSort.dir = 'asc'; }
     }
 
-    const adsData = [
-      { id: '10021', name: 'Summer Promo US', active: true, updated: '2026-07-08 14:22', created: '2026-06-15 09:10' },
-      { id: '10018', name: 'Brand Awareness EU', active: false, updated: '2026-07-05 11:30', created: '2026-05-20 16:45' },
-    ];
+    const adsCampaignData = ref([
+      {
+        id: '20750589204', name: 'Test', active: false, budget: '0 USD',
+        created: '2026-07-09 12:00:00', updated: '2026-07-09 12:00:00', objective: 'APP Promote',
+        spend: '', impressions: '0', clicks: '0', installs: '0', ctr: '', cvr: '', cpc: '', cpm: ''
+      },
+      {
+        id: '10021', name: 'Summer Promo US', active: true, budget: '500 USD',
+        created: '2026-06-15 09:10:00', updated: '2026-07-08 14:22:00', objective: 'APP Promote',
+        spend: '$528.40', impressions: '125,430', clicks: '3,842', installs: '892', ctr: '3.06%', cvr: '23.2%', cpc: '$0.14', cpm: '$4.21'
+      },
+    ]);
+
+    const adsAdGroupData = ref([
+      {
+        id: '50211001', name: '广告组20260709120000', campaignName: 'Test', campaignId: '20750589204',
+        region: '-', active: false, updated: '2026-07-09 12:00:00', created: '2026-07-09 12:00:00',
+        schedule: 'Continuous', bid: 'CPI: 1 USD', campaignBudget: '0 USD', adGroupBudget: 'Total Budget: 0 USD',
+        spend: '', impressions: '0', clicks: '0', installs: '0', ctr: '', cvr: '', cpc: '', cpm: ''
+      },
+      {
+        id: '5021', name: 'US_Android', campaignName: 'Summer Promo US', campaignId: '10021',
+        region: 'US', active: true, updated: '2026-07-08 14:22:00', created: '2026-06-20 10:15:00',
+        schedule: 'Continuous', bid: 'CPI: 2.15 USD', campaignBudget: '500 USD', adGroupBudget: 'Daily Budget: 100 USD',
+        spend: '$528.40', impressions: '125,430', clicks: '3,842', installs: '892', ctr: '3.06%', cvr: '23.2%', cpc: '$0.14', cpm: '$4.21'
+      },
+    ]);
 
     const campaignHistoryData = [
       { id: 'h-c1', name: 'APP Promote20260615091000', objective: 'app' },
@@ -4168,7 +4272,7 @@ createApp({
       creativeMonitorFilter, creativeMonitorDimensions, creativeMonitorSelectedMetrics,
       creativeMonitorTableColumns, creativeMonitorDisplayData, creativeMonitorSort,
       searchCreativeMonitor, sortCreativeMonitor,
-      navItems, adsData, adsCampaignForm, adsAdGroupForm, adsCreativeForm,
+      navItems, adsCampaignData, adsAdGroupData, adsShowMetrics, adsCampaignForm, adsAdGroupForm, adsCreativeForm,
       campaignHistoryData, creativeHistoryData, creativeGroupHistoryData, adsCreativeHistoryOptions,
       adsTrafficOptions,
       adsScheduleDays, adsScheduleHours, adsTimeSlotTimezones, selectedTimeSlotSummary,
