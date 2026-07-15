@@ -1160,25 +1160,7 @@ tr:hover td{background:#f9fafb}
                         <button type="button" class="btn btn-primary" @click="adsWizardNext">Next Step</button>
                       </div>
                     </div>
-                    <div class="creation-mode-seg">
-                      <button type="button" class="creation-mode-btn" :class="{active:adsAdGroupForm.mode==='new'}" @click="setAdGroupMode('new')">New</button>
-                      <button type="button" class="creation-mode-btn" :class="{active:adsAdGroupForm.mode==='existing'}" @click="setAdGroupMode('existing')">Select Existing</button>
-                    </div>
 
-                    <template v-if="adsAdGroupForm.mode==='existing'">
-                      <div class="wizard-tab-bar">
-                        <div class="wizard-tab active">History Data</div>
-                      </div>
-                      <div class="wizard-section">
-                        <div class="wizard-section-title">History Data</div>
-                        <select class="form-select" v-model="adsAdGroupForm.historyId">
-                          <option value="">Please enter History Data name</option>
-                          <option v-for="h in adGroupHistoryData" :key="h.id" :value="h.id">{{ h.name }}</option>
-                        </select>
-                      </div>
-                    </template>
-
-                    <template v-else>
                       <div class="wizard-section">
                         <div class="wizard-section-title">Ad Group Settings</div>
                         <div class="form-group">
@@ -1392,7 +1374,6 @@ tr:hover td{background:#f9fafb}
                           <input class="form-input" v-model="adsAdGroupForm.clickTrackUrl" placeholder="https://">
                         </div>
                       </div>
-                    </template>
                   </template>
 
                   <!-- Step 3: Creative -->
@@ -2617,8 +2598,6 @@ createApp({
       enableBudget: false
     });
     const adsAdGroupForm = reactive({
-      mode: 'new',
-      historyId: '',
       name: '',
       appId: '',
       audienceType: 'install',
@@ -3079,7 +3058,6 @@ createApp({
     const adMonitorDimensions = ref([
       { key: 'day', label: 'Day', selected: true },
       { key: 'hour', label: 'Hour', selected: false },
-      { key: 'week', label: 'Week', selected: false },
       { key: 'month', label: 'Month', selected: false },
       { key: 'campaignName', label: 'Campaign Name', selected: true },
       { key: 'campaignId', label: 'Campaign ID', selected: false },
@@ -3278,7 +3256,6 @@ createApp({
     const creativeMonitorDimensions = ref([
       { key: 'day', label: 'Day', selected: true },
       { key: 'hour', label: 'Hour', selected: false },
-      { key: 'week', label: 'Week', selected: false },
       { key: 'month', label: 'Month', selected: false },
       { key: 'campaignName', label: 'Campaign Name', selected: false },
       { key: 'campaignId', label: 'Campaign ID', selected: false },
@@ -3350,12 +3327,6 @@ createApp({
       { id: 'h-c1', name: 'APP Promote20260615091000', objective: 'app' },
       { id: 'h-c2', name: 'Web Promote20260520164500', objective: 'web' },
       { id: 'h-c3', name: 'Summer Promo US (Clone)', objective: 'app' },
-    ];
-
-    const adGroupHistoryData = [
-      { id: 'h-g1', name: 'US_Android_20260620', campaignId: '10021' },
-      { id: 'h-g2', name: 'EU_iOS_20260522', campaignId: '10018' },
-      { id: 'h-g3', name: 'APAC_Rewarded_20260701', campaignId: '10021' },
     ];
 
     const creativeHistoryData = [
@@ -3520,8 +3491,6 @@ createApp({
     }
 
     function resetAdsAdGroupForm() {
-      adsAdGroupForm.mode = 'new';
-      adsAdGroupForm.historyId = '';
       adsAdGroupForm.name = generateAdGroupName();
       adsAdGroupForm.appId = '';
       adsAdGroupForm.audienceType = 'install';
@@ -3546,16 +3515,6 @@ createApp({
       adsAdGroupForm.clickThroughUrl = '';
       adsAdGroupForm.clickTrackUrl = '';
       deviceOsOpenIndex.value = -1;
-    }
-
-    function setAdGroupMode(mode) {
-      adsAdGroupForm.mode = mode;
-      if (mode === 'new') {
-        adsAdGroupForm.historyId = '';
-        if (!adsAdGroupForm.name) adsAdGroupForm.name = generateAdGroupName();
-      } else {
-        adsAdGroupForm.historyId = '';
-      }
     }
 
     function setCampaignObjective(objective) {
@@ -4210,7 +4169,7 @@ createApp({
       creativeMonitorTableColumns, creativeMonitorDisplayData, creativeMonitorSort,
       searchCreativeMonitor, sortCreativeMonitor,
       navItems, adsData, adsCampaignForm, adsAdGroupForm, adsCreativeForm,
-      campaignHistoryData, adGroupHistoryData, creativeHistoryData, creativeGroupHistoryData, adsCreativeHistoryOptions,
+      campaignHistoryData, creativeHistoryData, creativeGroupHistoryData, adsCreativeHistoryOptions,
       adsTrafficOptions,
       adsScheduleDays, adsScheduleHours, adsTimeSlotTimezones, selectedTimeSlotSummary,
       deviceOsOpenIndex, adsAssetFile,
@@ -4218,7 +4177,7 @@ createApp({
       isTimeSlotSelected, toggleTimeSlot, clearTimeSlots,
       openDeviceOsSelect, onDeviceOsQuery, selectDeviceOs, addDeviceRow, closeDeviceOsSelect,
       openAdsWizard, closeAdsWizard, adsWizardNext, goAdsWizardStep, saveAdsWizard, finishAdsWizard,
-      setCampaignMode, setAdGroupMode, setCreativeMode, setCreativeEntryType, triggerAdsAssetUpload,
+      setCampaignMode, setCreativeMode, setCreativeEntryType, triggerAdsAssetUpload,
       setCampaignObjective, applyCampaignHistory,
       creativeTypes, assets, groups,
       groupFilter, filteredGroups, assetForm, applyToGroupForm, filteredApplyGroups, allApplyGroupsSelected,

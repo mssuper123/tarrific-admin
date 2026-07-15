@@ -1,7 +1,7 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.5  
-> **更新日期：** 2026-07-14  
+> **版本：** v1.6  
+> **更新日期：** 2026-07-15  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
 > **适用对象：** 产品、设计、前端、后端、测试、运营
@@ -12,6 +12,7 @@
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|----------|
+| v1.6 | 2026-07-15 | Ad Group 向导 Step 2 仅新建；Ad / Creative Monitoring 移除 Week 维度 |
 | v1.5 | 2026-07-14 | Creative Group 列表精简列；Members Invite 改为 Password；My Apps 新增 Icon / Preview Link |
 | v1.4 | 2026-07-14 | Ads 三步新建向导（Campaign / Ad Group / Creative）完整原型说明 |
 | v1.3 | 2026-07-14 | Ad Monitoring 移除素材筛选项/维度；报表 IR→IVR；两报表分工说明补全 |
@@ -269,7 +270,7 @@ Creative Review Queue  |  Risk Alerts（过滤 + View / Mute）
 
 ### 4.1 模块定位
 
-管理 Campaign 与 Ad Group 的启用状态、基础信息与时间戳；支持 **三步新建向导**（Campaign → Ad Group → Creative），每步均支持 **New** 与 **Select Existing（History Data）** 两种创建模式，遵循当前 1:1 clone 逻辑说明文案。
+管理 Campaign 与 Ad Group 的启用状态、基础信息与时间戳；支持 **三步新建向导**（Campaign → Ad Group → Creative）。**Step 1（Campaign）** 与 **Step 3（Creative）** 支持 **New** / **Select Existing（History Data）**；**Step 2（Ad Group）** 直接进入新建表单，无模式切换。
 
 ### 4.2 页面结构
 
@@ -372,22 +373,16 @@ Tab：Campaign | Ad Group
 
 ### 4.5 Step 2 — Ad Group
 
-**公共：** 模式切换 **New** | **Select Existing**
+**说明：** 无 New / Select Existing 切换；进入本步后直接填写完整新建表单。副文案：*Keep both creation, historical data, and template entries according to the current 1:1 clone logic.*
 
-#### 4.5.1 Select Existing
-
-| 字段 | 控件 |
-|------|------|
-| History Data | 下拉（历史 Ad Group 名称） |
-
-#### 4.5.2 New — Ad Group Settings
+#### 4.5.1 Ad Group Settings
 
 | 字段 | 控件 | 说明 |
 |------|------|------|
 | Ad Group Name | 文本 | 默认 `Ad Group` + 时间戳 |
 | APP Promote / Web Promote | 下拉 | 标签随 Step 1 Objective 变化；选项来自 **My Apps** |
 
-#### 4.5.3 New — Target
+#### 4.5.2 Target
 
 | 字段 | 选项 |
 |------|------|
@@ -396,7 +391,7 @@ Tab：Campaign | Ad Group
 | Bid Method | CPI · CPA · ROAS0 · ROAS7 |
 | Price | 数字 + **USD** 后缀 |
 
-#### 4.5.4 New — Audience
+#### 4.5.3 Audience
 
 | 字段 | 控件 | 说明 |
 |------|------|------|
@@ -409,7 +404,7 @@ Tab：Campaign | Ad Group
 
 **Device — OS 可选项：** All OS · Android · iOS · 其他/Amazon（搜索过滤）
 
-#### 4.5.5 New — Budget & Schedule
+#### 4.5.4 Budget & Schedule
 
 | 字段 | 控件 |
 |------|------|
@@ -420,7 +415,7 @@ Tab：Campaign | Ad Group
 
 **Time Slot 网格：** 行 = Mon–Sun；列 = 0–23；点击选中；摘要格式如 `Monday04:00-05:00`
 
-#### 4.5.6 New — Tracking Links
+#### 4.5.5 Tracking Links
 
 | 字段 |
 |------|
@@ -815,7 +810,7 @@ Search Data / Export Data
 
 **默认勾选：** Day · Campaign Name · Ad Group Name  
 
-**可选：** Hour / Week / Month / Campaign ID / Ad Group ID / Country · Region  
+**可选：** Hour / Month / Campaign ID / Ad Group ID / Country · Region  
 
 > **已从本页移除：** Creative Group Name/ID、Creative Name/ID、Creative Type。
 
@@ -888,7 +883,7 @@ Search Data / Export Data
 
 **默认勾选：** Day · Ad Group Name · Creative Name · Creative ID  
 
-**完整可选：** Hour / Week / Month · Campaign Name/ID · Ad Group Name/ID · Creative Group Name/ID · Creative Name/ID · Creative Type · Country / Region  
+**完整可选：** Hour / Month · Campaign Name/ID · Ad Group Name/ID · Creative Group Name/ID · Creative Name/ID · Creative Type · Country / Region  
 
 ### 10.5 Data Indicators
 
@@ -1236,9 +1231,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.5） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.6） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.5*
+*文档结束 · v1.6*
