@@ -1,6 +1,6 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.8  
+> **版本：** v1.9  
 > **更新日期：** 2026-07-16  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
@@ -12,6 +12,7 @@
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|----------|
+| v1.9 | 2026-07-16 | Targeting Settings 拆为 Allow & Block + Data Packages 子菜单；数据包 Country/Platform/Device Type 联动与搜索选择器；黑白名单模块重命名 Allow & Block，列表 App ID 列与 My Apps 统一 |
 | v1.8 | 2026-07-16 | 新增 Targeting Settings 模块（按 App 配置黑白名单）；Ads Step 2 支持 Ad Group 级黑白名单；My Apps 快捷入口 |
 | v1.7 | 2026-07-15 | Ads Campaign / Ad Group 列表列对齐 AppLovin（含 Show Metrics 指标列） |
 | v1.6 | 2026-07-15 | Ad Group 向导 Step 2 仅新建；Ad / Creative Monitoring 移除 Week 维度 |
@@ -89,7 +90,8 @@ tarrific.tv DSP 管理后台，面向广告主及代理商运营，提供：
 | Dashboard | Overview | `dashboard-overview` | ✓ |
 | Dashboard | Risk Control | `dashboard-risk` | |
 | Ads | — | `ads`（列表 `adsView=list`；新建 `adsView=wizard`） | |
-| Targeting Settings | — | `targeting-settings` | |
+| Targeting Settings | Allow & Block | `targeting-list` | ✓（子菜单默认） |
+| Targeting Settings | Data Packages | `targeting-data-packages` | |
 | Manage Creative | — | `manage-creative` | |
 | Reports | Download Reports | `reports-download` | |
 | Reports | Ad Monitoring Report | `reports-ad-monitor` | |
@@ -310,8 +312,10 @@ Tab：Campaign | Ad Group
 | `adsCreativeForm` | Step 3 模式与创意类型 |
 | `adsCampaignData` / `adsAdGroupData` | 列表 Mock 数据（Campaign / Ad Group 分表） |
 | `adsShowMetrics` | 列表是否显示指标列，默认 `true` |
-| `targetingSettingsData` | App 级黑白名单 Mock 数据 |
-| `targetingModal` | 定向设置弹窗表单状态 |
+| `targetingSettingsData` | Allow & Block Mock 数据 |
+| `targetingModal` | Allow & Block 弹窗状态 |
+| `dataPackages` | Data Packages Mock 数据 |
+| `adsAdGroupForm.dataPackageIds` | Step 2 已选数据包 ID |
 
 ### 4.3 列表页
 
@@ -428,19 +432,20 @@ Tab：Campaign | Ad Group
 | Audience | 开关 | 受众扩展开关 |
 | Device | 三列 | **OS（可搜索）** · OS Version · Device Brand；支持 **+ Add Device** 多行 |
 | Traffic | 下拉 | All Network · WiFi Only · Cellular Only |
+| Data Packages | 搜索选择器 | 需先填 **Country** 并选推广 App；**+ Select Data Packages** 打开搜索面板，仅展示匹配 Country + Platform 的包；已选以芯片展示 |
 
 **Device — OS 可选项：** All OS · Android · iOS · 其他/Amazon（搜索过滤）
 
-#### 4.5.4 App List Targeting
+#### 4.5.4 Allow & Block
 
-投放某个 App 时，控制使用或不使用哪些**来源 App** 的流量数据。
+投放某个 App 时，控制使用或不使用哪些**来源 App** 的流量数据（Ad Group 级覆盖；App 级默认见 Allow & Block 模块）。
 
 | 字段 | 控件 | 说明 |
 |------|------|------|
 | Whitelist | 文本域 + Upload | 仅使用列表中的来源 App ID |
 | Blacklist | 文本域 + Upload | 排除列表中的来源 App ID |
-| Load from app-level settings | 链接 | 从 Targeting Settings 载入当前所选 App 的默认配置 |
-| Targeting Settings | 链接 | 跳转定向设置模块 |
+| Load from app-level settings | 链接 | 从 Allow & Block 载入当前所选推广 App 的默认配置 |
+| Allow & Block | 链接 | 跳转 Allow & Block 子页 |
 
 **输入规则：** 每行一个 App ID，或用逗号 / 空格分隔；支持上传 `.txt` / `.csv` 合并导入。
 
@@ -534,7 +539,7 @@ Tab：Campaign | Ad Group
 | Step 3 写入本地 Mock 数据 | 服务端持久化与校验 |
 | 时区/排期/设备网格交互 | 复杂定向规则引擎 |
 | Show Metrics 指标列切换（Mock） | Custom Columns · 真实指标 API |
-| Targeting Settings 模块 + App/Ad Group 黑白名单录入上传（Mock） | 黑白名单校验 · 与投放引擎联动 |
+| Targeting Settings 模块 + Allow & Block / Data Packages（Mock） | 黑白名单与数据包校验 · 与投放引擎联动 |
 
 ---
 
@@ -973,7 +978,7 @@ New / Edit App 弹窗
 | 字段 | 选项 |
 |------|------|
 | App Name | 模糊匹配 |
-| Platform | 空 / iOS / Android |
+| Platform | 空 / iOS / Android / Mix |
 | Status | 空 / Active / Paused |
 
 ### 11.4 列表
@@ -983,7 +988,7 @@ New / Edit App 弹窗
 | 勾选 + 开关 | 批量选择；Active / Paused |
 | App Name | 图标 + 名称 |
 | Status | Active / Paused 徽章 |
-| Actions | Edit + ▾（更多占位） |
+| Actions | Edit + **Allow & Block**（跳转配置弹窗） |
 | App ID | Bundle ID |
 | OS / Timezone | |
 | Active Campaigns | 活跃 Campaign 数 |
@@ -1000,7 +1005,7 @@ New / Edit App 弹窗
 | + New App | 新建弹窗 |
 | 行开关 | Active / Paused，Toast |
 | Edit | 回填编辑 |
-| Targeting | 跳转 Targeting Settings 并打开该 App 的配置弹窗 |
+| Allow & Block | 跳转 Allow & Block 并打开该 App 的配置弹窗 |
 
 **弹窗字段（自上而下）：**
 
@@ -1021,18 +1026,33 @@ New / Edit App 弹窗
 
 ## 12. Targeting Settings
 
-> **入口：** 侧栏 Targeting Settings；或 My Apps 行内 **Targeting**；或 Ads Step 2 链接  
-> **页面标识：** `targeting-settings`  
-> **面包屑：** Home > Targeting Settings  
+> **入口：** 侧栏 Targeting Settings（可展开子菜单）  
+> **适用对象：** 投放运营  
 
-### 12.1 模块定位
+Targeting Settings 为一级导航分组，包含两个子模块：
 
-按 **App** 配置投放黑白名单：推广某个 App 时，指定哪些来源 App 的流量**允许使用**（Whitelist）或**禁止使用**（Blacklist）。与参考竞品不同，本模块采用 App 下拉 + 双栏文本录入/上传 + 列表汇总展示。
+| 子菜单 | page 标识 | 用途 |
+|--------|-----------|------|
+| **Allow & Block** | `targeting-list` | 按 My Apps 中的推广 App 配置来源 App 黑白名单 |
+| **Data Packages** | `targeting-data-packages` | 上传受众设备 ID 数据包，供 Ads Audience 选用 |
 
-### 12.2 页面结构
+> **命名说明：** 黑白名单子菜单为 **Allow & Block**（非 App Lists），强调按推广 App 配置允许/禁止的来源 App；列表 **App ID** 列与 My Apps 命名一致。
+
+---
+
+### 12.1 Allow & Block
+
+> **面包屑：** Home > Targeting Settings > Allow & Block  
+> **入口：** 子菜单 Allow & Block；My Apps 行内 **Allow & Block**；Ads Step 2 链接  
+
+#### 12.1.1 模块定位
+
+从 **My Apps** 选择一个推广 App，为其配置来源 App 的 **Whitelist**（允许）与 **Blacklist**（禁止）。列表展示已配置的 App，而非 My Apps 全量列表。
+
+#### 12.1.2 页面结构
 
 ```
-页头 + New Setting
+页头 + New Config
     ↓
 说明文案
     ↓
@@ -1043,29 +1063,26 @@ New / Edit App 弹窗
 New / Edit 弹窗（App 选择 + Whitelist / Blacklist）
 ```
 
-### 12.3 筛选
+#### 12.1.3 筛选
 
 | 字段 | 选项 |
 |------|------|
 | App Name | 模糊匹配 |
 | 列表类型 | All · Has whitelist · Has blacklist · Empty |
 
-### 12.4 列表
+#### 12.1.4 列表
 
 | 列 | 说明 |
 |----|------|
 | App Name | 图标 + 名称 |
-| Bundle ID | 推广 App 的 Bundle ID |
-| Platform | iOS / Android |
+| App ID | 与 My Apps 一致 |
+| Platform | iOS / Android / Mix |
 | Whitelist | ID 数量徽章 |
 | Blacklist | ID 数量徽章 |
 | Updated Time | 最后更新时间 |
 | Actions | Edit · Delete |
 
-**分页：** 10 / page  
-**空态：** No targeting settings found  
-
-### 12.5 弹窗字段
+#### 12.1.5 弹窗字段
 
 | 字段 | 必填 | 控件 | 说明 |
 |------|------|------|------|
@@ -1073,24 +1090,122 @@ New / Edit 弹窗（App 选择 + Whitelist / Blacklist）
 | Whitelist | 否 | 文本域 + Upload | 来源 App ID，支持 `.txt` / `.csv` 合并导入 |
 | Blacklist | 否 | 文本域 + Upload | 同上 |
 
-**预览：** 弹窗底部展示前 8 个 ID 芯片，超出显示 +N more。
+#### 12.1.6 操作与联动
 
-### 12.6 操作
+| 操作 / 入口 | 说明 |
+|-------------|------|
+| + New Config | 从尚未配置的 My Apps 中选择 App 并新建 |
+| Edit / Delete / Save | 标准 CRUD，写入 `targetingSettingsData` Mock |
+| My Apps → Allow & Block | 跳转并打开对应 App 弹窗 |
+| Ads Step 2 → Load from app-level settings | 将 App 级配置填入 Ad Group 表单 |
+
+---
+
+### 12.2 Data Packages
+
+> **面包屑：** Home > Targeting Settings > Data Packages  
+> **入口：** 子菜单 Data Packages；Ads Step 2 Audience → Manage Data Packages  
+
+#### 12.2.1 模块定位
+
+上传受众**设备 ID** 文件（IDFA、GAID 等），形成可复用的定向数据包，在 Ads Step 2 **Audience** 中通过搜索选择器绑定。
+
+#### 12.2.2 页面结构
+
+```
+页头 + New Package
+    ↓
+说明文案
+    ↓
+筛选（Package Name / Package ID / Platform）+ Search
+    ↓
+数据包列表 + 分页
+    ↓
+New / Edit 弹窗
+```
+
+#### 12.2.3 筛选
+
+| 字段 | 选项 |
+|------|------|
+| Package Name | 模糊匹配 |
+| Package ID | 模糊匹配 |
+| Platform | 空 / iOS / Android / Mix |
+
+#### 12.2.4 列表
+
+| 列 | 说明 |
+|----|------|
+| ID | 如 `dp-10001` |
+| Package Name | 数据包名称 |
+| Device Type | 所含设备类型，如 IDFA · GAID |
+| Platform | iOS / Android / Mix |
+| Country | Global · United States · China · United Kingdom · Japan | 与 Ads Audience **Country** 字段命名统一 |
+| Files | 已上传文件名芯片 |
+| Created Time | 创建时间 |
+| Actions | Edit · Delete |
+
+**空态：** No data packages found  
+
+#### 12.2.5 弹窗字段
+
+| 字段 | 必填 | 控件 | 说明 |
+|------|------|------|------|
+| Platform | 是 | 下拉 | **iOS** · **Android** · **Mix**；编辑时不可改；切换后 Device Type 选项联动 |
+| Country | 是 | 下拉 | Global · US · CN · GB · JP；与 Ads Country 匹配规则见 §12.2.7 |
+| Package Name | 是 | 文本 | |
+| Upload Files | 是 | 表格行 | 每行：Device Type 下拉 + 文件上传 + Delete；**+ Add device type** 可增行 |
+
+**Device Type 随 Platform 联动：**
+
+| Platform | 可选 Device Type |
+|----------|------------------|
+| iOS | IDFA · IDFA_MD5 |
+| Android | IMEI · GAID · OAID · IMEI_MD5 · GAID_MD5 · OAID_MD5 |
+| Mix | IMEI · IDFA · GAID · OAID · IMEI_MD5 · IDFA_MD5 · GAID_MD5 · OAID_MD5 |
+
+弹窗 Platform 下方展示当前平台可用类型；**+ Add device type** 在达到上限后禁用。
+
+**文件约束：** `.txt` · `.csv` · `.gz`，单文件 ≤ 500MB（原型 Mock 解析行数）  
+
+#### 12.2.6 操作
 
 | 操作 | 说明 |
 |------|------|
-| + New Setting | 为尚未配置的 App 新建 |
-| Edit | 打开弹窗回填 |
-| Delete | 删除该 App 配置，Toast |
-| Save | 写入 `targetingSettingsData` Mock |
+| + New Package | 打开新建弹窗 |
+| Edit / Delete / Save | 写入 `dataPackages` Mock |
+| Search | 刷新列表（Toast） |
 
-### 12.7 与 Ads / My Apps 联动
+#### 12.2.7 与 Ads 联动
 
-| 入口 | 行为 |
+**选择流程（Step 2 Audience）：**
+
+1. 填写 **Country** 并选择推广 **App**（确定 Platform）
+2. 点击 **+ Select Data Packages** 打开搜索面板
+3. 面板内仅列出同时匹配 Country + Platform 的包（`Global` 国家包匹配任意 Country）
+4. 支持按名称 / ID 搜索；选中后以芯片展示，可单独移除
+
+**匹配规则：**
+
+| 维度 | 规则 |
 |------|------|
-| My Apps → Targeting | 跳转本页并打开对应 App 弹窗 |
-| Ads Step 2 → Load from app-level settings | 将 App 级配置填入 Ad Group 表单 |
-| Ads Step 2 → Targeting Settings | 跳转本页（若已选 App 则打开其弹窗） |
+| Platform | 与 App OS 一致，或包 Platform 为 **Mix** |
+| Country | 包 Country 为 **Global**，或与 Audience Country 文本模糊匹配（如 `US` / `United States`） |
+
+- 链接 **Manage Data Packages** 跳转本子页  
+- Country 或 App 变更时，自动移除不再匹配的已选包  
+
+---
+
+### 12.3 状态字段
+
+| 字段 | 说明 |
+|------|------|
+| `targetingSettingsData` | Allow & Block Mock 数据 |
+| `targetingModal` | Allow & Block 弹窗状态 |
+| `dataPackages` | Data Packages Mock 数据 |
+| `dataPackageModal` | Data Packages 弹窗状态 |
+| `adsAdGroupForm.dataPackageIds` | Step 2 已选数据包 ID 数组 |
 
 ---
 
@@ -1295,7 +1410,8 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 | Reports | Ad Monitoring | `reports-ad-monitor` |
 | Reports | Creative Monitoring | `reports-creative-monitor` |
 | Apps | My Apps | `apps` |
-| Targeting | Targeting Settings | `targeting-settings` |
+| Targeting | Allow & Block | `targeting-list` |
+| Targeting | Data Packages | `targeting-data-packages` |
 | Settings | Account Settings | `account-settings` |
 
 ---
@@ -1349,9 +1465,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.8） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.9） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.8*
+*文档结束 · v1.9*

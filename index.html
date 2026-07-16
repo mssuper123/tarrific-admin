@@ -639,6 +639,34 @@ tr:hover td{background:#f9fafb}
 .targeting-count-badge{display:inline-flex;align-items:center;justify-content:center;min-width:28px;padding:2px 8px;border-radius:10px;background:#f3f4f6;font-size:12px;font-weight:600;color:#374151}
 .targeting-count-badge.has{background:#eff8fd;color:#0891b2}
 
+/* Data Packages */
+.dp-upload-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.dp-upload-table th{background:#fafbfc;padding:10px 12px;text-align:left;font-weight:600;color:#6b7280;border-bottom:1px solid #e8ecf1}
+.dp-upload-table td{padding:10px 12px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+.dp-file-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:#f3f4f6;border-radius:4px;font-size:12px;color:#374151;max-width:220px}
+.dp-file-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dp-add-row{display:inline-flex;align-items:center;gap:4px;margin-top:10px;font-size:12px;color:#5bc0eb;cursor:pointer;font-weight:500;background:none;border:none;padding:0}
+.dp-add-row:hover{text-decoration:underline}
+.package-select-list{border:1px solid #e5e9f0;border-radius:4px;max-height:180px;overflow-y:auto;background:#fff}
+.package-select-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #f3f4f6;transition:background .15s}
+.package-select-item:last-child{border-bottom:none}
+.package-select-item:hover{background:#f9fafb}
+.package-select-item.selected{background:#eff8fd}
+.package-select-item input{margin-top:2px;accent-color:#5bc0eb;flex-shrink:0}
+.package-select-meta{font-size:11px;color:#9ca3af;margin-top:2px}
+.package-select-empty{padding:20px;text-align:center;color:#9ca3af;font-size:12px}
+.package-picker-panel{min-width:320px;padding:8px 0}
+.package-picker-search{padding:8px 12px;border-bottom:1px solid #f0f2f5}
+.package-picker-search .form-input{width:100%}
+.package-picker-hint{padding:10px 12px;font-size:12px;color:#9ca3af;line-height:1.5}
+.package-picker-option{padding:10px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid #f3f4f6}
+.package-picker-option:hover{background:#f9fafb}
+.package-picker-option.disabled{color:#9ca3af;cursor:default}
+.package-picker-option.disabled:hover{background:transparent}
+.dp-selected-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 12px;background:#eff8fd;color:#0891b2;border-radius:4px;font-size:12px;font-weight:500;margin:0 6px 6px 0}
+.dp-selected-chip button{background:none;border:none;color:#0891b2;cursor:pointer;font-size:14px;line-height:1;padding:0 2px;opacity:.7}
+.dp-selected-chip button:hover{opacity:1}
+
 </style>
 </head>
 <body>
@@ -1269,7 +1297,7 @@ tr:hover td{background:#f9fafb}
                         </div>
                         <div class="form-group" style="margin-bottom:0">
                           <label class="form-label">{{ adsCampaignForm.objective === 'web' ? 'Web Promote' : 'APP Promote' }}</label>
-                          <select class="form-select" v-model="adsAdGroupForm.appId">
+                          <select class="form-select" v-model="adsAdGroupForm.appId" @change="syncAdGroupDataPackages">
                             <option value="">Select app</option>
                             <option v-for="app in myApps" :key="app.id" :value="app.id">{{ app.name }} ({{ app.os }})</option>
                           </select>
@@ -1317,7 +1345,7 @@ tr:hover td{background:#f9fafb}
                         <div class="wizard-section-title">Audience</div>
                         <div class="form-group">
                           <label class="form-label">Country</label>
-                          <input class="form-input" v-model="adsAdGroupForm.country" placeholder="Please enter Country name">
+                          <input class="form-input" v-model="adsAdGroupForm.country" placeholder="Please enter Country name" @input="syncAdGroupDataPackages">
                         </div>
                         <div class="form-group">
                           <label class="form-label">City</label>
@@ -1326,6 +1354,50 @@ tr:hover td{background:#f9fafb}
                         <div class="form-group">
                           <label class="form-label">Language</label>
                           <input class="form-input" v-model="adsAdGroupForm.language" placeholder="Please enter Language name">
+                        </div>
+                        <div class="form-group">
+                          <label class="form-label">Data Packages</label>
+                          <p style="font-size:12px;color:#6b7280;margin-bottom:10px;line-height:1.5">
+                            Fill in <strong>Country</strong> and select promote app above first. Only packages matching country and platform can be added.
+                            <span v-if="adGroupAppPlatform"> Current platform: <strong>{{ adGroupAppPlatform }}</strong>.</span>
+                          </p>
+                          <div v-if="selectedDataPackagesForAdGroup.length" class="targeting-preview" style="margin-bottom:10px;max-height:none">
+                            <span v-for="pkg in selectedDataPackagesForAdGroup" :key="pkg.id" class="dp-selected-chip">
+                              {{ pkg.name }}
+                              <button type="button" title="Remove" @click="removeAdGroupDataPackage(pkg.id)">×</button>
+                            </span>
+                          </div>
+                          <div v-else class="package-select-list" style="margin-bottom:10px">
+                            <div class="package-select-empty">No data packages selected</div>
+                          </div>
+                          <div class="search-select package-picker" :class="{open: dataPackagePickerOpen}">
+                            <button type="button" class="btn btn-default btn-sm" :disabled="!canPickDataPackages" @click.stop="toggleDataPackagePicker">
+                              + Select Data Packages
+                            </button>
+                            <div v-if="dataPackagePickerOpen" class="search-select-panel package-picker-panel" @click.stop>
+                              <div class="package-picker-search">
+                                <input class="form-input" v-model="dataPackagePickerSearch" placeholder="Search by name or ID" @keydown.stop>
+                              </div>
+                              <div v-if="!canPickDataPackages" class="package-picker-hint">Please enter Country and select promote app first.</div>
+                              <template v-else>
+                                <div v-if="!filteredDataPackagePickerOptions.length" class="package-picker-hint">
+                                  {{ dataPackagePickerSearch ? 'No matching packages' : 'No available packages for this country and platform' }}
+                                </div>
+                                <div
+                                  v-for="pkg in filteredDataPackagePickerOptions"
+                                  :key="pkg.id"
+                                  class="package-picker-option"
+                                  @mousedown.prevent="addAdGroupDataPackage(pkg.id)"
+                                >
+                                  <div>{{ pkg.name }}</div>
+                                  <div class="package-select-meta">{{ pkg.id }} · {{ pkg.platform }} · {{ formatPackageDeviceTypes(pkg) }} · {{ formatPackageCountry(pkg) }}</div>
+                                </div>
+                              </template>
+                            </div>
+                          </div>
+                          <p style="font-size:12px;color:#6b7280;margin-top:8px;margin-bottom:0">
+                            <button type="button" class="btn-link" style="padding:0" @click="page='targeting-data-packages'">Manage Data Packages</button>
+                          </p>
                         </div>
                         <div class="audience-toggle-row">
                           <span class="audience-toggle-label">Audience</span>
@@ -1374,8 +1446,8 @@ tr:hover td{background:#f9fafb}
                       </div>
 
                       <div class="wizard-section">
-                        <div class="wizard-section-title">App List Targeting</div>
-                        <p style="font-size:12px;color:#6b7280;line-height:1.5;margin-bottom:16px">When delivering ads for the promoted app, control which source apps' traffic to include (whitelist) or exclude (blacklist). One App ID per line, or separated by commas.</p>
+                        <div class="wizard-section-title">Allow & Block</div>
+                        <p style="font-size:12px;color:#6b7280;line-height:1.5;margin-bottom:16px">When delivering ads for the promoted app, control which source apps' traffic to include (whitelist) or exclude (blacklist). One source App ID per line, or separated by commas.</p>
                         <div class="targeting-form-grid">
                           <div>
                             <div class="app-id-panel">
@@ -1414,7 +1486,7 @@ tr:hover td{background:#f9fafb}
                         </div>
                         <p style="font-size:12px;color:#6b7280;margin-top:12px;margin-bottom:0">
                           <button type="button" class="btn-link" style="padding:0" @click="loadAppTargetingToAdGroup">Load from app-level settings</button>
-                          · Configure defaults in <button type="button" class="btn-link" style="padding:0" @click="openTargetingFromAdGroup">Targeting Settings</button>
+                          · Configure defaults in <button type="button" class="btn-link" style="padding:0" @click="openTargetingFromAdGroup">Allow & Block</button>
                         </p>
                       </div>
 
@@ -2190,13 +2262,13 @@ tr:hover td{background:#f9fafb}
             </div>
           </div>
         </template>
-        <template v-if="page==='targeting-settings'">
-          <div class="bread">Home <span>></span> Targeting Settings</div>
+        <template v-if="page==='targeting-list'">
+          <div class="bread">Home <span>></span> Targeting Settings <span>></span> Allow & Block</div>
           <div class="page-head">
-            <h1 class="page-title">Targeting Settings</h1>
-            <button class="btn btn-primary" @click="openTargetingModal()">+ New Setting</button>
+            <h1 class="page-title">Allow & Block</h1>
+            <button class="btn btn-primary" @click="openTargetingModal()">+ New Config</button>
           </div>
-          <p class="targeting-desc">Configure app-level whitelist and blacklist for delivery. When running ads for a promoted app, whitelist IDs define source apps whose traffic to use; blacklist IDs define source apps to exclude.</p>
+          <p class="targeting-desc">Configure whitelist and blacklist per promoted app from My Apps. Whitelist defines source apps whose traffic to use; blacklist defines source apps to exclude.</p>
           <div class="apps-toolbar">
             <div class="apps-filters">
               <input class="form-input" v-model="targetingFilter.appName" placeholder="App Name">
@@ -2214,7 +2286,7 @@ tr:hover td{background:#f9fafb}
                 <thead>
                   <tr>
                     <th>App Name</th>
-                    <th>Bundle ID</th>
+                    <th>App ID</th>
                     <th>Platform</th>
                     <th>Whitelist</th>
                     <th>Blacklist</th>
@@ -2251,6 +2323,74 @@ tr:hover td{background:#f9fafb}
             </div>
             <div class="pagination">
               Total {{ filteredTargetingSettings.length }}
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+              <select class="page-size"><option>10 / page</option></select>
+            </div>
+          </div>
+        </template>
+        <template v-if="page==='targeting-data-packages'">
+          <div class="bread">Home <span>></span> Targeting Settings <span>></span> Data Packages</div>
+          <div class="page-head">
+            <h1 class="page-title">Data Packages</h1>
+            <button class="btn btn-primary" @click="openDataPackageModal()">+ New Package</button>
+          </div>
+          <p class="targeting-desc">Upload audience device ID files for retargeting. Each package can include multiple device types (IDFA, GAID, etc.) and is available in Ads Step 2 Audience when the platform matches.</p>
+          <div class="apps-toolbar">
+            <div class="apps-filters">
+              <input class="form-input" v-model="dataPackageFilter.name" placeholder="Package Name">
+              <input class="form-input" v-model="dataPackageFilter.id" placeholder="Package ID">
+              <select class="form-select" v-model="dataPackageFilter.platform">
+                <option value="">Platform</option>
+                <option value="iOS">iOS</option>
+                <option value="Android">Android</option>
+                <option value="Mix">Mix</option>
+              </select>
+            </div>
+            <button class="btn btn-default" @click="showToast('List refreshed')">Search</button>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Package Name</th>
+                    <th>Device Type</th>
+                    <th>Platform</th>
+                    <th>Country</th>
+                    <th>Files</th>
+                    <th>Created Time</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in filteredDataPackages" :key="row.id">
+                    <td>{{ row.id }}</td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ formatPackageDeviceTypes(row) }}</td>
+                    <td>{{ row.platform }}</td>
+                    <td>{{ formatPackageCountry(row) }}</td>
+                    <td>
+                      <span v-for="(file, idx) in row.files" :key="idx" class="dp-file-chip" style="margin-right:6px;margin-bottom:4px">
+                        <span>{{ file.fileName }}</span>
+                      </span>
+                    </td>
+                    <td>{{ row.createdAt }}</td>
+                    <td>
+                      <button class="btn-link" @click="openDataPackageModal(row)">Edit</button>
+                      <button class="btn-link danger" style="margin-left:8px" @click="deleteDataPackage(row.id)">Delete</button>
+                    </td>
+                  </tr>
+                  <tr v-if="!filteredDataPackages.length">
+                    <td colspan="8" style="text-align:center;padding:48px;color:#9ca3af">No data packages found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              Total {{ filteredDataPackages.length }}
               <button class="page-btn">‹</button>
               <button class="page-btn active">1</button>
               <button class="page-btn">›</button>
@@ -2324,7 +2464,7 @@ tr:hover td{background:#f9fafb}
                     </td>
                     <td>
                       <button class="btn-link" @click="openAppModal(app)">Edit</button>
-                      <button class="btn-link" @click="openTargetingModal(app.id)" style="margin-left:8px">Targeting</button>
+                      <button class="btn-link" @click="openTargetingModal(app.id)" style="margin-left:8px">Allow & Block</button>
                     </td>
                     <td>{{ app.appId }}</td>
                     <td>{{ app.os }}</td>
@@ -2694,13 +2834,13 @@ tr:hover td{background:#f9fafb}
   <div class="modal-overlay" v-if="targetingModal.show" @click.self="targetingModal.show=false">
     <div class="modal modal-sm">
       <div class="modal-head">
-        <h3>{{ targetingModal.editingId ? 'Edit Targeting' : 'New Targeting' }}</h3>
+        <h3>{{ targetingModal.editingId ? 'Edit Allow & Block' : 'New Allow & Block' }}</h3>
         <button class="modal-close" @click="targetingModal.show=false">&times;</button>
       </div>
       <div class="modal-body">
         <div class="modal-info">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-          <span>Whitelist = source apps to include when delivering for the selected app. Blacklist = source apps to exclude. App IDs can be entered manually or uploaded from a .txt / .csv file.</span>
+          <span>Select a promoted app from My Apps, then configure source App IDs to allow (whitelist) or block (blacklist). IDs can be entered manually or uploaded from a .txt / .csv file.</span>
         </div>
         <div class="form-group">
           <label class="form-label">App <span style="color:#ef4444">*</span></label>
@@ -2757,6 +2897,84 @@ tr:hover td{background:#f9fafb}
       <div class="modal-foot">
         <button class="btn btn-default" @click="targetingModal.show=false">Cancel</button>
         <button class="btn btn-primary" @click="saveTargetingSetting">Save</button>
+      </div>
+    </div>
+  </div>
+  <!-- Data Package Modal -->
+  <div class="modal-overlay" v-if="dataPackageModal.show" @click.self="dataPackageModal.show=false">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>{{ dataPackageModal.editingId ? 'Edit Data Package' : 'New Data Package' }}</h3>
+        <button class="modal-close" @click="dataPackageModal.show=false">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-info">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>Upload device ID files for audience retargeting. Supports .txt, .csv, .gz up to 500MB per file. Add multiple device types in one package.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Platform <span style="color:#ef4444">*</span></label>
+          <select class="form-select" v-model="dataPackageModal.platform" :disabled="!!dataPackageModal.editingId" @change="onDataPackagePlatformChange">
+            <option value="iOS">iOS</option>
+            <option value="Android">Android</option>
+            <option value="Mix">Mix</option>
+          </select>
+          <p style="font-size:11px;color:#9ca3af;margin-top:6px">{{ dataPackageDeviceTypeOptions.join(' · ') }}</p>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <select class="form-select" v-model="dataPackageModal.country">
+            <option v-for="c in dataPackageCountryOptions" :key="c.value" :value="c.value">{{ c.label }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Package Name <span style="color:#ef4444">*</span></label>
+          <input class="form-input" v-model="dataPackageModal.name" placeholder="e.g. US_iOS_Retarget_Q3">
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Upload Files <span style="color:#ef4444">*</span></label>
+          <table class="dp-upload-table">
+            <thead>
+              <tr>
+                <th style="width:180px">Device Type</th>
+                <th>File</th>
+                <th style="width:80px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, idx) in dataPackageModal.uploadRows" :key="row.uid">
+                <td>
+                  <select class="form-select" v-model="row.deviceType" style="width:100%">
+                    <option v-for="dt in dataPackageDeviceTypeOptions" :key="dt" :value="dt">{{ dt }}</option>
+                  </select>
+                </td>
+                <td>
+                  <span v-if="row.fileName" class="dp-file-chip">
+                    <span>{{ row.fileName }}</span>
+                    <span style="color:#9ca3af;flex-shrink:0">{{ row.fileSize }}</span>
+                  </span>
+                  <label v-else class="app-id-upload">
+                    <input type="file" accept=".txt,.csv,.gz" @change="onDataPackageFile(idx, $event)">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                    Choose file
+                  </label>
+                  <label v-if="row.fileName" class="app-id-upload" style="margin-left:8px">
+                    <input type="file" accept=".txt,.csv,.gz" @change="onDataPackageFile(idx, $event)">
+                    Replace
+                  </label>
+                </td>
+                <td>
+                  <button type="button" class="btn-link danger" :disabled="dataPackageModal.uploadRows.length <= 1" @click="removeDataPackageUploadRow(idx)">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" class="dp-add-row" :disabled="dataPackageModal.uploadRows.length >= dataPackageDeviceTypeOptions.length" @click="addDataPackageUploadRow">+ Add device type</button>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-default" @click="dataPackageModal.show=false">Cancel</button>
+        <button class="btn btn-primary" @click="saveDataPackage">Save</button>
       </div>
     </div>
   </div>
@@ -2906,7 +3124,8 @@ createApp({
       clickThroughUrl: '',
       clickTrackUrl: '',
       whitelistText: '',
-      blacklistText: ''
+      blacklistText: '',
+      dataPackageIds: []
     });
     const deviceOsOpenIndex = ref(-1);
     const adsAssetFile = ref(null);
@@ -2917,7 +3136,7 @@ createApp({
     });
     const mcTab = ref('creatives');
     const mcView = ref('list');
-    const navGroupsOpen = reactive({ dashboard: true, reports: true });
+    const navGroupsOpen = reactive({ dashboard: true, reports: true, targeting: true });
     const reportSearch = ref('');
     const dragOver = ref(false);
     const showMetrics = ref(true);
@@ -3065,7 +3284,13 @@ createApp({
         ]
       },
       { id: 'ads', label: 'Ads', icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>' },
-      { id: 'targeting-settings', label: 'Targeting Settings', icon: '<circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2M12 6V2M12 22v-4"/><circle cx="12" cy="12" r="3"/>' },
+      {
+        id: 'targeting', label: 'Targeting Settings', icon: '<circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2M12 6V2M12 22v-4"/><circle cx="12" cy="12" r="3"/>',
+        children: [
+          { id: 'targeting-list', label: 'Allow & Block' },
+          { id: 'targeting-data-packages', label: 'Data Packages' },
+        ]
+      },
       { id: 'manage-creative', label: 'Manage Creative', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' },
       {
         id: 'reports', label: 'Reports', icon: '<path d="M18 20V10M12 20V4M6 20v-6"/>',
@@ -3152,6 +3377,78 @@ createApp({
       appId: '',
       whitelistText: '',
       blacklistText: ''
+    });
+    const DATA_PACKAGE_DEVICE_TYPES = {
+      iOS: ['IDFA', 'IDFA_MD5'],
+      Android: ['IMEI', 'GAID', 'OAID', 'IMEI_MD5', 'GAID_MD5', 'OAID_MD5'],
+      Mix: ['IMEI', 'IDFA', 'GAID', 'OAID', 'IMEI_MD5', 'IDFA_MD5', 'GAID_MD5', 'OAID_MD5'],
+    };
+    function getDataPackageDeviceTypes(platform) {
+      return DATA_PACKAGE_DEVICE_TYPES[platform] || DATA_PACKAGE_DEVICE_TYPES.iOS;
+    }
+    function defaultDeviceTypeForPlatform(platform) {
+      if (platform === 'Android') return 'GAID';
+      return 'IDFA';
+    }
+    const dataPackageCountryOptions = [
+      { value: 'Global', label: 'Global' },
+      { value: 'US', label: 'United States' },
+      { value: 'CN', label: 'China' },
+      { value: 'GB', label: 'United Kingdom' },
+      { value: 'JP', label: 'Japan' },
+    ];
+    const dataPackageCountryLabels = Object.fromEntries(dataPackageCountryOptions.map(c => [c.value, c.label]));
+    let dataPackageRowUid = 0;
+    const dataPackagePickerOpen = ref(false);
+    const dataPackagePickerSearch = ref('');
+    const dataPackages = ref([
+      {
+        id: 'dp-10001',
+        name: 'US_iOS_Retarget_Q3',
+        platform: 'iOS',
+        country: 'US',
+        files: [{ deviceType: 'IDFA', fileName: 'idfa_us_q3.csv', fileSize: '2.4 MB', recordCount: 125000 }],
+        createdAt: '2026-07-10 14:20:00'
+      },
+      {
+        id: 'dp-10002',
+        name: 'Android_Lapsed_Users',
+        platform: 'Android',
+        country: 'Global',
+        files: [
+          { deviceType: 'GAID', fileName: 'gaid_lapsed.txt', fileSize: '8.1 MB', recordCount: 420000 },
+          { deviceType: 'OAID_MD5', fileName: 'oaid_md5_lapsed.csv', fileSize: '1.2 MB', recordCount: 68000 }
+        ],
+        createdAt: '2026-07-08 09:15:00'
+      },
+      {
+        id: 'dp-10003',
+        name: 'Cross_Platform_High_Value',
+        platform: 'Mix',
+        country: 'Global',
+        files: [
+          { deviceType: 'IDFA', fileName: 'idfa_hv.csv', fileSize: '3.1 MB', recordCount: 98000 },
+          { deviceType: 'GAID_MD5', fileName: 'gaid_md5_hv.txt', fileSize: '5.6 MB', recordCount: 210000 }
+        ],
+        createdAt: '2026-07-06 16:40:00'
+      },
+      {
+        id: 'dp-10004',
+        name: 'CN_Android_Reactivation',
+        platform: 'Android',
+        country: 'CN',
+        files: [{ deviceType: 'OAID', fileName: 'oaid_cn.csv', fileSize: '4.2 MB', recordCount: 156000 }],
+        createdAt: '2026-07-05 11:30:00'
+      },
+    ]);
+    const dataPackageFilter = reactive({ name: '', id: '', platform: '' });
+    const dataPackageModal = reactive({
+      show: false,
+      editingId: '',
+      name: '',
+      platform: 'iOS',
+      country: 'Global',
+      uploadRows: []
     });
     const appFilter = reactive({ name: '', platform: '', status: '' });
     const selectedAppsList = ref([]);
@@ -3264,7 +3561,7 @@ createApp({
         targetingModal.blacklistText = '';
       }
       targetingModal.show = true;
-      if (appId && page.value !== 'targeting-settings') page.value = 'targeting-settings';
+      if (appId && page.value !== 'targeting-list') page.value = 'targeting-list';
     }
 
     function saveTargetingSetting() {
@@ -3303,8 +3600,228 @@ createApp({
 
     function openTargetingFromAdGroup() {
       const appId = Number(adsAdGroupForm.appId);
-      page.value = 'targeting-settings';
+      page.value = 'targeting-list';
       openTargetingModal(appId || undefined);
+    }
+
+    const filteredDataPackages = computed(() => {
+      let list = [...dataPackages.value];
+      if (dataPackageFilter.name) {
+        const q = dataPackageFilter.name.toLowerCase();
+        list = list.filter(row => row.name.toLowerCase().includes(q));
+      }
+      if (dataPackageFilter.id) {
+        const q = dataPackageFilter.id.toLowerCase();
+        list = list.filter(row => row.id.toLowerCase().includes(q));
+      }
+      if (dataPackageFilter.platform) list = list.filter(row => row.platform === dataPackageFilter.platform);
+      return list.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    });
+
+    const adGroupAppPlatform = computed(() => {
+      const app = myApps.value.find(a => a.id === Number(adsAdGroupForm.appId));
+      return app?.os || '';
+    });
+
+    function formatPackageCountry(pkg) {
+      return dataPackageCountryLabels[pkg.country] || pkg.country || '—';
+    }
+
+    function packageMatchesCountry(pkg, countryInput) {
+      if (!countryInput) return false;
+      const c = countryInput.trim().toLowerCase();
+      if (!c) return false;
+      if ((pkg.country || '').toLowerCase() === 'global') return true;
+      const code = (pkg.country || '').toLowerCase();
+      const label = (dataPackageCountryLabels[pkg.country] || '').toLowerCase();
+      return code === c || label.includes(c) || c.includes(code) || (label && c.includes(label.split(' ')[0]));
+    }
+
+    function packageMatchesPlatform(pkg, platform) {
+      if (!platform) return true;
+      return pkg.platform === platform || pkg.platform === 'Mix';
+    }
+
+    const canPickDataPackages = computed(() => {
+      return !!adsAdGroupForm.appId && !!(adsAdGroupForm.country || '').trim();
+    });
+
+    const selectableDataPackagesForAdGroup = computed(() => {
+      if (!canPickDataPackages.value) return [];
+      const platform = adGroupAppPlatform.value;
+      const country = adsAdGroupForm.country;
+      return dataPackages.value.filter(pkg => packageMatchesPlatform(pkg, platform) && packageMatchesCountry(pkg, country));
+    });
+
+    const filteredDataPackagePickerOptions = computed(() => {
+      const selected = new Set(adsAdGroupForm.dataPackageIds);
+      let list = selectableDataPackagesForAdGroup.value.filter(pkg => !selected.has(pkg.id));
+      const q = dataPackagePickerSearch.value.trim().toLowerCase();
+      if (q) {
+        list = list.filter(pkg =>
+          pkg.name.toLowerCase().includes(q) ||
+          pkg.id.toLowerCase().includes(q) ||
+          formatPackageDeviceTypes(pkg).toLowerCase().includes(q)
+        );
+      }
+      return list;
+    });
+
+    const selectedDataPackagesForAdGroup = computed(() => {
+      return adsAdGroupForm.dataPackageIds
+        .map(id => dataPackages.value.find(p => p.id === id))
+        .filter(Boolean);
+    });
+
+    const dataPackageDeviceTypeOptions = computed(() => getDataPackageDeviceTypes(dataPackageModal.platform));
+
+    function formatPackageDeviceTypes(pkg) {
+      return (pkg.files || []).map(f => f.deviceType).join(', ') || '—';
+    }
+
+    function createDataPackageUploadRow(deviceType = 'IDFA', fileName = '', fileSize = '', recordCount = 0) {
+      return { uid: ++dataPackageRowUid, deviceType, fileName, fileSize, recordCount };
+    }
+
+    function resetDataPackageUploadRows(files) {
+      const allowed = getDataPackageDeviceTypes(dataPackageModal.platform);
+      dataPackageModal.uploadRows = (files && files.length)
+        ? files.map(f => createDataPackageUploadRow(
+            allowed.includes(f.deviceType) ? f.deviceType : allowed[0],
+            f.fileName, f.fileSize, f.recordCount
+          ))
+        : [createDataPackageUploadRow(defaultDeviceTypeForPlatform(dataPackageModal.platform))];
+    }
+
+    function onDataPackagePlatformChange() {
+      const allowed = getDataPackageDeviceTypes(dataPackageModal.platform);
+      dataPackageModal.uploadRows.forEach(row => {
+        if (!allowed.includes(row.deviceType)) row.deviceType = allowed[0];
+      });
+    }
+
+    function openDataPackageModal(row) {
+      if (row) {
+        dataPackageModal.editingId = row.id;
+        dataPackageModal.name = row.name;
+        dataPackageModal.platform = row.platform;
+        dataPackageModal.country = row.country || 'Global';
+        resetDataPackageUploadRows(row.files);
+      } else {
+        dataPackageModal.editingId = '';
+        dataPackageModal.name = '';
+        dataPackageModal.platform = 'iOS';
+        dataPackageModal.country = 'Global';
+        resetDataPackageUploadRows();
+      }
+      dataPackageModal.show = true;
+    }
+
+    function addDataPackageUploadRow() {
+      const allowed = getDataPackageDeviceTypes(dataPackageModal.platform);
+      const used = new Set(dataPackageModal.uploadRows.map(r => r.deviceType));
+      const next = allowed.find(dt => !used.has(dt));
+      if (!next) return;
+      dataPackageModal.uploadRows.push(createDataPackageUploadRow(next));
+    }
+
+    function removeDataPackageUploadRow(idx) {
+      if (dataPackageModal.uploadRows.length <= 1) return;
+      dataPackageModal.uploadRows.splice(idx, 1);
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    async function onDataPackageFile(idx, event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+      if (file.size > 500 * 1024 * 1024) {
+        showToast('File exceeds 500MB limit');
+        event.target.value = '';
+        return;
+      }
+      const row = dataPackageModal.uploadRows[idx];
+      if (!row) return;
+      row.fileName = file.name;
+      row.fileSize = formatFileSize(file.size);
+      try {
+        const text = await file.text();
+        const lines = text.split(/[\n\r]+/).map(s => s.trim()).filter(Boolean);
+        row.recordCount = lines.length;
+      } catch {
+        row.recordCount = 0;
+      }
+      event.target.value = '';
+      showToast('File attached');
+    }
+
+    function saveDataPackage() {
+      if (!dataPackageModal.name.trim()) { showToast('Please enter package name'); return; }
+      const files = dataPackageModal.uploadRows.filter(r => r.fileName);
+      if (!files.length) { showToast('Please upload at least one file'); return; }
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const createdAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      const payload = {
+        name: dataPackageModal.name.trim(),
+        platform: dataPackageModal.platform,
+        country: dataPackageModal.country,
+        files: files.map(r => ({ deviceType: r.deviceType, fileName: r.fileName, fileSize: r.fileSize, recordCount: r.recordCount })),
+        createdAt
+      };
+      if (dataPackageModal.editingId) {
+        const row = dataPackages.value.find(r => r.id === dataPackageModal.editingId);
+        if (row) Object.assign(row, payload);
+        showToast('Data package updated');
+      } else {
+        dataPackages.value.unshift({ id: 'dp-' + Date.now(), ...payload });
+        showToast('Data package created');
+      }
+      dataPackageModal.show = false;
+    }
+
+    function deleteDataPackage(id) {
+      dataPackages.value = dataPackages.value.filter(row => row.id !== id);
+      adsAdGroupForm.dataPackageIds = adsAdGroupForm.dataPackageIds.filter(pid => pid !== id);
+      showToast('Data package deleted');
+    }
+
+    function toggleDataPackagePicker() {
+      if (!canPickDataPackages.value) {
+        showToast('Please enter Country and select promote app first');
+        return;
+      }
+      dataPackagePickerOpen.value = !dataPackagePickerOpen.value;
+      if (!dataPackagePickerOpen.value) dataPackagePickerSearch.value = '';
+    }
+
+    function closeDataPackagePicker() {
+      dataPackagePickerOpen.value = false;
+      dataPackagePickerSearch.value = '';
+    }
+
+    function addAdGroupDataPackage(id) {
+      if (!adsAdGroupForm.dataPackageIds.includes(id)) {
+        adsAdGroupForm.dataPackageIds.push(id);
+        showToast('Data package added');
+      }
+      dataPackagePickerSearch.value = '';
+    }
+
+    function removeAdGroupDataPackage(id) {
+      adsAdGroupForm.dataPackageIds = adsAdGroupForm.dataPackageIds.filter(pid => pid !== id);
+    }
+
+    function syncAdGroupDataPackages() {
+      const valid = new Set(selectableDataPackagesForAdGroup.value.map(p => p.id));
+      const next = adsAdGroupForm.dataPackageIds.filter(id => valid.has(id));
+      if (next.length !== adsAdGroupForm.dataPackageIds.length) {
+        adsAdGroupForm.dataPackageIds = next;
+      }
     }
 
     function toggleAllAppsList(e) {
@@ -3978,6 +4495,7 @@ createApp({
       adsAdGroupForm.clickTrackUrl = '';
       adsAdGroupForm.whitelistText = '';
       adsAdGroupForm.blacklistText = '';
+      adsAdGroupForm.dataPackageIds = [];
       deviceOsOpenIndex.value = -1;
     }
 
@@ -4610,8 +5128,8 @@ createApp({
     function filterGroups() { showToast('Found ' + filteredGroups.value.length + ' groups'); }
 
     function onDocumentClick(e) {
-      if (deviceOsOpenIndex.value < 0) return;
-      if (!e.target.closest('.search-select')) closeDeviceOsSelect();
+      if (deviceOsOpenIndex.value >= 0 && !e.target.closest('.search-select')) closeDeviceOsSelect();
+      if (dataPackagePickerOpen.value && !e.target.closest('.package-picker')) closeDataPackagePicker();
     }
 
     onMounted(() => document.addEventListener('click', onDocumentClick));
@@ -4627,6 +5145,12 @@ createApp({
       targetingSettingsData, targetingFilter, filteredTargetingSettings, targetingModal,
       availableTargetingApps, getAppById, parseAppIdList, openTargetingModal, saveTargetingSetting,
       deleteTargetingSetting, onTargetingAppIdFile, onAdGroupAppIdFile, loadAppTargetingToAdGroup, openTargetingFromAdGroup,
+      dataPackages, dataPackageFilter, filteredDataPackages, dataPackageModal, dataPackageDeviceTypeOptions, dataPackageCountryOptions,
+      adGroupAppPlatform, canPickDataPackages, selectedDataPackagesForAdGroup, filteredDataPackagePickerOptions,
+      dataPackagePickerOpen, dataPackagePickerSearch,
+      formatPackageCountry, formatPackageDeviceTypes, openDataPackageModal, saveDataPackage,
+      deleteDataPackage, addDataPackageUploadRow, removeDataPackageUploadRow, onDataPackageFile, onDataPackagePlatformChange,
+      toggleDataPackagePicker, addAdGroupDataPackage, removeAdGroupDataPackage, syncAdGroupDataPackages,
       reportSearch, downloadReports, filteredDownloadReports,
       adMonitorFilter, adMonitorDimensions, adMonitorSelectedMetrics, adMonitorTableColumns,
       adMonitorDisplayData, adMonitorSort, columnsModal, filteredSelectedColumnGroups, filteredUnselectedColumnGroups,
