@@ -572,6 +572,19 @@ tr:hover td{background:#f9fafb}
 .website-input{display:flex}
 .website-prefix{background:#f3f4f6;border:1px solid #d1d9e6;border-right:none;border-radius:4px 0 0 4px;padding:8px 12px;font-size:13px;color:#9ca3af;white-space:nowrap}
 .website-input .form-input{border-radius:0 4px 4px 0}
+.field-label-row{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.field-label-row .form-label{margin-bottom:0}
+.field-tip-wrap{position:relative;display:inline-flex}
+.field-tip-popover{display:none;position:absolute;left:0;top:calc(100% + 8px);z-index:30;width:280px;padding:12px 14px;background:#fff;border:1px solid #e5e9f0;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.12);font-size:12px;color:#374151;line-height:1.55;font-weight:400}
+.field-tip-popover::before{content:'';position:absolute;top:-6px;left:10px;width:10px;height:10px;background:#fff;border-left:1px solid #e5e9f0;border-top:1px solid #e5e9f0;transform:rotate(45deg)}
+.field-tip-wrap:hover .field-tip-popover,.field-tip-wrap:focus-within .field-tip-popover{display:block}
+.field-tip-popover li{margin-left:16px;margin-bottom:6px}
+.field-tip-popover li:last-child{margin-bottom:0}
+.budget-input{display:flex;align-items:stretch}
+.budget-input .budget-prefix{background:#f3f4f6;border:1px solid #d1d9e6;border-right:none;border-radius:4px 0 0 4px;padding:8px 12px;font-size:13px;color:#6b7280;display:flex;align-items:center}
+.budget-input .form-input{border-radius:0 4px 4px 0;flex:1}
+.budget-input.disabled .budget-prefix,.budget-input.disabled .form-input{opacity:.55;background:#f9fafb}
+.budget-limit-row{margin-top:10px}
 .owner-card{display:flex;align-items:center;gap:14px;padding:16px 20px;background:#eff8fd;border:1px solid #bae6fd;border-radius:6px;margin-bottom:24px}
 .owner-avatar{width:40px;height:40px;border-radius:50%;background:#5bc0eb;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600}
 .owner-label{font-size:11px;font-weight:600;color:#0891b2;text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
@@ -666,6 +679,16 @@ tr:hover td{background:#f9fafb}
 .dp-selected-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px 4px 12px;background:#eff8fd;color:#0891b2;border-radius:4px;font-size:12px;font-weight:500;margin:0 6px 6px 0}
 .dp-selected-chip button{background:none;border:none;color:#0891b2;cursor:pointer;font-size:14px;line-height:1;padding:0 2px;opacity:.7}
 .dp-selected-chip button:hover{opacity:1}
+
+/* Events */
+.event-modal-section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.event-modal-section-head h4{font-size:13px;font-weight:600;color:#374151;margin:0}
+.event-settings-table{width:100%;border-collapse:collapse;font-size:12px}
+.event-settings-table th{background:#fafbfc;padding:10px 12px;text-align:left;font-weight:600;color:#6b7280;border-bottom:1px solid #e8ecf1}
+.event-settings-table td{padding:8px 12px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+.event-settings-table .form-input{width:100%}
+.event-id-field{display:flex;align-items:center;gap:6px}
+.event-id-field .form-input{flex:1}
 
 </style>
 </head>
@@ -2398,6 +2421,67 @@ tr:hover td{background:#f9fafb}
             </div>
           </div>
         </template>
+        <template v-if="page==='targeting-events'">
+          <div class="bread">Home <span>></span> Targeting Settings <span>></span> Events</div>
+          <div class="page-head">
+            <h1 class="page-title">Events</h1>
+            <button class="btn btn-primary" @click="openEventModal()">+ New Events</button>
+          </div>
+          <p class="targeting-desc">Configure conversion events per promoted app from My Apps. Each app can have multiple event name and description pairs for tracking and optimization.</p>
+          <div class="apps-toolbar">
+            <div class="apps-filters">
+              <input class="form-input" v-model="eventFilter.appName" placeholder="App Name">
+              <input class="form-input" v-model="eventFilter.eventName" placeholder="Event Name">
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>App</th>
+                    <th>App ID</th>
+                    <th>Event</th>
+                    <th>Event Description</th>
+                    <th>Updated Time</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in filteredEventListRows" :key="row.rowKey">
+                    <td>
+                      <div class="app-name-cell">
+                        <div class="app-icon">
+                          <img v-if="getAppById(row.appId) && isAppIconImage(getAppById(row.appId).icon)" :src="getAppById(row.appId).icon" alt="">
+                          <span v-else>{{ getAppById(row.appId)?.icon || getAppById(row.appId)?.name?.charAt(0) || '?' }}</span>
+                        </div>
+                        {{ row.appName || '—' }}
+                      </div>
+                    </td>
+                    <td>{{ row.appBundleId || '—' }}</td>
+                    <td>{{ row.eventName }}</td>
+                    <td>{{ row.eventDescription || '—' }}</td>
+                    <td>{{ row.updatedAt }}</td>
+                    <td>
+                      <button class="btn-link" @click="openEventModal(row.appId)">Edit</button>
+                      <button class="btn-link danger" style="margin-left:8px" @click="deleteEventRow(row)">Delete</button>
+                    </td>
+                  </tr>
+                  <tr v-if="!filteredEventListRows.length">
+                    <td colspan="6" style="text-align:center;padding:48px;color:#9ca3af">No events found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              Total {{ filteredEventListRows.length }}
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+              <select class="page-size"><option>10 / page</option></select>
+            </div>
+          </div>
+        </template>
         <template v-if="page==='apps'">
           <div class="bread">Home <span>></span> My Apps</div>
           <div class="page-head">
@@ -2465,6 +2549,7 @@ tr:hover td{background:#f9fafb}
                     <td>
                       <button class="btn-link" @click="openAppModal(app)">Edit</button>
                       <button class="btn-link" @click="openTargetingModal(app.id)" style="margin-left:8px">Allow & Block</button>
+                      <button class="btn-link" @click="openEventModal(app.id)" style="margin-left:8px">Events</button>
                     </td>
                     <td>{{ app.appId }}</td>
                     <td>{{ app.os }}</td>
@@ -2978,6 +3063,57 @@ tr:hover td{background:#f9fafb}
       </div>
     </div>
   </div>
+  <!-- Events Modal -->
+  <div class="modal-overlay" v-if="eventModal.show" @click.self="eventModal.show=false">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>{{ eventModal.editingConfigId ? 'Edit Events' : 'New Events' }}</h3>
+        <button class="modal-close" @click="eventModal.show=false">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">App <span style="color:#ef4444">*</span></label>
+          <select class="form-select" v-model="eventModal.appId" :disabled="!!eventModal.editingConfigId">
+            <option value="">Select app</option>
+            <option v-for="app in availableEventApps" :key="app.id" :value="app.id">{{ app.name }} ({{ app.os }}) · {{ app.appId }}</option>
+          </select>
+        </div>
+        <div class="event-modal-section-head">
+          <h4>Event Settings</h4>
+          <button type="button" class="btn btn-default btn-sm" @click="addEventRow">+ Custom Event</button>
+        </div>
+        <table class="event-settings-table">
+          <thead>
+            <tr>
+              <th>Event Name</th>
+              <th>Event Description</th>
+              <th style="width:80px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, idx) in eventModal.eventRows" :key="row.uid">
+              <td>
+                <input class="form-input" v-model="row.name" placeholder="Event name">
+              </td>
+              <td>
+                <div class="event-id-field">
+                  <input class="form-input" v-model="row.description" placeholder="Event description">
+                  <span class="info-icon" title="Description shown in list and used for event mapping">i</span>
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn-link danger" :disabled="eventModal.eventRows.length <= 1" @click="removeEventRow(idx)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-default" @click="eventModal.show=false">Cancel</button>
+        <button class="btn btn-primary" @click="saveEventConfig">Save</button>
+      </div>
+    </div>
+  </div>
   <!-- New / Edit App Modal -->
   <div class="modal-overlay" v-if="appModal.show" @click.self="appModal.show=false">
     <div class="modal modal-sm">
@@ -3013,6 +3149,36 @@ tr:hover td{background:#f9fafb}
         <div class="form-group">
           <label class="form-label">Preview Link</label>
           <input class="form-input" v-model="appModal.previewLink" placeholder="https://">
+        </div>
+        <div class="form-group">
+          <div class="field-label-row">
+            <label class="form-label">Daily Available Budget</label>
+            <span class="field-tip-wrap">
+              <span class="info-icon" tabindex="0">i</span>
+              <div class="field-tip-popover">
+                <ul>
+                  <li>Once the daily budget is consumed, ads and all associated ad units will be automatically paused.</li>
+                  <li>Daily budget is calculated and effective in GMT-8 timezone.</li>
+                </ul>
+              </div>
+            </span>
+          </div>
+          <div class="budget-input" :class="{disabled: appModal.noBudgetLimit}">
+            <span class="budget-prefix">$</span>
+            <input
+              class="form-input"
+              type="number"
+              min="0"
+              step="0.01"
+              v-model="appModal.dailyBudget"
+              placeholder="0.00"
+              :disabled="appModal.noBudgetLimit"
+            >
+          </div>
+          <label class="chk-label budget-limit-row">
+            <input type="checkbox" v-model="appModal.noBudgetLimit">
+            No budget limit
+          </label>
         </div>
         <div class="form-group">
           <label class="form-label">Timezone</label>
@@ -3289,6 +3455,7 @@ createApp({
         children: [
           { id: 'targeting-list', label: 'Allow & Block' },
           { id: 'targeting-data-packages', label: 'Data Packages' },
+          { id: 'targeting-events', label: 'Events' },
         ]
       },
       { id: 'manage-creative', label: 'Manage Creative', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' },
@@ -3352,9 +3519,9 @@ createApp({
     const overviewTableData = ref([]);
 
     const myApps = ref([
-      { id: 1, name: 'Test', os: 'iOS', appId: 'com.test', timezone: 'UTC+0', active: true, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '🍎', previewLink: '' },
-      { id: 2, name: 'Summer Game', os: 'Android', appId: 'com.global.pnck', timezone: 'UTC+8', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 0, icon: '🎮', previewLink: '' },
-      { id: 3, name: 'NashFlow', os: 'iOS', appId: 'com.nashflow.app', timezone: 'UTC+0', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '📱', previewLink: '' },
+      { id: 1, name: 'Test', os: 'iOS', appId: 'com.test', timezone: 'UTC+0', active: true, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '🍎', previewLink: '', dailyBudget: '', noBudgetLimit: true },
+      { id: 2, name: 'Summer Game', os: 'Android', appId: 'com.global.pnck', timezone: 'UTC+8', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 0, icon: '🎮', previewLink: '', dailyBudget: '500', noBudgetLimit: false },
+      { id: 3, name: 'NashFlow', os: 'iOS', appId: 'com.nashflow.app', timezone: 'UTC+0', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '📱', previewLink: '', dailyBudget: '', noBudgetLimit: true },
     ]);
     const targetingSettingsData = ref([
       {
@@ -3377,6 +3544,31 @@ createApp({
       appId: '',
       whitelistText: '',
       blacklistText: ''
+    });
+    let eventRowUid = 0;
+    const appEventsData = ref([
+      {
+        id: 'evc-1', appId: 1,
+        events: [
+          { uid: 1, name: 'AtomeCardKYCApprove', description: 'AtomeCardKYCApprove' },
+          { uid: 2, name: 'Purchase', description: 'First in-app purchase' },
+        ],
+        updatedAt: '2026-07-10 10:00:00'
+      },
+      {
+        id: 'evc-2', appId: 2,
+        events: [
+          { uid: 3, name: 'LevelComplete', description: 'User completed level 5' },
+        ],
+        updatedAt: '2026-07-08 14:30:00'
+      },
+    ]);
+    const eventFilter = reactive({ appName: '', eventName: '' });
+    const eventModal = reactive({
+      show: false,
+      editingConfigId: '',
+      appId: '',
+      eventRows: []
     });
     const DATA_PACKAGE_DEVICE_TYPES = {
       iOS: ['IDFA', 'IDFA_MD5'],
@@ -3453,7 +3645,10 @@ createApp({
     const appFilter = reactive({ name: '', platform: '', status: '' });
     const selectedAppsList = ref([]);
     const appSort = reactive({ key: '', dir: 'asc' });
-    const appModal = reactive({ show: false, editing: null, name: '', os: 'iOS', appId: '', timezone: 'UTC+0', icon: '', previewLink: '' });
+    const appModal = reactive({
+      show: false, editing: null, name: '', os: 'iOS', appId: '', timezone: 'UTC+0', icon: '', previewLink: '',
+      dailyBudget: '', noBudgetLimit: true
+    });
 
     const filteredAppsList = computed(() => {
       let list = [...myApps.value];
@@ -3824,6 +4019,119 @@ createApp({
       }
     }
 
+    const eventListRows = computed(() => {
+      const rows = [];
+      for (const config of appEventsData.value) {
+        const app = getAppById(config.appId);
+        for (const ev of config.events) {
+          rows.push({
+            rowKey: `${config.id}-${ev.uid}`,
+            configId: config.id,
+            eventUid: ev.uid,
+            appId: config.appId,
+            appName: app?.name,
+            appBundleId: app?.appId,
+            eventName: ev.name,
+            eventDescription: ev.description,
+            updatedAt: config.updatedAt,
+          });
+        }
+      }
+      return rows.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    });
+
+    const filteredEventListRows = computed(() => {
+      let list = [...eventListRows.value];
+      if (eventFilter.appName) {
+        const q = eventFilter.appName.toLowerCase();
+        list = list.filter(row => (row.appName || '').toLowerCase().includes(q));
+      }
+      if (eventFilter.eventName) {
+        const q = eventFilter.eventName.toLowerCase();
+        list = list.filter(row => row.eventName.toLowerCase().includes(q));
+      }
+      return list;
+    });
+
+    const availableEventApps = computed(() => {
+      const configured = new Set(appEventsData.value.map(c => c.appId));
+      if (eventModal.editingConfigId) {
+        const config = appEventsData.value.find(c => c.id === eventModal.editingConfigId);
+        if (config) return myApps.value.filter(app => app.id === config.appId);
+      }
+      return myApps.value.filter(app => !configured.has(app.id));
+    });
+
+    function createEventRow(name = '', description = '') {
+      return { uid: ++eventRowUid, name, description };
+    }
+
+    function resetEventRows(events) {
+      eventModal.eventRows = (events && events.length)
+        ? events.map(ev => createEventRow(ev.name, ev.description))
+        : [createEventRow()];
+    }
+
+    function getEventConfigByAppId(appId) {
+      return appEventsData.value.find(c => c.appId === Number(appId));
+    }
+
+    function openEventModal(appId) {
+      const id = appId ? Number(appId) : '';
+      const existing = id ? getEventConfigByAppId(id) : null;
+      if (existing) {
+        eventModal.editingConfigId = existing.id;
+        eventModal.appId = existing.appId;
+        resetEventRows(existing.events);
+      } else {
+        eventModal.editingConfigId = '';
+        eventModal.appId = id || '';
+        resetEventRows();
+      }
+      eventModal.show = true;
+      if (appId && page.value !== 'targeting-events') page.value = 'targeting-events';
+    }
+
+    function addEventRow() {
+      eventModal.eventRows.push(createEventRow());
+    }
+
+    function removeEventRow(idx) {
+      if (eventModal.eventRows.length <= 1) return;
+      eventModal.eventRows.splice(idx, 1);
+    }
+
+    function saveEventConfig() {
+      const appId = Number(eventModal.appId);
+      if (!appId) { showToast('Please select an app'); return; }
+      const events = eventModal.eventRows
+        .map(r => ({ uid: r.uid, name: r.name.trim(), description: r.description.trim() }))
+        .filter(r => r.name);
+      if (!events.length) { showToast('Please add at least one event'); return; }
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const updatedAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      if (eventModal.editingConfigId) {
+        const config = appEventsData.value.find(c => c.id === eventModal.editingConfigId);
+        if (config) Object.assign(config, { events, updatedAt });
+        showToast('Events updated');
+      } else {
+        appEventsData.value.unshift({ id: 'evc-' + Date.now(), appId, events, updatedAt });
+        showToast('Events saved');
+      }
+      eventModal.show = false;
+    }
+
+    function deleteEventRow(row) {
+      const config = appEventsData.value.find(c => c.id === row.configId);
+      if (!config) return;
+      config.events = config.events.filter(ev => ev.uid !== row.eventUid);
+      if (!config.events.length) {
+        appEventsData.value = appEventsData.value.filter(c => c.id !== row.configId);
+      }
+      showToast('Event deleted');
+    }
+
     function toggleAllAppsList(e) {
       selectedAppsList.value = e.target.checked ? filteredAppsList.value.map(a => a.id) : [];
     }
@@ -3851,6 +4159,8 @@ createApp({
         appModal.timezone = app.timezone;
         appModal.icon = app.icon || '';
         appModal.previewLink = app.previewLink || '';
+        appModal.dailyBudget = app.dailyBudget ?? '';
+        appModal.noBudgetLimit = app.noBudgetLimit !== false;
       } else {
         appModal.editing = null;
         appModal.name = '';
@@ -3859,23 +4169,31 @@ createApp({
         appModal.timezone = 'UTC+0';
         appModal.icon = '';
         appModal.previewLink = '';
+        appModal.dailyBudget = '';
+        appModal.noBudgetLimit = true;
       }
       appModal.show = true;
     }
 
     function saveApp() {
       if (!appModal.name.trim() || !appModal.appId.trim()) { showToast('Please fill required fields'); return; }
+      if (!appModal.noBudgetLimit && (!appModal.dailyBudget || Number(appModal.dailyBudget) <= 0)) {
+        showToast('Please enter a daily budget or enable No budget limit');
+        return;
+      }
       const icon = appModal.icon.trim() || (appModal.os === 'iOS' ? '🍎' : '🤖');
       const previewLink = appModal.previewLink.trim();
+      const dailyBudget = appModal.noBudgetLimit ? '' : String(appModal.dailyBudget);
+      const noBudgetLimit = appModal.noBudgetLimit;
       if (appModal.editing) {
         const app = myApps.value.find(a => a.id === appModal.editing);
-        if (app) Object.assign(app, { name: appModal.name, os: appModal.os, appId: appModal.appId, timezone: appModal.timezone, icon, previewLink });
+        if (app) Object.assign(app, { name: appModal.name, os: appModal.os, appId: appModal.appId, timezone: appModal.timezone, icon, previewLink, dailyBudget, noBudgetLimit });
         showToast('App updated');
       } else {
         myApps.value.unshift({
           id: Date.now(), name: appModal.name, os: appModal.os, appId: appModal.appId, timezone: appModal.timezone,
           active: true, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 0,
-          icon, previewLink,
+          icon, previewLink, dailyBudget, noBudgetLimit,
         });
         showToast('App created');
       }
@@ -5151,6 +5469,8 @@ createApp({
       formatPackageCountry, formatPackageDeviceTypes, openDataPackageModal, saveDataPackage,
       deleteDataPackage, addDataPackageUploadRow, removeDataPackageUploadRow, onDataPackageFile, onDataPackagePlatformChange,
       toggleDataPackagePicker, addAdGroupDataPackage, removeAdGroupDataPackage, syncAdGroupDataPackages,
+      appEventsData, eventFilter, filteredEventListRows, eventModal, availableEventApps,
+      openEventModal, saveEventConfig, addEventRow, removeEventRow, deleteEventRow,
       reportSearch, downloadReports, filteredDownloadReports,
       adMonitorFilter, adMonitorDimensions, adMonitorSelectedMetrics, adMonitorTableColumns,
       adMonitorDisplayData, adMonitorSort, columnsModal, filteredSelectedColumnGroups, filteredUnselectedColumnGroups,

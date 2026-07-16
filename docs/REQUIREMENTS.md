@@ -1,6 +1,6 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.9  
+> **版本：** v1.11  
 > **更新日期：** 2026-07-16  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
@@ -12,6 +12,8 @@
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|----------|
+| v1.11 | 2026-07-16 | Targeting Settings 新增 Events 子菜单；My Apps 支持 Events 快捷配置 |
+| v1.10 | 2026-07-16 | My Apps 新建/编辑弹窗支持 Daily Available Budget 与 No budget limit |
 | v1.9 | 2026-07-16 | Targeting Settings 拆为 Allow & Block + Data Packages 子菜单；数据包 Country/Platform/Device Type 联动与搜索选择器；黑白名单模块重命名 Allow & Block，列表 App ID 列与 My Apps 统一 |
 | v1.8 | 2026-07-16 | 新增 Targeting Settings 模块（按 App 配置黑白名单）；Ads Step 2 支持 Ad Group 级黑白名单；My Apps 快捷入口 |
 | v1.7 | 2026-07-15 | Ads Campaign / Ad Group 列表列对齐 AppLovin（含 Show Metrics 指标列） |
@@ -92,6 +94,7 @@ tarrific.tv DSP 管理后台，面向广告主及代理商运营，提供：
 | Ads | — | `ads`（列表 `adsView=list`；新建 `adsView=wizard`） | |
 | Targeting Settings | Allow & Block | `targeting-list` | ✓（子菜单默认） |
 | Targeting Settings | Data Packages | `targeting-data-packages` | |
+| Targeting Settings | Events | `targeting-events` | |
 | Manage Creative | — | `manage-creative` | |
 | Reports | Download Reports | `reports-download` | |
 | Reports | Ad Monitoring Report | `reports-ad-monitor` | |
@@ -988,7 +991,7 @@ New / Edit App 弹窗
 | 勾选 + 开关 | 批量选择；Active / Paused |
 | App Name | 图标 + 名称 |
 | Status | Active / Paused 徽章 |
-| Actions | Edit + **Allow & Block**（跳转配置弹窗） |
+| Actions | Edit + **Allow & Block** + **Events** |
 | App ID | Bundle ID |
 | OS / Timezone | |
 | Active Campaigns | 活跃 Campaign 数 |
@@ -1006,6 +1009,7 @@ New / Edit App 弹窗
 | 行开关 | Active / Paused，Toast |
 | Edit | 回填编辑 |
 | Allow & Block | 跳转 Allow & Block 并打开该 App 的配置弹窗 |
+| Events | 跳转 Events 并打开该 App 的事件配置弹窗 |
 
 **弹窗字段（自上而下）：**
 
@@ -1016,11 +1020,18 @@ New / Edit App 弹窗
 | Platform | 是 | 下拉 | iOS / Android |
 | App ID (Bundle ID) | 是 | 文本 | |
 | Preview Link | 否 | 文本 | App 预览链接，placeholder `https://` |
+| Daily Available Budget | 条件 | 数字 + **$** 前缀 | 勾选 **No budget limit** 时禁用；未勾选时需填写 &gt; 0 |
+| No budget limit | 否 | 勾选框 | 默认勾选；不设每日预算上限 |
 | Timezone | 否 | 下拉 | UTC+0 / UTC+8 / UTC-5 |
+
+**Daily Available Budget 说明（ⓘ）：**
+
+1. 当日预算消耗完毕后，该 App 下广告及关联 Ad Unit 自动关停  
+2. 每日预算按 **GMT-8** 时区计算与生效  
 
 **列表 Icon 展示：** 图片 URL / data URL 显示缩略图；否则显示 emoji 或名称首字母。
 
-**新建默认：** Active=true；Spend/CVR/CPI=`--`；Linked Ad Units=0  
+**新建默认：** Active=true；Spend/CVR/CPI=`--`；Linked Ad Units=0；**No budget limit=true**
 
 ---
 
@@ -1035,8 +1046,9 @@ Targeting Settings 为一级导航分组，包含两个子模块：
 |--------|-----------|------|
 | **Allow & Block** | `targeting-list` | 按 My Apps 中的推广 App 配置来源 App 黑白名单 |
 | **Data Packages** | `targeting-data-packages` | 上传受众设备 ID 数据包，供 Ads Audience 选用 |
+| **Events** | `targeting-events` | 按 My Apps 中的推广 App 配置转化事件 |
 
-> **命名说明：** 黑白名单子菜单为 **Allow & Block**（非 App Lists），强调按推广 App 配置允许/禁止的来源 App；列表 **App ID** 列与 My Apps 命名一致。
+> **命名说明：** 黑白名单子菜单为 **Allow & Block**；**Events** 用于 App 级事件名称与说明配置；列表 **App ID** 列与 My Apps 命名一致。
 
 ---
 
@@ -1197,12 +1209,68 @@ New / Edit 弹窗
 
 ---
 
-### 12.3 状态字段
+### 12.3 Events
+
+> **面包屑：** Home > Targeting Settings > Events  
+> **入口：** 子菜单 Events；My Apps 行内 **Events**  
+
+#### 12.3.1 模块定位
+
+从 **My Apps** 选择一个推广 App，配置一个或多个**转化事件**（Event Name + Event Description），供投放追踪与优化使用。
+
+#### 12.3.2 页面结构
+
+```
+页头 + New Events
+    ↓
+说明文案
+    ↓
+筛选（App Name / Event Name）
+    ↓
+事件列表（按事件行展开）+ 分页
+    ↓
+New / Edit 弹窗
+```
+
+#### 12.3.3 列表
+
+| 列 | 说明 |
+|----|------|
+| App | 图标 + 名称 |
+| App ID | 与 My Apps 一致 |
+| Event | 事件名称 |
+| Event Description | 事件说明 |
+| Updated Time | 最后更新时间 |
+| Actions | Edit（打开该 App 全部事件）· Delete（删除单条事件） |
+
+**空态：** No events found  
+
+#### 12.3.4 弹窗字段
+
+| 字段 | 必填 | 控件 | 说明 |
+|------|------|------|------|
+| App | 是 | 下拉 | 来自 My Apps；每个 App 仅一条事件配置；编辑时不可改 App |
+| Event Settings | 是 | 表格行 | Event Name · Event Description · Delete |
+| + Custom Event | — | 按钮 | 新增空行 |
+
+**校验：** 至少一条 Event Name 非空；Save 写入 `appEventsData` Mock。
+
+#### 12.3.5 操作与联动
+
+| 操作 / 入口 | 说明 |
+|-------------|------|
+| + New Events | 为尚未配置的 App 新建 |
+| My Apps → Events | 跳转并打开对应 App 弹窗 |
+| Delete（列表行） | 删除单条事件；若 App 下无事件则移除整个配置 |
+
+---
+
+### 12.4 状态字段
 
 | 字段 | 说明 |
 |------|------|
-| `targetingSettingsData` | Allow & Block Mock 数据 |
-| `targetingModal` | Allow & Block 弹窗状态 |
+| `appEventsData` | Events Mock 数据（按 App 聚合） |
+| `eventModal` | Events 弹窗状态 |
 | `dataPackages` | Data Packages Mock 数据 |
 | `dataPackageModal` | Data Packages 弹窗状态 |
 | `adsAdGroupForm.dataPackageIds` | Step 2 已选数据包 ID 数组 |
@@ -1412,6 +1480,7 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 | Apps | My Apps | `apps` |
 | Targeting | Allow & Block | `targeting-list` |
 | Targeting | Data Packages | `targeting-data-packages` |
+| Targeting | Events | `targeting-events` |
 | Settings | Account Settings | `account-settings` |
 
 ---
@@ -1465,9 +1534,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.9） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.11） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.9*
+*文档结束 · v1.11*
