@@ -619,6 +619,26 @@ tr:hover td{background:#f9fafb}
 .modal-section-title{font-size:13px;font-weight:600;color:#374151;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #f0f2f5}
 .card-details-box{background:#f9fafb;border-radius:4px;padding:16px;margin-bottom:16px}
 
+/* Targeting Settings */
+.targeting-desc{font-size:13px;color:#6b7280;line-height:1.6;margin-bottom:16px;max-width:720px}
+.targeting-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:900px){.targeting-form-grid{grid-template-columns:1fr}}
+.app-id-panel{border:1px solid #e5e9f0;border-radius:4px;overflow:hidden;background:#fff}
+.app-id-panel-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:#fafbfc;border-bottom:1px solid #e8ecf1}
+.app-id-panel-head span{font-size:13px;font-weight:600;color:#374151}
+.app-id-count{font-size:11px;color:#9ca3af;font-weight:500}
+.app-id-textarea{width:100%;min-height:140px;border:none;padding:12px 14px;font-size:12px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;resize:vertical;outline:none;color:#374151;line-height:1.5}
+.app-id-textarea::placeholder{color:#c4cdd8}
+.app-id-panel-foot{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-top:1px solid #f0f2f5;background:#fafbfc}
+.app-id-upload{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:#5bc0eb;cursor:pointer;font-weight:500}
+.app-id-upload:hover{text-decoration:underline}
+.app-id-upload input{display:none}
+.targeting-preview{margin-top:8px;display:flex;flex-wrap:wrap;gap:4px;max-height:72px;overflow-y:auto}
+.id-chip{display:inline-block;padding:2px 8px;background:#eff8fd;color:#0891b2;border-radius:3px;font-size:11px;font-family:monospace}
+.id-chip.black{background:#fef2f2;color:#dc2626}
+.targeting-count-badge{display:inline-flex;align-items:center;justify-content:center;min-width:28px;padding:2px 8px;border-radius:10px;background:#f3f4f6;font-size:12px;font-weight:600;color:#374151}
+.targeting-count-badge.has{background:#eff8fd;color:#0891b2}
+
 </style>
 </head>
 <body>
@@ -1351,6 +1371,51 @@ tr:hover td{background:#f9fafb}
                             <option v-for="t in adsTrafficOptions" :key="t" :value="t">{{ t }}</option>
                           </select>
                         </div>
+                      </div>
+
+                      <div class="wizard-section">
+                        <div class="wizard-section-title">App List Targeting</div>
+                        <p style="font-size:12px;color:#6b7280;line-height:1.5;margin-bottom:16px">When delivering ads for the promoted app, control which source apps' traffic to include (whitelist) or exclude (blacklist). One App ID per line, or separated by commas.</p>
+                        <div class="targeting-form-grid">
+                          <div>
+                            <div class="app-id-panel">
+                              <div class="app-id-panel-head">
+                                <span>Whitelist</span>
+                                <span class="app-id-count">{{ parseAppIdList(adsAdGroupForm.whitelistText).length }} App IDs</span>
+                              </div>
+                              <textarea class="app-id-textarea" v-model="adsAdGroupForm.whitelistText" placeholder="Enter source App IDs to include&#10;e.g. mtg17000111"></textarea>
+                              <div class="app-id-panel-foot">
+                                <label class="app-id-upload">
+                                  <input type="file" accept=".txt,.csv" @change="onAdGroupAppIdFile('whitelist', $event)">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                                  Upload file
+                                </label>
+                                <button type="button" class="btn-link" @click="adsAdGroupForm.whitelistText=''">Clear</button>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <div class="app-id-panel">
+                              <div class="app-id-panel-head">
+                                <span>Blacklist</span>
+                                <span class="app-id-count">{{ parseAppIdList(adsAdGroupForm.blacklistText).length }} App IDs</span>
+                              </div>
+                              <textarea class="app-id-textarea" v-model="adsAdGroupForm.blacklistText" placeholder="Enter source App IDs to exclude&#10;e.g. mtg99001001"></textarea>
+                              <div class="app-id-panel-foot">
+                                <label class="app-id-upload">
+                                  <input type="file" accept=".txt,.csv" @change="onAdGroupAppIdFile('blacklist', $event)">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                                  Upload file
+                                </label>
+                                <button type="button" class="btn-link" @click="adsAdGroupForm.blacklistText=''">Clear</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <p style="font-size:12px;color:#6b7280;margin-top:12px;margin-bottom:0">
+                          <button type="button" class="btn-link" style="padding:0" @click="loadAppTargetingToAdGroup">Load from app-level settings</button>
+                          · Configure defaults in <button type="button" class="btn-link" style="padding:0" @click="openTargetingFromAdGroup">Targeting Settings</button>
+                        </p>
                       </div>
 
                       <div class="wizard-section">
@@ -2125,6 +2190,74 @@ tr:hover td{background:#f9fafb}
             </div>
           </div>
         </template>
+        <template v-if="page==='targeting-settings'">
+          <div class="bread">Home <span>></span> Targeting Settings</div>
+          <div class="page-head">
+            <h1 class="page-title">Targeting Settings</h1>
+            <button class="btn btn-primary" @click="openTargetingModal()">+ New Setting</button>
+          </div>
+          <p class="targeting-desc">Configure app-level whitelist and blacklist for delivery. When running ads for a promoted app, whitelist IDs define source apps whose traffic to use; blacklist IDs define source apps to exclude.</p>
+          <div class="apps-toolbar">
+            <div class="apps-filters">
+              <input class="form-input" v-model="targetingFilter.appName" placeholder="App Name">
+              <select class="form-select" v-model="targetingFilter.hasList">
+                <option value="">All settings</option>
+                <option value="whitelist">Has whitelist</option>
+                <option value="blacklist">Has blacklist</option>
+                <option value="empty">Empty</option>
+              </select>
+            </div>
+          </div>
+          <div class="card">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>App Name</th>
+                    <th>Bundle ID</th>
+                    <th>Platform</th>
+                    <th>Whitelist</th>
+                    <th>Blacklist</th>
+                    <th>Updated Time</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in filteredTargetingSettings" :key="row.id">
+                    <td>
+                      <div class="app-name-cell">
+                        <div class="app-icon">
+                          <img v-if="getAppById(row.appId) && isAppIconImage(getAppById(row.appId).icon)" :src="getAppById(row.appId).icon" alt="">
+                          <span v-else>{{ getAppById(row.appId)?.icon || getAppById(row.appId)?.name?.charAt(0) || '?' }}</span>
+                        </div>
+                        {{ getAppById(row.appId)?.name || '—' }}
+                      </div>
+                    </td>
+                    <td>{{ getAppById(row.appId)?.appId || '—' }}</td>
+                    <td>{{ getAppById(row.appId)?.os || '—' }}</td>
+                    <td><span class="targeting-count-badge" :class="{has: row.whitelist.length}">{{ row.whitelist.length }}</span></td>
+                    <td><span class="targeting-count-badge" :class="{has: row.blacklist.length}">{{ row.blacklist.length }}</span></td>
+                    <td>{{ row.updatedAt }}</td>
+                    <td>
+                      <button class="btn-link" @click="openTargetingModal(row.appId)">Edit</button>
+                      <button class="btn-link danger" style="margin-left:8px" @click="deleteTargetingSetting(row.id)">Delete</button>
+                    </td>
+                  </tr>
+                  <tr v-if="!filteredTargetingSettings.length">
+                    <td colspan="7" style="text-align:center;padding:48px;color:#9ca3af">No targeting settings found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination">
+              Total {{ filteredTargetingSettings.length }}
+              <button class="page-btn">‹</button>
+              <button class="page-btn active">1</button>
+              <button class="page-btn">›</button>
+              <select class="page-size"><option>10 / page</option></select>
+            </div>
+          </div>
+        </template>
         <template v-if="page==='apps'">
           <div class="bread">Home <span>></span> My Apps</div>
           <div class="page-head">
@@ -2191,7 +2324,7 @@ tr:hover td{background:#f9fafb}
                     </td>
                     <td>
                       <button class="btn-link" @click="openAppModal(app)">Edit</button>
-                      <button class="btn-link" style="color:#9ca3af;margin-left:4px">▾</button>
+                      <button class="btn-link" @click="openTargetingModal(app.id)" style="margin-left:8px">Targeting</button>
                     </td>
                     <td>{{ app.appId }}</td>
                     <td>{{ app.os }}</td>
@@ -2557,6 +2690,76 @@ tr:hover td{background:#f9fafb}
       </div>
     </div>
   </div>
+  <!-- Targeting Settings Modal -->
+  <div class="modal-overlay" v-if="targetingModal.show" @click.self="targetingModal.show=false">
+    <div class="modal modal-sm">
+      <div class="modal-head">
+        <h3>{{ targetingModal.editingId ? 'Edit Targeting' : 'New Targeting' }}</h3>
+        <button class="modal-close" @click="targetingModal.show=false">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-info">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>Whitelist = source apps to include when delivering for the selected app. Blacklist = source apps to exclude. App IDs can be entered manually or uploaded from a .txt / .csv file.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">App <span style="color:#ef4444">*</span></label>
+          <select class="form-select" v-model="targetingModal.appId" :disabled="!!targetingModal.editingId">
+            <option value="">Select app</option>
+            <option v-for="app in availableTargetingApps" :key="app.id" :value="app.id">{{ app.name }} ({{ app.os }}) · {{ app.appId }}</option>
+          </select>
+        </div>
+        <div class="targeting-form-grid">
+          <div>
+            <div class="app-id-panel">
+              <div class="app-id-panel-head">
+                <span>Whitelist</span>
+                <span class="app-id-count">{{ parseAppIdList(targetingModal.whitelistText).length }} App IDs</span>
+              </div>
+              <textarea class="app-id-textarea" v-model="targetingModal.whitelistText" placeholder="One App ID per line"></textarea>
+              <div class="app-id-panel-foot">
+                <label class="app-id-upload">
+                  <input type="file" accept=".txt,.csv" @change="onTargetingAppIdFile('whitelist', $event)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                  Upload file
+                </label>
+                <button type="button" class="btn-link" @click="targetingModal.whitelistText=''">Clear</button>
+              </div>
+            </div>
+            <div v-if="parseAppIdList(targetingModal.whitelistText).length" class="targeting-preview">
+              <span v-for="id in parseAppIdList(targetingModal.whitelistText).slice(0, 8)" :key="'w-'+id" class="id-chip">{{ id }}</span>
+              <span v-if="parseAppIdList(targetingModal.whitelistText).length > 8" class="id-chip">+{{ parseAppIdList(targetingModal.whitelistText).length - 8 }} more</span>
+            </div>
+          </div>
+          <div>
+            <div class="app-id-panel">
+              <div class="app-id-panel-head">
+                <span>Blacklist</span>
+                <span class="app-id-count">{{ parseAppIdList(targetingModal.blacklistText).length }} App IDs</span>
+              </div>
+              <textarea class="app-id-textarea" v-model="targetingModal.blacklistText" placeholder="One App ID per line"></textarea>
+              <div class="app-id-panel-foot">
+                <label class="app-id-upload">
+                  <input type="file" accept=".txt,.csv" @change="onTargetingAppIdFile('blacklist', $event)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                  Upload file
+                </label>
+                <button type="button" class="btn-link" @click="targetingModal.blacklistText=''">Clear</button>
+              </div>
+            </div>
+            <div v-if="parseAppIdList(targetingModal.blacklistText).length" class="targeting-preview">
+              <span v-for="id in parseAppIdList(targetingModal.blacklistText).slice(0, 8)" :key="'b-'+id" class="id-chip black">{{ id }}</span>
+              <span v-if="parseAppIdList(targetingModal.blacklistText).length > 8" class="id-chip black">+{{ parseAppIdList(targetingModal.blacklistText).length - 8 }} more</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-default" @click="targetingModal.show=false">Cancel</button>
+        <button class="btn btn-primary" @click="saveTargetingSetting">Save</button>
+      </div>
+    </div>
+  </div>
   <!-- New / Edit App Modal -->
   <div class="modal-overlay" v-if="appModal.show" @click.self="appModal.show=false">
     <div class="modal modal-sm">
@@ -2701,7 +2904,9 @@ createApp({
       timeSlots: {},
       impressionUrl: '',
       clickThroughUrl: '',
-      clickTrackUrl: ''
+      clickTrackUrl: '',
+      whitelistText: '',
+      blacklistText: ''
     });
     const deviceOsOpenIndex = ref(-1);
     const adsAssetFile = ref(null);
@@ -2860,6 +3065,7 @@ createApp({
         ]
       },
       { id: 'ads', label: 'Ads', icon: '<path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>' },
+      { id: 'targeting-settings', label: 'Targeting Settings', icon: '<circle cx="12" cy="12" r="10"/><path d="M22 12h-4M6 12H2M12 6V2M12 22v-4"/><circle cx="12" cy="12" r="3"/>' },
       { id: 'manage-creative', label: 'Manage Creative', icon: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>' },
       {
         id: 'reports', label: 'Reports', icon: '<path d="M18 20V10M12 20V4M6 20v-6"/>',
@@ -2925,6 +3131,28 @@ createApp({
       { id: 2, name: 'Summer Game', os: 'Android', appId: 'com.global.pnck', timezone: 'UTC+8', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 0, icon: '🎮', previewLink: '' },
       { id: 3, name: 'NashFlow', os: 'iOS', appId: 'com.nashflow.app', timezone: 'UTC+0', active: false, activeCampaigns: 0, spend: '--', cvr: '--', cpi: '--', linkedAdUnits: 1, icon: '📱', previewLink: '' },
     ]);
+    const targetingSettingsData = ref([
+      {
+        id: 'ts-1', appId: 1,
+        whitelist: ['mtg17000111', 'mtg1700112'],
+        blacklist: ['mtg99001001'],
+        updatedAt: '2026-07-09 12:00:00'
+      },
+      {
+        id: 'ts-2', appId: 2,
+        whitelist: [],
+        blacklist: ['mtg88002001', 'mtg88002002', 'mtg88002003'],
+        updatedAt: '2026-07-08 09:30:00'
+      },
+    ]);
+    const targetingFilter = reactive({ appName: '', hasList: '' });
+    const targetingModal = reactive({
+      show: false,
+      editingId: '',
+      appId: '',
+      whitelistText: '',
+      blacklistText: ''
+    });
     const appFilter = reactive({ name: '', platform: '', status: '' });
     const selectedAppsList = ref([]);
     const appSort = reactive({ key: '', dir: 'asc' });
@@ -2948,6 +3176,136 @@ createApp({
     });
 
     const allAppsSelected = computed(() => filteredAppsList.value.length && selectedAppsList.value.length === filteredAppsList.value.length);
+
+    const filteredTargetingSettings = computed(() => {
+      let list = [...targetingSettingsData.value];
+      if (targetingFilter.appName) {
+        const q = targetingFilter.appName.toLowerCase();
+        list = list.filter(row => {
+          const app = myApps.value.find(a => a.id === row.appId);
+          return app && app.name.toLowerCase().includes(q);
+        });
+      }
+      if (targetingFilter.hasList === 'whitelist') list = list.filter(row => row.whitelist.length);
+      if (targetingFilter.hasList === 'blacklist') list = list.filter(row => row.blacklist.length);
+      if (targetingFilter.hasList === 'empty') list = list.filter(row => !row.whitelist.length && !row.blacklist.length);
+      return list.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
+    });
+
+    const availableTargetingApps = computed(() => {
+      const configured = new Set(targetingSettingsData.value.map(row => row.appId));
+      if (targetingModal.editingId) return myApps.value.filter(app => app.id === Number(targetingModal.appId) || app.id === targetingModal.appId);
+      return myApps.value.filter(app => !configured.has(app.id));
+    });
+
+    function getAppById(id) {
+      return myApps.value.find(a => a.id === id);
+    }
+
+    function parseAppIdList(text) {
+      if (!text || !String(text).trim()) return [];
+      return [...new Set(String(text).split(/[\n,\s]+/).map(s => s.trim()).filter(Boolean))];
+    }
+
+    function appIdsToText(ids) {
+      return (ids || []).join('\n');
+    }
+
+    function mergeAppIdText(currentText, incomingText) {
+      const merged = [...new Set([...parseAppIdList(currentText), ...parseAppIdList(incomingText)])];
+      return appIdsToText(merged);
+    }
+
+    async function readAppIdFile(event) {
+      const file = event.target.files?.[0];
+      if (!file) return '';
+      try {
+        return await file.text();
+      } catch {
+        showToast('Failed to read file');
+        return '';
+      } finally {
+        event.target.value = '';
+      }
+    }
+
+    async function onTargetingAppIdFile(field, event) {
+      const text = await readAppIdFile(event);
+      if (!text) return;
+      if (field === 'whitelist') targetingModal.whitelistText = mergeAppIdText(targetingModal.whitelistText, text);
+      else targetingModal.blacklistText = mergeAppIdText(targetingModal.blacklistText, text);
+      showToast('App IDs imported');
+    }
+
+    async function onAdGroupAppIdFile(field, event) {
+      const text = await readAppIdFile(event);
+      if (!text) return;
+      if (field === 'whitelist') adsAdGroupForm.whitelistText = mergeAppIdText(adsAdGroupForm.whitelistText, text);
+      else adsAdGroupForm.blacklistText = mergeAppIdText(adsAdGroupForm.blacklistText, text);
+      showToast('App IDs imported');
+    }
+
+    function getTargetingByAppId(appId) {
+      return targetingSettingsData.value.find(row => row.appId === appId);
+    }
+
+    function openTargetingModal(appId) {
+      const id = appId ? Number(appId) : '';
+      const existing = id ? getTargetingByAppId(id) : null;
+      if (existing) {
+        targetingModal.editingId = existing.id;
+        targetingModal.appId = existing.appId;
+        targetingModal.whitelistText = appIdsToText(existing.whitelist);
+        targetingModal.blacklistText = appIdsToText(existing.blacklist);
+      } else {
+        targetingModal.editingId = '';
+        targetingModal.appId = id || '';
+        targetingModal.whitelistText = '';
+        targetingModal.blacklistText = '';
+      }
+      targetingModal.show = true;
+      if (appId && page.value !== 'targeting-settings') page.value = 'targeting-settings';
+    }
+
+    function saveTargetingSetting() {
+      const appId = Number(targetingModal.appId);
+      if (!appId) { showToast('Please select an app'); return; }
+      const whitelist = parseAppIdList(targetingModal.whitelistText);
+      const blacklist = parseAppIdList(targetingModal.blacklistText);
+      const now = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      const updatedAt = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      if (targetingModal.editingId) {
+        const row = targetingSettingsData.value.find(r => r.id === targetingModal.editingId);
+        if (row) Object.assign(row, { whitelist, blacklist, updatedAt });
+        showToast('Targeting updated');
+      } else {
+        targetingSettingsData.value.unshift({ id: 'ts-' + Date.now(), appId, whitelist, blacklist, updatedAt });
+        showToast('Targeting saved');
+      }
+      targetingModal.show = false;
+    }
+
+    function deleteTargetingSetting(id) {
+      targetingSettingsData.value = targetingSettingsData.value.filter(row => row.id !== id);
+      showToast('Targeting deleted');
+    }
+
+    function loadAppTargetingToAdGroup() {
+      const appId = Number(adsAdGroupForm.appId);
+      if (!appId) { showToast('Please select an app first'); return; }
+      const row = getTargetingByAppId(appId);
+      if (!row) { showToast('No app-level targeting found'); return; }
+      adsAdGroupForm.whitelistText = appIdsToText(row.whitelist);
+      adsAdGroupForm.blacklistText = appIdsToText(row.blacklist);
+      showToast('Loaded app-level targeting');
+    }
+
+    function openTargetingFromAdGroup() {
+      const appId = Number(adsAdGroupForm.appId);
+      page.value = 'targeting-settings';
+      openTargetingModal(appId || undefined);
+    }
 
     function toggleAllAppsList(e) {
       selectedAppsList.value = e.target.checked ? filteredAppsList.value.map(a => a.id) : [];
@@ -3618,6 +3976,8 @@ createApp({
       adsAdGroupForm.impressionUrl = '';
       adsAdGroupForm.clickThroughUrl = '';
       adsAdGroupForm.clickTrackUrl = '';
+      adsAdGroupForm.whitelistText = '';
+      adsAdGroupForm.blacklistText = '';
       deviceOsOpenIndex.value = -1;
     }
 
@@ -4264,6 +4624,9 @@ createApp({
       overviewApps, overviewFilter, overviewView, overviewKpis, overviewColumns, overviewTableData,
       myApps, appFilter, filteredAppsList, selectedAppsList, allAppsSelected, appModal,
       openAppModal, saveApp, isAppIconImage, onAppIconFile, onAppToggle, sortApps, toggleAllAppsList,
+      targetingSettingsData, targetingFilter, filteredTargetingSettings, targetingModal,
+      availableTargetingApps, getAppById, parseAppIdList, openTargetingModal, saveTargetingSetting,
+      deleteTargetingSetting, onTargetingAppIdFile, onAdGroupAppIdFile, loadAppTargetingToAdGroup, openTargetingFromAdGroup,
       reportSearch, downloadReports, filteredDownloadReports,
       adMonitorFilter, adMonitorDimensions, adMonitorSelectedMetrics, adMonitorTableColumns,
       adMonitorDisplayData, adMonitorSort, columnsModal, filteredSelectedColumnGroups, filteredUnselectedColumnGroups,

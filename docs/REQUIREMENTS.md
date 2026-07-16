@@ -1,7 +1,7 @@
 # tarrific.tv DSP Admin 产品需求文档
 
-> **版本：** v1.7  
-> **更新日期：** 2026-07-15  
+> **版本：** v1.8  
+> **更新日期：** 2026-07-16  
 > **文档状态：** 基于交互原型（`index.html`）整理  
 > **对标：** AppLovin（AXON Ads Manager）广告主后台能力与信息架构  
 > **适用对象：** 产品、设计、前端、后端、测试、运营
@@ -12,6 +12,7 @@
 
 | 版本 | 日期 | 变更摘要 |
 |------|------|----------|
+| v1.8 | 2026-07-16 | 新增 Targeting Settings 模块（按 App 配置黑白名单）；Ads Step 2 支持 Ad Group 级黑白名单；My Apps 快捷入口 |
 | v1.7 | 2026-07-15 | Ads Campaign / Ad Group 列表列对齐 AppLovin（含 Show Metrics 指标列） |
 | v1.6 | 2026-07-15 | Ad Group 向导 Step 2 仅新建；Ad / Creative Monitoring 移除 Week 维度 |
 | v1.5 | 2026-07-14 | Creative Group 列表精简列；Members Invite 改为 Password；My Apps 新增 Icon / Preview Link |
@@ -36,10 +37,11 @@
 9. [Reports · Ad Monitoring Report](#9-reports--ad-monitoring-report)
 10. [Reports · Creative Monitoring Report](#10-reports--creative-monitoring-report)
 11. [My Apps](#11-my-apps)
-12. [Account Settings · Account Info](#12-account-settings--account-info)
-13. [Account Settings · Members](#13-account-settings--members)
-14. [Account Settings · Payment & Billing](#14-account-settings--payment--billing)
-15. [附录](#15-附录)
+12. [Targeting Settings](#12-targeting-settings)
+13. [Account Settings · Account Info](#13-account-settings--account-info)
+14. [Account Settings · Members](#14-account-settings--members)
+15. [Account Settings · Payment & Billing](#15-account-settings--payment--billing)
+16. [附录](#16-附录)
     - [附录 A：报表指标字段库](#附录-a报表指标字段库)
     - [附录 F：广告报表 vs 素材报表对照](#附录-f广告报表-vs-素材报表对照)
 
@@ -59,7 +61,7 @@ tarrific.tv DSP 管理后台，面向广告主及代理商运营，提供：
 2. Campaign / Ad Group 管理（Ads）— 列表 + 三步新建向导  
 3. 素材组与素材管理（Manage Creative）  
 4. 明细报表与离线下载（Reports）  
-5. App 资产与账户成员 / 计费（My Apps、Account Settings）
+5. App 资产、定向设置与账户成员 / 计费（My Apps、Targeting Settings、Account Settings）
 
 当前为单页 Vue 3 CDN 原型，无 URL 路由、无真实 API。
 
@@ -87,6 +89,7 @@ tarrific.tv DSP 管理后台，面向广告主及代理商运营，提供：
 | Dashboard | Overview | `dashboard-overview` | ✓ |
 | Dashboard | Risk Control | `dashboard-risk` | |
 | Ads | — | `ads`（列表 `adsView=list`；新建 `adsView=wizard`） | |
+| Targeting Settings | — | `targeting-settings` | |
 | Manage Creative | — | `manage-creative` | |
 | Reports | Download Reports | `reports-download` | |
 | Reports | Ad Monitoring Report | `reports-ad-monitor` | |
@@ -307,6 +310,8 @@ Tab：Campaign | Ad Group
 | `adsCreativeForm` | Step 3 模式与创意类型 |
 | `adsCampaignData` / `adsAdGroupData` | 列表 Mock 数据（Campaign / Ad Group 分表） |
 | `adsShowMetrics` | 列表是否显示指标列，默认 `true` |
+| `targetingSettingsData` | App 级黑白名单 Mock 数据 |
+| `targetingModal` | 定向设置弹窗表单状态 |
 
 ### 4.3 列表页
 
@@ -426,7 +431,20 @@ Tab：Campaign | Ad Group
 
 **Device — OS 可选项：** All OS · Android · iOS · 其他/Amazon（搜索过滤）
 
-#### 4.5.4 Budget & Schedule
+#### 4.5.4 App List Targeting
+
+投放某个 App 时，控制使用或不使用哪些**来源 App** 的流量数据。
+
+| 字段 | 控件 | 说明 |
+|------|------|------|
+| Whitelist | 文本域 + Upload | 仅使用列表中的来源 App ID |
+| Blacklist | 文本域 + Upload | 排除列表中的来源 App ID |
+| Load from app-level settings | 链接 | 从 Targeting Settings 载入当前所选 App 的默认配置 |
+| Targeting Settings | 链接 | 跳转定向设置模块 |
+
+**输入规则：** 每行一个 App ID，或用逗号 / 空格分隔；支持上传 `.txt` / `.csv` 合并导入。
+
+#### 4.5.5 Budget & Schedule
 
 | 字段 | 控件 |
 |------|------|
@@ -437,7 +455,7 @@ Tab：Campaign | Ad Group
 
 **Time Slot 网格：** 行 = Mon–Sun；列 = 0–23；点击选中；摘要格式如 `Monday04:00-05:00`
 
-#### 4.5.5 Tracking Links
+#### 4.5.6 Tracking Links
 
 | 字段 |
 |------|
@@ -516,6 +534,7 @@ Tab：Campaign | Ad Group
 | Step 3 写入本地 Mock 数据 | 服务端持久化与校验 |
 | 时区/排期/设备网格交互 | 复杂定向规则引擎 |
 | Show Metrics 指标列切换（Mock） | Custom Columns · 真实指标 API |
+| Targeting Settings 模块 + App/Ad Group 黑白名单录入上传（Mock） | 黑白名单校验 · 与投放引擎联动 |
 
 ---
 
@@ -981,6 +1000,7 @@ New / Edit App 弹窗
 | + New App | 新建弹窗 |
 | 行开关 | Active / Paused，Toast |
 | Edit | 回填编辑 |
+| Targeting | 跳转 Targeting Settings 并打开该 App 的配置弹窗 |
 
 **弹窗字段（自上而下）：**
 
@@ -999,16 +1019,91 @@ New / Edit App 弹窗
 
 ---
 
-## 12. Account Settings · Account Info
+## 12. Targeting Settings
+
+> **入口：** 侧栏 Targeting Settings；或 My Apps 行内 **Targeting**；或 Ads Step 2 链接  
+> **页面标识：** `targeting-settings`  
+> **面包屑：** Home > Targeting Settings  
+
+### 12.1 模块定位
+
+按 **App** 配置投放黑白名单：推广某个 App 时，指定哪些来源 App 的流量**允许使用**（Whitelist）或**禁止使用**（Blacklist）。与参考竞品不同，本模块采用 App 下拉 + 双栏文本录入/上传 + 列表汇总展示。
+
+### 12.2 页面结构
+
+```
+页头 + New Setting
+    ↓
+说明文案
+    ↓
+筛选（App Name / 列表类型）
+    ↓
+配置列表 + 分页
+    ↓
+New / Edit 弹窗（App 选择 + Whitelist / Blacklist）
+```
+
+### 12.3 筛选
+
+| 字段 | 选项 |
+|------|------|
+| App Name | 模糊匹配 |
+| 列表类型 | All · Has whitelist · Has blacklist · Empty |
+
+### 12.4 列表
+
+| 列 | 说明 |
+|----|------|
+| App Name | 图标 + 名称 |
+| Bundle ID | 推广 App 的 Bundle ID |
+| Platform | iOS / Android |
+| Whitelist | ID 数量徽章 |
+| Blacklist | ID 数量徽章 |
+| Updated Time | 最后更新时间 |
+| Actions | Edit · Delete |
+
+**分页：** 10 / page  
+**空态：** No targeting settings found  
+
+### 12.5 弹窗字段
+
+| 字段 | 必填 | 控件 | 说明 |
+|------|------|------|------|
+| App | 是 | 下拉 | 来自 My Apps；每个 App 仅一条配置；编辑时不可改 App |
+| Whitelist | 否 | 文本域 + Upload | 来源 App ID，支持 `.txt` / `.csv` 合并导入 |
+| Blacklist | 否 | 文本域 + Upload | 同上 |
+
+**预览：** 弹窗底部展示前 8 个 ID 芯片，超出显示 +N more。
+
+### 12.6 操作
+
+| 操作 | 说明 |
+|------|------|
+| + New Setting | 为尚未配置的 App 新建 |
+| Edit | 打开弹窗回填 |
+| Delete | 删除该 App 配置，Toast |
+| Save | 写入 `targetingSettingsData` Mock |
+
+### 12.7 与 Ads / My Apps 联动
+
+| 入口 | 行为 |
+|------|------|
+| My Apps → Targeting | 跳转本页并打开对应 App 弹窗 |
+| Ads Step 2 → Load from app-level settings | 将 App 级配置填入 Ad Group 表单 |
+| Ads Step 2 → Targeting Settings | 跳转本页（若已选 App 则打开其弹窗） |
+
+---
+
+## 13. Account Settings · Account Info
 
 > **入口：** 用户下拉 → Account settings → Account info  
 > **页面标识：** `account-settings` + `settingsTab=account-info`  
 
-### 12.1 模块定位
+### 13.1 模块定位
 
 维护账户主体信息（账户名、公司、税号、推广网站）。
 
-### 12.2 页面结构
+### 13.2 页面结构
 
 ```
 独立全屏：返回 + 左侧 Tab（Account info / Members / Payment & billing）
@@ -1018,7 +1113,7 @@ New / Edit App 弹窗
 可编辑表单 + Save
 ```
 
-### 12.3 表单字段
+### 13.3 表单字段
 
 | 字段 | 说明 |
 |------|------|
@@ -1027,7 +1122,7 @@ New / Edit App 弹窗
 | Tax ID | |
 | Website to promote | 前缀 `https://` + 域名 |
 
-### 12.4 操作
+### 13.4 操作
 
 | 操作 | 说明 |
 |------|------|
@@ -1037,16 +1132,16 @@ New / Edit App 弹窗
 
 ---
 
-## 13. Account Settings · Members
+## 14. Account Settings · Members
 
 > **入口：** Account settings → Members  
 > **Tab：** `members`  
 
-### 13.1 模块定位
+### 14.1 模块定位
 
 管理子账号：查看 Owner、邀请用户并配置权限与有效期。
 
-### 13.2 页面结构
+### 14.2 页面结构
 
 ```
 筛选（email / Access level）+ Invite new user
@@ -1058,14 +1153,14 @@ All users 表 + 分页
 Invite 弹窗
 ```
 
-### 13.3 筛选
+### 14.3 筛选
 
 | 字段 | 说明 |
 |------|------|
 | Search users by email | 模糊匹配邮箱 |
 | Access level | 空 / Owner / Admin / Read-only |
 
-### 13.4 展示
+### 14.4 展示
 
 **Owner 卡片：** 头像、Account owner 标签、Email  
 
@@ -1073,7 +1168,7 @@ Invite 弹窗
 
 **分页：** 10 / page，含 Go to、Rows per page  
 
-### 13.5 Invite 弹窗
+### 14.5 Invite 弹窗
 
 | 字段 | 必填 | 控件 | 说明 |
 |------|------|------|------|
@@ -1086,16 +1181,16 @@ Invite 弹窗
 
 ---
 
-## 14. Account Settings · Payment & Billing
+## 15. Account Settings · Payment & Billing
 
 > **入口：** Account settings → Payment & billing  
 > **Tab：** `billing`  
 
-### 14.1 模块定位
+### 15.1 模块定位
 
 查看余额、支付方式、账单流水与账单地址，支撑充值与自动扣款。
 
-### 14.2 页面结构
+### 15.2 页面结构
 
 ```
 Balance 卡片 | Payment Method 卡片
@@ -1107,7 +1202,7 @@ Billing Address 卡片
 Add Card / Add Billing Information 弹窗
 ```
 
-### 14.3 筛选（账单流水）
+### 15.3 筛选（账单流水）
 
 | 字段 | 说明 |
 |------|------|
@@ -1115,7 +1210,7 @@ Add Card / Add Billing Information 弹窗
 | 时间范围 | All time（可扩展） |
 | Category / Status | Chip 下拉 |
 
-### 14.4 展示
+### 15.4 展示
 
 **Balance：** Balance · Added funds · Ad credit · Held for spend  
 
@@ -1125,7 +1220,7 @@ Add Card / Add Billing Information 弹窗
 
 **Billing Address：** 已填地址或 `—`  
 
-### 14.5 操作
+### 15.5 操作
 
 | 操作 | 说明 |
 |------|------|
@@ -1141,7 +1236,7 @@ Add Card / Add Billing Information 弹窗
 
 ---
 
-## 15. 附录
+## 16. 附录
 
 ### 附录 A：报表指标字段库
 
@@ -1200,6 +1295,7 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 | Reports | Ad Monitoring | `reports-ad-monitor` |
 | Reports | Creative Monitoring | `reports-creative-monitor` |
 | Apps | My Apps | `apps` |
+| Targeting | Targeting Settings | `targeting-settings` |
 | Settings | Account Settings | `account-settings` |
 
 ---
@@ -1253,9 +1349,9 @@ D0–D30 unique target events、1Y unique target events；D0–D30 target event 
 
 | 文档 | 内容 |
 |------|------|
-| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.7） |
+| [REQUIREMENTS.md](./REQUIREMENTS.md) | 全模块产品需求（本文，v1.8） |
 | [RISK_CONTROL.md](./RISK_CONTROL.md) | Risk Control 专项说明（字段字典、告警跳转、运营读盘顺序） |
 
 ---
 
-*文档结束 · v1.7*
+*文档结束 · v1.8*
